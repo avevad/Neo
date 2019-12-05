@@ -24,7 +24,7 @@ public abstract class NGraphics {
 
     public abstract void fillPolygon(int[] xs, int[] ys);
 
-    public abstract void drawString(String s);
+    public abstract void drawString(String s, int x, int y);
 
     public abstract NGraphics create();
 
