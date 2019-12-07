@@ -23,4 +23,12 @@ public final class NRectangle {
         w = p2.x - p1.x;
         h = p2.y - p1.y;
     }
+
+    public NPoint getPoint() {
+        return new NPoint(x, y);
+    }
+
+    public NDimension getSize() {
+        return new NDimension(w, h);
+    }
 }
