@@ -1,6 +1,6 @@
 package com.avevad.neo.graphics;
 
-public class NRectangle {
+public final class NRectangle {
     public final int x, y, w, h;
 
     public NRectangle(int x, int y, int w, int h) {

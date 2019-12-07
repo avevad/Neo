@@ -1,6 +1,6 @@
 package com.avevad.neo.graphics;
 
-public class NDimension {
+public final class NDimension {
     public final int w, h;
 
     public NDimension(int w, int h) {
