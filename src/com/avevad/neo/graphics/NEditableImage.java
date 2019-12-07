@@ -6,5 +6,5 @@ public abstract class NEditableImage extends NImage {
         super(w, h);
     }
 
-    public abstract void setPixel(int w, int h, int rgb);
+    public abstract void setPixel(int x, int y, int rgb);
 }
