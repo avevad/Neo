@@ -77,4 +77,31 @@ public abstract class NGraphics {
     public NGraphics create(NRectangle bounds) {
         return create(bounds.x, bounds.y, bounds.w, bounds.h);
     }
+
+    public abstract void drawImage(NImage img, int x, int y);
+
+    public void drawImage(NImage img, NPoint point) {
+        drawImage(img, point.x, point.y);
+    }
+
+    public abstract void drawImage(NImage img, int x, int y, int w, int h);
+
+    public void drawImage(NImage img, NPoint point, NDimension size) {
+        drawImage(img, point.x, point.y, size.w, size.h);
+    }
+
+    public void drawImage(NImage img, NRectangle bounds) {
+        drawImage(img, bounds.x, bounds.y, bounds.w, bounds.h);
+    }
+
+    public abstract void drawImage(NImage img, int srcX, int srcY, int srcW, int srcH, int dstX, int dstY, int dstW, int dstH);
+
+    public void drawImage(NImage img, NPoint srcPoint, NDimension srcSize, NPoint dstPoint, NDimension dstSize) {
+        drawImage(img, srcPoint.x, srcPoint.y, srcSize.w, srcSize.h, dstPoint.x, dstPoint.y, dstSize.w, dstSize.h);
+    }
+
+    public void drawImage(NImage img, NRectangle srcArea, NRectangle dstArea) {
+        drawImage(img, srcArea.x, srcArea.y, srcArea.w, srcArea.h, dstArea.x, dstArea.y, dstArea.w, dstArea.h);
+    }
+
 }
