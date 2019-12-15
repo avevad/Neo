@@ -30,5 +30,5 @@ public abstract class NComponent {
         return parent;
     }
 
-    public abstract void render(NGraphics g);
+    public abstract boolean render(NGraphics g, int layer);
 }
