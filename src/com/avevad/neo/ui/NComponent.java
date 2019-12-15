@@ -33,7 +33,7 @@ public abstract class NComponent {
         return parent;
     }
 
-    public abstract boolean render(NGraphics g, int layer);
+    public abstract boolean render(int layer);
 
     public final NRectangle getBounds() {
         return bounds;
