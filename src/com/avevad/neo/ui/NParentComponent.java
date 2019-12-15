@@ -1,12 +1,22 @@
 package com.avevad.neo.ui;
 
 
+import com.avevad.neo.graphics.NRectangle;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 public abstract class NParentComponent extends NComponent implements Iterable<NComponent> {
     private final Set<NComponent> children = new HashSet<>();
+
+    public NParentComponent(NRectangle bounds) {
+        super(bounds);
+    }
+
+    public NParentComponent(int x, int y, int w, int h) {
+        super(x, y, w, h);
+    }
 
     public boolean hasChild(NComponent child) {
         return children.contains(child);
