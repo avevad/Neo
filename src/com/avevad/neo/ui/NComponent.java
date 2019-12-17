@@ -1,13 +1,11 @@
 package com.avevad.neo.ui;
 
-import com.avevad.neo.graphics.NDimension;
-import com.avevad.neo.graphics.NGraphics;
-import com.avevad.neo.graphics.NPoint;
-import com.avevad.neo.graphics.NRectangle;
+import com.avevad.neo.graphics.*;
 
 public abstract class NComponent {
     private NParentComponent parent;
     private NRectangle bounds;
+    private NGraphics graphics;
 
     public NComponent(NRectangle bounds) {
         this.bounds = bounds;
@@ -22,6 +20,7 @@ public abstract class NComponent {
         if (parent == null) throw new IllegalArgumentException("parent cannot be null");
         try {
             this.parent = parent;
+            this.graphics = parent.getGraphics() == null ? null : new NLinkedGraphics(parent, this);
             if (!parent.hasChild(this)) parent.addChild(this);
         } catch (Exception ex) {
             this.parent = null;
@@ -31,6 +30,10 @@ public abstract class NComponent {
 
     public final NParentComponent getParent() {
         return parent;
+    }
+
+    public NGraphics getGraphics() {
+        return graphics;
     }
 
     public abstract boolean render(int layer);
@@ -57,5 +60,141 @@ public abstract class NComponent {
 
     public final void setLocation(NPoint location) {
         bounds = new NRectangle(location, bounds.getSize());
+    }
+
+    private static final class NLinkedGraphics extends NGraphics {
+        private final NComponent parent;
+        private final NComponent child;
+        private NRectangle lastBounds;
+        private NGraphics lastGraphics;
+        private NGraphics graphics;
+        private int color;
+        private NFont font;
+
+        public NLinkedGraphics(NComponent parent, NComponent child) {
+            this.parent = parent;
+            this.child = child;
+            updateGraphics();
+        }
+
+        private void updateGraphics() {
+            if (lastBounds != child.bounds || lastGraphics != parent.graphics) {
+                lastGraphics = parent.graphics;
+                lastBounds = child.bounds;
+                graphics = lastGraphics.create(lastBounds);
+            }
+        }
+
+        private void setParameters() {
+            graphics.setColor(color);
+            graphics.setFont(font);
+        }
+
+        @Override
+        public void setColor(int color) {
+            this.color = color;
+        }
+
+        @Override
+        public int getColor() {
+            return color;
+        }
+
+        @Override
+        public void setFont(NFont font) {
+            this.font = font;
+        }
+
+        @Override
+        public NFont getFont() {
+            return font;
+        }
+
+        @Override
+        public void drawLine(int x1, int y1, int x2, int y2) {
+            updateGraphics();
+            setParameters();
+            graphics.drawLine(x1, y1, x2, y2);
+        }
+
+        @Override
+        public void drawRect(int x, int y, int w, int h) {
+            updateGraphics();
+            setParameters();
+            graphics.drawRect(x, y, w, h);
+        }
+
+        @Override
+        public void fillRect(int x, int y, int w, int h) {
+            updateGraphics();
+            setParameters();
+            graphics.fillRect(x, y, w, h);
+        }
+
+        @Override
+        public void drawOval(int x, int y, int w, int h) {
+            updateGraphics();
+            setParameters();
+            graphics.drawOval(x, y, w, h);
+        }
+
+        @Override
+        public void fillOval(int x, int y, int w, int h) {
+            updateGraphics();
+            setParameters();
+            graphics.fillOval(x, y, w, h);
+        }
+
+        @Override
+        public void drawPolygon(int[] xs, int[] ys) {
+            updateGraphics();
+            setParameters();
+            graphics.drawPolygon(xs, ys);
+        }
+
+        @Override
+        public void fillPolygon(int[] xs, int[] ys) {
+            updateGraphics();
+            setParameters();
+            graphics.fillPolygon(xs, ys);
+        }
+
+        @Override
+        public void drawString(String s, int x, int y) {
+            updateGraphics();
+            setParameters();
+            graphics.drawString(s, x, y);
+        }
+
+        @Override
+        public NGraphics create() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public NGraphics create(int x, int y, int w, int h) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void drawImage(NImage img, int x, int y) {
+            updateGraphics();
+            setParameters();
+            graphics.drawImage(img, x, y);
+        }
+
+        @Override
+        public void drawImage(NImage img, int x, int y, int w, int h) {
+            updateGraphics();
+            setParameters();
+            graphics.drawImage(img, x, y, w, h);
+        }
+
+        @Override
+        public void drawImage(NImage img, int srcX, int srcY, int srcW, int srcH, int dstX, int dstY, int dstW, int dstH) {
+            updateGraphics();
+            setParameters();
+            graphics.drawImage(img, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
+        }
     }
 }
