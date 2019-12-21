@@ -25,6 +25,11 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     public final synchronized void addChild(NComponent child) {
         if (child == null) throw new IllegalArgumentException("child cannot be null");
         if (hasChild(child)) throw new IllegalArgumentException("already have this child");
+        NComponent component = this;
+        while (component != null) {
+            if (component == child) throw new IllegalArgumentException("ancestor of the component cannot be its child");
+            component = component.getParent();
+        }
         try {
             children.add(child);
             if (child.getParent() != this) child.setParent(this);
