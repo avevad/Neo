@@ -78,10 +78,10 @@ public abstract class NComponent {
         }
 
         private void updateGraphics() {
-            if (lastBounds != child.bounds || lastGraphics != parent.graphics) {
-                lastGraphics = parent.graphics;
-                lastBounds = child.bounds;
-                graphics = lastGraphics.create(lastBounds);
+            if (lastBounds != child.getBounds() || lastGraphics != parent.getGraphics()) {
+                graphics = parent.getGraphics() == null ? null : parent.getGraphics().create(child.getBounds());
+                lastGraphics = parent.getGraphics();
+                lastBounds = child.getBounds();
             }
         }
 
