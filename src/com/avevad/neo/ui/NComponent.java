@@ -36,8 +36,6 @@ public abstract class NComponent {
         return graphics;
     }
 
-    public abstract boolean render(int layer);
-
     public final NRectangle getBounds() {
         return bounds;
     }
@@ -197,4 +195,18 @@ public abstract class NComponent {
             graphics.drawImage(img, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
         }
     }
+
+    public abstract boolean render(int layer);
+
+    public abstract void onMousePressed(int x, int y, int button);
+
+    public abstract void onMouseReleased(int x, int y, int button);
+
+    public abstract void onMouseDragged(int x, int y, int button);
+
+    public abstract void onMouseMoved(int x, int y);
+
+    public abstract void onKeyPressed(int key);
+
+    public abstract void onKeyReleased(int key);
 }
