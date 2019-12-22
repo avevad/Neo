@@ -209,4 +209,6 @@ public abstract class NComponent {
     public abstract void onKeyPressed(int key);
 
     public abstract void onKeyReleased(int key);
+
+    public abstract void isKeyboardNeeded();
 }
