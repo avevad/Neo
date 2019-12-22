@@ -48,12 +48,28 @@ public abstract class NComponent {
         return bounds.getSize();
     }
 
+    public final int getWidth() {
+        return bounds.w;
+    }
+
+    public final int getHeight() {
+        return bounds.h;
+    }
+
     public final void setSize(NDimension size) {
         bounds = new NRectangle(bounds.getPoint(), size);
     }
 
     public final NPoint getLocation() {
         return bounds.getPoint();
+    }
+
+    public final int getLocationX() {
+        return bounds.x;
+    }
+
+    public final int getLocationY() {
+        return bounds.y;
     }
 
     public final void setLocation(NPoint location) {
