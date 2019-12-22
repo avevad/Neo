@@ -220,6 +220,8 @@ public abstract class NComponent {
 
     public abstract void onMouseDragged(int x, int y, int button);
 
+    public abstract void onMouseWheelScrolled(int x, int y, int value);
+
     public abstract void onMouseMoved(int x, int y);
 
     public abstract void onKeyPressed(int key);
