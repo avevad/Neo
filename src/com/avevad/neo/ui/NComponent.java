@@ -219,15 +219,15 @@ public abstract class NComponent implements Comparable<NComponent> {
 
     public abstract boolean render(int layer);
 
-    public abstract void onMousePressed(int x, int y, int button);
+    public abstract boolean onMousePressed(int x, int y, int button);
 
-    public abstract void onMouseReleased(int x, int y, int button);
+    public abstract boolean onMouseReleased(int x, int y, int button);
 
-    public abstract void onMouseDragged(int x, int y, int button);
+    public abstract boolean onMouseDragged(int x, int y, int button);
 
-    public abstract void onMouseWheelScrolled(int x, int y, int value);
+    public abstract boolean onMouseWheelScrolled(int x, int y, int value);
 
-    public abstract void onMouseMoved(int x, int y);
+    public abstract boolean onMouseMoved(int x, int y);
 
     public abstract void onKeyPressed(int key);
 
