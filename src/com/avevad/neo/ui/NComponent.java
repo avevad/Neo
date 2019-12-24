@@ -2,7 +2,7 @@ package com.avevad.neo.ui;
 
 import com.avevad.neo.graphics.*;
 
-public abstract class NComponent {
+public abstract class NComponent implements Comparable<NComponent> {
     private NParentComponent parent;
     private NRectangle bounds;
     private NGraphics graphics;
@@ -70,6 +70,11 @@ public abstract class NComponent {
 
     public final int getLocationY() {
         return bounds.y;
+    }
+
+    @Override
+    public int compareTo(NComponent other) {
+        return getZIndex() - other.getZIndex();
     }
 
     public final void setLocation(NPoint location) {
@@ -229,4 +234,6 @@ public abstract class NComponent {
     public abstract void onKeyReleased(int key);
 
     public abstract void isKeyboardNeeded();
+
+    public abstract int getZIndex();
 }
