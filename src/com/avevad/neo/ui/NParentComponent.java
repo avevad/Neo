@@ -3,12 +3,10 @@ package com.avevad.neo.ui;
 
 import com.avevad.neo.graphics.NRectangle;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public abstract class NParentComponent extends NComponent implements Iterable<NComponent> {
-    private final Set<NComponent> children = new HashSet<>();
+    private final List<NComponent> children = new ArrayList<>();
 
     public NParentComponent(NRectangle bounds) {
         super(bounds);
