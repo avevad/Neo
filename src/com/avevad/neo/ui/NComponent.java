@@ -233,7 +233,7 @@ public abstract class NComponent implements Comparable<NComponent> {
 
     public abstract void onKeyReleased(int key);
 
-    public abstract void isKeyboardNeeded();
+    public abstract boolean isKeyboardNeeded();
 
     public abstract int getZIndex();
 }
