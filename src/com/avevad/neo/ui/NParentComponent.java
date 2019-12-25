@@ -88,4 +88,27 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
         return false;
     }
 
+    @Override
+    public boolean onMouseWheelScrolled(int x, int y, int value) {
+        Collections.sort(children);
+        for (NComponent comp : this) {
+            if (comp.onMouseWheelScrolled(x - comp.getLocationX(), y - comp.getLocationY(), value)) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onKeyPressed(int key) {
+        if (focus != null) focus.onKeyPressed(key);
+    }
+
+    @Override
+    public void onKeyReleased(int key) {
+        if (focus != null) focus.onKeyReleased(key);
+    }
+
+    @Override
+    public boolean isKeyboardNeeded() {
+        return focus != null && focus.isKeyboardNeeded();
+    }
 }
