@@ -7,6 +7,7 @@ import java.util.*;
 
 public abstract class NParentComponent extends NComponent implements Iterable<NComponent> {
     private final List<NComponent> children = new ArrayList<>();
+    private NComponent focus;
 
     public NParentComponent(NRectangle bounds) {
         super(bounds);
@@ -35,6 +36,15 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
             children.remove(child);
             throw ex;
         }
+    }
+
+    public final void setFocus(NComponent focus) {
+        if (focus != null && !hasChild(focus)) throw new IllegalArgumentException("focus must be a child");
+        this.focus = focus;
+    }
+
+    public final NComponent getFocus() {
+        return focus;
     }
 
     @Override
