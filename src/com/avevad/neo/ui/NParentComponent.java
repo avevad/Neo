@@ -48,6 +48,24 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     }
 
     @Override
+    public boolean render(int layer) {
+        Collections.sort(children);
+        List<NComponent> render = new ArrayList<>(children);
+        List<NComponent> render2 = new ArrayList<>();
+        int l = 0;
+        while (!render.isEmpty()) {
+            for (NComponent child : render) {
+                if (child.render(l)) render2.add(child);
+            }
+            render.clear();
+            render.addAll(render2);
+            render2.clear();
+            l++;
+        }
+        return false;
+    }
+
+    @Override
     public final Iterator<NComponent> iterator() {
         return children.iterator();
     }
