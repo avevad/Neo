@@ -106,7 +106,7 @@ public abstract class NComponent implements Comparable<NComponent> {
 
         private void setParameters() {
             graphics.setColor(color);
-            graphics.setFont(font);
+            if (font != null) graphics.setFont(font);
         }
 
         @Override
