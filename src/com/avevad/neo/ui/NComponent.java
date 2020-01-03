@@ -6,6 +6,8 @@ public abstract class NComponent implements Comparable<NComponent> {
     private NParentComponent parent;
     private NRectangle bounds;
     private NGraphics graphics;
+    private int backgroundColor;
+    private int foregroundColor;
 
     public NComponent(NRectangle bounds) {
         this.bounds = bounds;
@@ -72,13 +74,29 @@ public abstract class NComponent implements Comparable<NComponent> {
         return bounds.y;
     }
 
+    public final void setLocation(NPoint location) {
+        bounds = new NRectangle(location, bounds.getSize());
+    }
+
+    public final void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public final int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public final void setForegroundColor(int foregroundColor) {
+        this.foregroundColor = foregroundColor;
+    }
+
+    public final int getForegroundColor() {
+        return foregroundColor;
+    }
+
     @Override
     public int compareTo(NComponent other) {
         return getZIndex() - other.getZIndex();
-    }
-
-    public final void setLocation(NPoint location) {
-        bounds = new NRectangle(location, bounds.getSize());
     }
 
     private static final class NLinkedGraphics extends NGraphics {
