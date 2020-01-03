@@ -107,16 +107,23 @@ public abstract class NComponent implements Comparable<NComponent> {
         private NGraphics graphics;
         private int color;
         private NFont font;
+        private final NRectangle clip;
 
-        public NLinkedGraphics(NComponent parent, NComponent child) {
+        public NLinkedGraphics(NComponent parent, NComponent child, NRectangle clip) {
             this.parent = parent;
             this.child = child;
+            this.clip = clip;
             updateGraphics();
+        }
+
+        public NLinkedGraphics(NComponent parent, NComponent child) {
+            this(parent, child, null);
         }
 
         private void updateGraphics() {
             if (lastBounds != child.getBounds() || lastGraphics != parent.getGraphics()) {
                 graphics = parent.getGraphics() == null ? null : parent.getGraphics().create(child.getBounds());
+                if (clip != null && graphics != null) graphics = graphics.create(clip);
                 lastGraphics = parent.getGraphics();
                 lastBounds = child.getBounds();
             }
@@ -205,12 +212,12 @@ public abstract class NComponent implements Comparable<NComponent> {
 
         @Override
         public NGraphics create() {
-            throw new UnsupportedOperationException();
+            return new NLinkedGraphics(parent, child);
         }
 
         @Override
         public NGraphics create(int x, int y, int w, int h) {
-            throw new UnsupportedOperationException();
+            return new NLinkedGraphics(parent, child, new NRectangle(x, y, w, h));
         }
 
         @Override
