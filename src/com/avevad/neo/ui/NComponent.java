@@ -22,7 +22,7 @@ public abstract class NComponent implements Comparable<NComponent> {
         if (parent == null) throw new IllegalArgumentException("parent cannot be null");
         try {
             this.parent = parent;
-            this.graphics = parent.getGraphics() == null ? null : new NLinkedGraphics(parent, this);
+            this.graphics = new NLinkedGraphics(parent, this);
             if (!parent.hasChild(this)) parent.addChild(this);
         } catch (Exception ex) {
             this.parent = null;
