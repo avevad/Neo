@@ -6,8 +6,8 @@ public abstract class NComponent implements Comparable<NComponent> {
     private NParentComponent parent;
     private NRectangle bounds;
     private NGraphics graphics;
-    private int backgroundColor = 0xFFFFFF;
-    private int foregroundColor = 0x000000;
+    private int backgroundColor = NColor.WHITE;
+    private int foregroundColor = NColor.BLACK;
 
     public NComponent(NRectangle bounds) {
         this.bounds = bounds;
