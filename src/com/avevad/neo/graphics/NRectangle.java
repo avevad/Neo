@@ -31,4 +31,9 @@ public final class NRectangle {
     public NDimension getSize() {
         return new NDimension(w, h);
     }
+
+    @Override
+    public String toString() {
+        return "NRectangle(" + x + ", " + y + ", " + w + ", " + h + ")";
+    }
 }

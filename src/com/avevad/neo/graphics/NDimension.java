@@ -7,4 +7,9 @@ public final class NDimension {
         this.w = w;
         this.h = h;
     }
+
+    @Override
+    public String toString() {
+        return "NDimension(" + w + ", " + h + ")";
+    }
 }
