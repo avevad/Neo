@@ -217,7 +217,18 @@ public abstract class NComponent implements Comparable<NComponent> {
 
         @Override
         public NGraphics create(int x, int y, int w, int h) {
-            return new NLinkedGraphics(parent, child, new NRectangle(x, y, w, h));
+            if (clip == null) return new NLinkedGraphics(parent, child, new NRectangle(x, y, w, h));
+            else {
+                x += clip.x;
+                y += clip.y;
+                int x1 = Integer.max(x, clip.x);
+                int y1 = Integer.max(y, clip.y);
+                int x2 = Integer.min(x + w, clip.x + clip.w);
+                int y2 = Integer.min(y + h, clip.y + clip.h);
+                if (x2 < x1) x2 = x1;
+                if (y2 < y1) y2 = y1;
+                return new NLinkedGraphics(parent, child, new NRectangle(x1, y1, x2 - x1, y2 - y1));
+            }
         }
 
         @Override
