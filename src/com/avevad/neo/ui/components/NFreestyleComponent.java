@@ -9,7 +9,7 @@ public class NFreestyleComponent extends NComponent {
     public final NImage canvas;
 
     public NFreestyleComponent(NImage canvas, int x, int y, int w, int h) {
-        super(x, y, canvas.w, canvas.h);
+        super(x, y, w, h);
         this.canvas = canvas;
     }
 
