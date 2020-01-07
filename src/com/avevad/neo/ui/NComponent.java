@@ -94,6 +94,10 @@ public abstract class NComponent implements Comparable<NComponent> {
         return foregroundColor;
     }
 
+    public final boolean isFocused() {
+        return parent != null && parent.getFocus() == this;
+    }
+
     @Override
     public int compareTo(NComponent other) {
         return getZIndex() - other.getZIndex();
