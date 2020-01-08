@@ -1,11 +1,14 @@
 package com.avevad.neo.ui.components.parent;
 
+import com.avevad.neo.graphics.NColor;
 import com.avevad.neo.graphics.NGraphics;
 import com.avevad.neo.graphics.NPoint;
 import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NParentComponent;
 
 public class NPanel extends NParentComponent {
+    private int color = NColor.WHITE;
+
     public NPanel(NRectangle bounds) {
         super(bounds);
     }
@@ -14,11 +17,19 @@ public class NPanel extends NParentComponent {
         super(x, y, w, h);
     }
 
+    public final void setColor(int color) {
+        this.color = color;
+    }
+
+    public final int getColor() {
+        return color;
+    }
+
     @Override
     public boolean render(int layer) {
         NGraphics g = getParent().getGraphics();
         if (layer == 0) {
-            g.setColor(getBackgroundColor());
+            g.setColor(getColor());
             g.fillRect(getLocationX(), getLocationY(), getWidth(), getHeight());
         }
         return super.render(layer);

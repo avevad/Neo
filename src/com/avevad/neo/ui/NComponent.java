@@ -6,8 +6,6 @@ public abstract class NComponent {
     private NParentComponent parent;
     private NRectangle bounds;
     private NGraphics graphics;
-    private int backgroundColor = NColor.WHITE;
-    private int foregroundColor = NColor.BLACK;
 
     public NComponent(NRectangle bounds) {
         this.bounds = bounds;
@@ -76,22 +74,6 @@ public abstract class NComponent {
 
     public final void setLocation(NPoint location) {
         bounds = new NRectangle(location, bounds.getSize());
-    }
-
-    public final void setBackgroundColor(int backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public final int getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public final void setForegroundColor(int foregroundColor) {
-        this.foregroundColor = foregroundColor;
-    }
-
-    public final int getForegroundColor() {
-        return foregroundColor;
     }
 
     public final boolean isFocused() {
