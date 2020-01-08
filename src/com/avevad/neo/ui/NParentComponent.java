@@ -79,7 +79,10 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     @Override
     public boolean onMousePressed(int x, int y, int button) {
         for (NComponent comp : this) {
-            if (comp.onMousePressed(x - comp.getLocationX(), y - comp.getLocationY(), button)) return true;
+            if (comp.onMousePressed(x - comp.getLocationX(), y - comp.getLocationY(), button)) {
+                setFocus(comp);
+                return true;
+            }
         }
         return false;
     }
