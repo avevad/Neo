@@ -36,4 +36,12 @@ public final class NRectangle {
     public String toString() {
         return "NRectangle(" + x + ", " + y + ", " + w + ", " + h + ")";
     }
+
+    public boolean contains(NPoint point) {
+        return contains(point.x, point.y);
+    }
+
+    public boolean contains(int x, int y) {
+        return x >= this.x && x < this.x + w && y >= this.y && y < this.y + h;
+    }
 }
