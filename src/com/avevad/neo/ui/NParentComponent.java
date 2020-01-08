@@ -84,6 +84,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
                 return true;
             }
         }
+        setFocus(null);
         return false;
     }
 
