@@ -10,7 +10,6 @@ import com.avevad.neo.ui.events.*;
 public class NFreestyleComponent extends NComponent {
     public final NImage canvas;
     private boolean keyboardNeeded = false;
-    public int zIndex = 0;
 
     public final NEventDispatcher<NMousePressedEvent> mousePressed = new NEventDispatcher<>();
     public final NEventDispatcher<NMouseReleasedEvent> mouseReleased = new NEventDispatcher<>();
