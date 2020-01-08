@@ -79,7 +79,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     @Override
     public boolean onMousePressed(int x, int y, int button) {
         for (NComponent comp : this) {
-            if (comp.onMousePressed(x - comp.getLocationX(), y - comp.getLocationY(), button)) {
+            if (comp.onMousePressed(x - comp.getX(), y - comp.getY(), button)) {
                 setFocus(comp);
                 return true;
             }
@@ -91,7 +91,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     @Override
     public boolean onMouseReleased(int x, int y, int button) {
         for (NComponent comp : this) {
-            if (comp.onMouseReleased(x - comp.getLocationX(), y - comp.getLocationY(), button)) return true;
+            if (comp.onMouseReleased(x - comp.getX(), y - comp.getY(), button)) return true;
         }
         return false;
     }
@@ -99,7 +99,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     @Override
     public boolean onMouseDragged(int x, int y, int button) {
         for (NComponent comp : this) {
-            if (comp.onMouseDragged(x - comp.getLocationX(), y - comp.getLocationY(), button)) return true;
+            if (comp.onMouseDragged(x - comp.getX(), y - comp.getY(), button)) return true;
         }
         return false;
     }
@@ -107,7 +107,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     @Override
     public boolean onMouseMoved(int x, int y) {
         for (NComponent comp : this) {
-            if (comp.onMouseMoved(x - comp.getLocationX(), y - comp.getLocationY())) return true;
+            if (comp.onMouseMoved(x - comp.getX(), y - comp.getY())) return true;
         }
         return false;
     }
@@ -115,7 +115,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     @Override
     public boolean onMouseWheelScrolled(int x, int y, int value) {
         for (NComponent comp : this) {
-            if (comp.onMouseWheelScrolled(x - comp.getLocationX(), y - comp.getLocationY(), value)) return true;
+            if (comp.onMouseWheelScrolled(x - comp.getX(), y - comp.getY(), value)) return true;
         }
         return false;
     }

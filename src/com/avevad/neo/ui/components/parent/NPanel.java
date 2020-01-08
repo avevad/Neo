@@ -30,7 +30,7 @@ public class NPanel extends NParentComponent {
         NGraphics g = getParent().getGraphics();
         if (layer == 0) {
             g.setColor(getColor());
-            g.fillRect(getLocationX(), getLocationY(), getWidth(), getHeight());
+            g.fillRect(getX(), getY(), getWidth(), getHeight());
         }
         return super.render(layer);
     }

@@ -36,49 +36,90 @@ public abstract class NComponent {
         return graphics;
     }
 
-    public final NRectangle getBounds() {
-        return bounds;
-    }
 
     public final void setBounds(NRectangle bounds) {
         this.bounds = bounds;
     }
 
-    public final NDimension getSize() {
-        return bounds.getSize();
+    public final void setBounds(NPoint location, NDimension size) {
+        setBounds(new NRectangle(location, size));
     }
 
-    public final int getWidth() {
-        return bounds.w;
+    public final void setBounds(int x, int y, int w, int h) {
+        setBounds(new NRectangle(x, y, w, h));
     }
 
-    public final int getHeight() {
-        return bounds.h;
+    public final NRectangle getBounds() {
+        return bounds;
     }
 
-    public final void setSize(NDimension size) {
-        bounds = new NRectangle(bounds.getPoint(), size);
+
+    public final void setLocation(NPoint location) {
+        setBounds(location, bounds.getSize());
+    }
+
+    public final void setLocation(int x, int y) {
+        setBounds(x, y, bounds.w, bounds.h);
     }
 
     public final NPoint getLocation() {
         return bounds.getPoint();
     }
 
-    public final int getLocationX() {
+
+    public final void setSize(NDimension size) {
+        setBounds(bounds.getPoint(), size);
+    }
+
+    public final void setSize(int w, int h) {
+        setBounds(bounds.x, bounds.y, w, h);
+    }
+
+    public final NDimension getSize() {
+        return bounds.getSize();
+    }
+
+
+    public final void setWidth(int w) {
+        setBounds(bounds.x, bounds.y, w, bounds.h);
+    }
+
+    public final int getWidth() {
+        return bounds.w;
+    }
+
+
+    public final void setHeight(int h) {
+        setBounds(bounds.x, bounds.y, bounds.w, h);
+    }
+
+    public final int getHeight() {
+        return bounds.h;
+    }
+
+
+    public final void setX(int x) {
+        setBounds(x, bounds.y, bounds.w, bounds.h);
+    }
+
+    public final int getX() {
         return bounds.x;
     }
 
-    public final int getLocationY() {
+
+    public final void setY(int y) {
+        setBounds(bounds.x, y, bounds.w, bounds.h);
+    }
+
+    public final int getY() {
         return bounds.y;
     }
 
-    public final void setLocation(NPoint location) {
-        bounds = new NRectangle(location, bounds.getSize());
-    }
 
     public final boolean isFocused() {
         return parent != null && parent.getFocus() == this;
     }
+
 
     private static final class NLinkedGraphics extends NGraphics {
         private final NComponent parent;
@@ -234,7 +275,9 @@ public abstract class NComponent {
         }
     }
 
+
     public abstract boolean render(int layer);
+
 
     public abstract boolean onMousePressed(int x, int y, int button);
 
@@ -249,6 +292,7 @@ public abstract class NComponent {
     public abstract void onKeyPressed(int key);
 
     public abstract void onKeyReleased(int key);
+
 
     public abstract boolean isKeyboardNeeded();
 }
