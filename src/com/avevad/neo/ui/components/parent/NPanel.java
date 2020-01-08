@@ -22,9 +22,4 @@ public class NPanel extends NParentComponent {
         }
         return super.render(layer);
     }
-
-    @Override
-    public int getZIndex() {
-        return 0;
-    }
 }

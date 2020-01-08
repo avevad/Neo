@@ -90,9 +90,4 @@ public class NFreestyleComponent extends NComponent {
     public boolean isKeyboardNeeded() {
         return keyboardNeeded;
     }
-
-    @Override
-    public int getZIndex() {
-        return zIndex;
-    }
 }

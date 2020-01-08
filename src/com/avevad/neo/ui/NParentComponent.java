@@ -49,18 +49,24 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean render(int layer) {
-        Collections.sort(children);
-        List<NComponent> render = new ArrayList<>(children);
-        List<NComponent> render2 = new ArrayList<>();
-        int l = 0;
-        while (!render.isEmpty()) {
-            for (NComponent child : render) {
-                if (child.render(l)) render2.add(child);
+        synchronized (children) {
+            List<NComponent> zSort = new ArrayList<>();
+            List<NComponent> render = new ArrayList<>(children);
+            List<NComponent> render2 = new ArrayList<>();
+            int l = 0;
+            while (!render.isEmpty()) {
+                for (NComponent child : render) {
+                    if (child.render(l)) render2.add(child);
+                }
+                zSort.addAll(render);
+                zSort.removeAll(render2);
+                render.clear();
+                render.addAll(render2);
+                render2.clear();
+                l++;
             }
-            render.clear();
-            render.addAll(render2);
-            render2.clear();
-            l++;
+            children.clear();
+            children.addAll(zSort);
         }
         return false;
     }
@@ -72,7 +78,6 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMousePressed(int x, int y, int button) {
-        Collections.sort(children);
         for (NComponent comp : this) {
             if (comp.onMousePressed(x - comp.getLocationX(), y - comp.getLocationY(), button)) return true;
         }
@@ -81,7 +86,6 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMouseReleased(int x, int y, int button) {
-        Collections.sort(children);
         for (NComponent comp : this) {
             if (comp.onMouseReleased(x - comp.getLocationX(), y - comp.getLocationY(), button)) return true;
         }
@@ -90,7 +94,6 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMouseDragged(int x, int y, int button) {
-        Collections.sort(children);
         for (NComponent comp : this) {
             if (comp.onMouseDragged(x - comp.getLocationX(), y - comp.getLocationY(), button)) return true;
         }
@@ -99,7 +102,6 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMouseMoved(int x, int y) {
-        Collections.sort(children);
         for (NComponent comp : this) {
             if (comp.onMouseMoved(x - comp.getLocationX(), y - comp.getLocationY())) return true;
         }
@@ -108,7 +110,6 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMouseWheelScrolled(int x, int y, int value) {
-        Collections.sort(children);
         for (NComponent comp : this) {
             if (comp.onMouseWheelScrolled(x - comp.getLocationX(), y - comp.getLocationY(), value)) return true;
         }

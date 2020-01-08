@@ -2,7 +2,7 @@ package com.avevad.neo.ui;
 
 import com.avevad.neo.graphics.*;
 
-public abstract class NComponent implements Comparable<NComponent> {
+public abstract class NComponent {
     private NParentComponent parent;
     private NRectangle bounds;
     private NGraphics graphics;
@@ -96,11 +96,6 @@ public abstract class NComponent implements Comparable<NComponent> {
 
     public final boolean isFocused() {
         return parent != null && parent.getFocus() == this;
-    }
-
-    @Override
-    public int compareTo(NComponent other) {
-        return getZIndex() - other.getZIndex();
     }
 
     private static final class NLinkedGraphics extends NGraphics {
@@ -274,6 +269,4 @@ public abstract class NComponent implements Comparable<NComponent> {
     public abstract void onKeyReleased(int key);
 
     public abstract boolean isKeyboardNeeded();
-
-    public abstract int getZIndex();
 }
