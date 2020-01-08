@@ -12,4 +12,6 @@ public final class NPoint {
     public String toString() {
         return "NPoint(" + x + ", " + y + ")";
     }
+
+    public static final NPoint ZERO = new NPoint(0, 0);
 }
