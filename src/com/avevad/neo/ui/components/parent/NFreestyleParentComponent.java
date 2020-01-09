@@ -19,8 +19,7 @@ public class NFreestyleParentComponent extends NParentComponent {
     public final NEventDispatcher<NKeyPressedEvent> keyPressed = new NEventDispatcher<>();
     public final NEventDispatcher<NKeyReleasedEvent> keyReleased = new NEventDispatcher<>();
 
-    public NFreestyleParentComponent(NImage canvas, int x, int y, int w, int h) {
-        super(null, x, y, w, h);
+    public NFreestyleParentComponent(NImage canvas) {
         this.canvas = canvas;
     }
 

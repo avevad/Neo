@@ -11,12 +11,8 @@ import com.avevad.neo.ui.NUI;
 public class NPanel extends NParentComponent {
     private int color = NColor.WHITE;
 
-    public NPanel(NRectangle bounds) {
-        super(new DefaultUI(), bounds);
-    }
-
-    public NPanel(int x, int y, int w, int h) {
-        super(new DefaultUI(), x, y, w, h);
+    public NPanel() {
+        setUi(new DefaultUI());
     }
 
     public final void setColor(int color) {

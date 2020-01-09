@@ -20,8 +20,7 @@ public class NFreestyleComponent extends NComponent {
     public final NEventDispatcher<NKeyPressedEvent> keyPressed = new NEventDispatcher<>();
     public final NEventDispatcher<NKeyReleasedEvent> keyReleased = new NEventDispatcher<>();
 
-    public NFreestyleComponent(NImage canvas, int x, int y, int w, int h) {
-        super(null, x, y, w, h);
+    public NFreestyleComponent(NImage canvas) {
         this.canvas = canvas;
     }
 

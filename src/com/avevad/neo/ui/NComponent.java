@@ -8,14 +8,8 @@ public abstract class NComponent {
     private NGraphics graphics;
     private NUI ui;
 
-    public NComponent(NUI ui, NRectangle bounds) {
-        this.ui = ui;
-        this.bounds = bounds;
-    }
-
-    public NComponent(NUI ui, int x, int y, int w, int h) {
-        this.ui = ui;
-        this.bounds = new NRectangle(x, y, w, h);
+    public NComponent() {
+        this.bounds = new NRectangle(0, 0, 0, 0);
     }
 
     public synchronized void setParent(NParentComponent parent) {

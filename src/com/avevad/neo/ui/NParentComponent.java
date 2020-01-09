@@ -9,12 +9,8 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     private final List<NComponent> children = new ArrayList<>();
     private NComponent focus;
 
-    public NParentComponent(NUI ui, NRectangle bounds) {
-        super(ui, bounds);
-    }
-
-    public NParentComponent(NUI ui, int x, int y, int w, int h) {
-        super(ui, x, y, w, h);
+    public NParentComponent() {
+        super();
     }
 
     public boolean hasChild(NComponent child) {
