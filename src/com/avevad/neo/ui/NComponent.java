@@ -116,9 +116,31 @@ public abstract class NComponent {
     }
 
 
+
     public final boolean isFocused() {
         return parent != null && parent.getFocus() == this;
     }
+
+
+    public abstract boolean render(int layer);
+
+
+    public abstract boolean onMousePressed(int x, int y, int button);
+
+    public abstract boolean onMouseReleased(int x, int y, int button);
+
+    public abstract boolean onMouseDragged(int x, int y, int button);
+
+    public abstract boolean onMouseWheelScrolled(int x, int y, int value);
+
+    public abstract boolean onMouseMoved(int x, int y);
+
+    public abstract void onKeyPressed(int key);
+
+    public abstract void onKeyReleased(int key);
+
+
+    public abstract boolean isKeyboardNeeded();
 
 
     private static final class NLinkedGraphics extends NGraphics {
@@ -274,25 +296,4 @@ public abstract class NComponent {
             graphics.drawImage(img, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
         }
     }
-
-
-    public abstract boolean render(int layer);
-
-
-    public abstract boolean onMousePressed(int x, int y, int button);
-
-    public abstract boolean onMouseReleased(int x, int y, int button);
-
-    public abstract boolean onMouseDragged(int x, int y, int button);
-
-    public abstract boolean onMouseWheelScrolled(int x, int y, int value);
-
-    public abstract boolean onMouseMoved(int x, int y);
-
-    public abstract void onKeyPressed(int key);
-
-    public abstract void onKeyReleased(int key);
-
-
-    public abstract boolean isKeyboardNeeded();
 }
