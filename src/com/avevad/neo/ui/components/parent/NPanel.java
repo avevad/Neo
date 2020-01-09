@@ -4,17 +4,19 @@ import com.avevad.neo.graphics.NColor;
 import com.avevad.neo.graphics.NGraphics;
 import com.avevad.neo.graphics.NPoint;
 import com.avevad.neo.graphics.NRectangle;
+import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NParentComponent;
+import com.avevad.neo.ui.NUI;
 
 public class NPanel extends NParentComponent {
     private int color = NColor.WHITE;
 
     public NPanel(NRectangle bounds) {
-        super(bounds);
+        super(new DefaultUI(), bounds);
     }
 
     public NPanel(int x, int y, int w, int h) {
-        super(x, y, w, h);
+        super(new DefaultUI(), x, y, w, h);
     }
 
     public final void setColor(int color) {
@@ -23,16 +25,6 @@ public class NPanel extends NParentComponent {
 
     public final int getColor() {
         return color;
-    }
-
-    @Override
-    public boolean render(int layer) {
-        NGraphics g = getParent().getGraphics();
-        if (layer == 0) {
-            g.setColor(getColor());
-            g.fillRect(getX(), getY(), getWidth(), getHeight());
-        }
-        return super.render(layer);
     }
 
     @Override
@@ -63,5 +55,20 @@ public class NPanel extends NParentComponent {
     public boolean onMouseWheelScrolled(int x, int y, int value) {
         if (super.onMouseWheelScrolled(x, y, value)) return true;
         return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    }
+
+    private static final class DefaultUI implements NUI {
+
+        @Override
+        public boolean render(NComponent component, int layer) {
+            if (!(component instanceof NPanel)) throw new IllegalArgumentException("This UI can only render NPanel");
+            NPanel panel = (NPanel) component;
+            NGraphics g = panel.getParent().getGraphics();
+            if (layer == 0) {
+                g.setColor(panel.getColor());
+                g.fillRect(panel.getX(), panel.getY(), panel.getWidth(), panel.getHeight());
+            }
+            return false;
+        }
     }
 }

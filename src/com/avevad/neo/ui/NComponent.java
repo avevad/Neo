@@ -6,12 +6,15 @@ public abstract class NComponent {
     private NParentComponent parent;
     private NRectangle bounds;
     private NGraphics graphics;
+    private NUI ui;
 
-    public NComponent(NRectangle bounds) {
+    public NComponent(NUI ui, NRectangle bounds) {
+        this.ui = ui;
         this.bounds = bounds;
     }
 
-    public NComponent(int x, int y, int w, int h) {
+    public NComponent(NUI ui, int x, int y, int w, int h) {
+        this.ui = ui;
         this.bounds = new NRectangle(x, y, w, h);
     }
 
@@ -34,6 +37,15 @@ public abstract class NComponent {
 
     public NGraphics getGraphics() {
         return graphics;
+    }
+
+
+    public void setUi(NUI ui) {
+        this.ui = ui;
+    }
+
+    public final NUI getUi() {
+        return ui;
     }
 
 
@@ -116,13 +128,15 @@ public abstract class NComponent {
     }
 
 
-
     public final boolean isFocused() {
         return parent != null && parent.getFocus() == this;
     }
 
 
-    public abstract boolean render(int layer);
+    public boolean render(int layer) {
+        if (ui != null) return ui.render(this, layer);
+        else return false;
+    }
 
 
     public abstract boolean onMousePressed(int x, int y, int button);

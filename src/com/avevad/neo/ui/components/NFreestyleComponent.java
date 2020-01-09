@@ -5,6 +5,7 @@ import com.avevad.neo.graphics.NImage;
 import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NEventDispatcher;
+import com.avevad.neo.ui.NUI;
 import com.avevad.neo.ui.events.*;
 
 public class NFreestyleComponent extends NComponent {
@@ -20,8 +21,13 @@ public class NFreestyleComponent extends NComponent {
     public final NEventDispatcher<NKeyReleasedEvent> keyReleased = new NEventDispatcher<>();
 
     public NFreestyleComponent(NImage canvas, int x, int y, int w, int h) {
-        super(x, y, w, h);
+        super(null, x, y, w, h);
         this.canvas = canvas;
+    }
+
+    @Override
+    public void setUi(NUI ui) {
+        throw new UnsupportedOperationException("this component doesn't support custom UI");
     }
 
     @Override

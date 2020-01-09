@@ -9,12 +9,12 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     private final List<NComponent> children = new ArrayList<>();
     private NComponent focus;
 
-    public NParentComponent(NRectangle bounds) {
-        super(bounds);
+    public NParentComponent(NUI ui, NRectangle bounds) {
+        super(ui, bounds);
     }
 
-    public NParentComponent(int x, int y, int w, int h) {
-        super(x, y, w, h);
+    public NParentComponent(NUI ui, int x, int y, int w, int h) {
+        super(ui, x, y, w, h);
     }
 
     public boolean hasChild(NComponent child) {
@@ -49,7 +49,8 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean render(int layer) {
-        synchronized (children) {
+        boolean ret = super.render(layer);
+        if (layer == 0) synchronized (children) {
             List<NComponent> zSort = new ArrayList<>();
             List<NComponent> render = new ArrayList<>(children);
             List<NComponent> render2 = new ArrayList<>();
@@ -68,7 +69,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
             children.clear();
             children.addAll(zSort);
         }
-        return false;
+        return ret;
     }
 
     @Override
