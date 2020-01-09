@@ -34,11 +34,11 @@ public abstract class NComponent {
     }
 
 
-    public void setUi(NUI ui) {
+    public void setUI(NUI ui) {
         this.ui = ui;
     }
 
-    public final NUI getUi() {
+    public final NUI getUI() {
         return ui;
     }
 

@@ -12,7 +12,7 @@ public class NPanel extends NParentComponent {
     private int color = NColor.WHITE;
 
     public NPanel() {
-        setUi(new DefaultUI());
+        setUI(new DefaultUI());
     }
 
     public final void setColor(int color) {

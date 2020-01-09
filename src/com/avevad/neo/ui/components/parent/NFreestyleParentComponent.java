@@ -24,7 +24,7 @@ public class NFreestyleParentComponent extends NParentComponent {
     }
 
     @Override
-    public void setUi(NUI ui) {
+    public void setUI(NUI ui) {
         throw new UnsupportedOperationException("this component doesn't support custom UI");
     }
 
