@@ -306,6 +306,7 @@ public abstract class NComponent {
 
         @Override
         public NFontMetrics getFontMetrics(NFont font) {
+            updateGraphics();
             return graphics.getFontMetrics(font);
         }
     }
