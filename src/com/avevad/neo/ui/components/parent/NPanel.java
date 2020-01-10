@@ -9,7 +9,7 @@ import com.avevad.neo.ui.NParentComponent;
 import com.avevad.neo.ui.NUI;
 
 public class NPanel extends NParentComponent {
-    private int color = NColor.WHITE;
+    private int color = NColor.NONE;
 
     public NPanel() {
         setUI(new DefaultUI());
@@ -54,6 +54,7 @@ public class NPanel extends NParentComponent {
     }
 
     private static final class DefaultUI implements NUI {
+        public static final int DEFAULT_COLOR = NColor.WHITE;
 
         @Override
         public boolean render(NComponent component, int layer) {
