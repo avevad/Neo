@@ -118,13 +118,13 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     }
 
     @Override
-    public void onKeyPressed(int key) {
-        if (focus != null) focus.onKeyPressed(key);
+    public void onKeyPressed(int key, char c) {
+        if (focus != null) focus.onKeyPressed(key, c);
     }
 
     @Override
-    public void onKeyReleased(int key) {
-        if (focus != null) focus.onKeyReleased(key);
+    public void onKeyReleased(int key, char c) {
+        if (focus != null) focus.onKeyReleased(key, c);
     }
 
     @Override

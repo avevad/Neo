@@ -86,12 +86,12 @@ public class NLabel extends NComponent {
     }
 
     @Override
-    public void onKeyPressed(int key) {
+    public void onKeyPressed(int key, char c) {
 
     }
 
     @Override
-    public void onKeyReleased(int key) {
+    public void onKeyReleased(int key, char c) {
 
     }
 

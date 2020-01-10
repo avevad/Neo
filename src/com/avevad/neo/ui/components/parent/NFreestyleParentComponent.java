@@ -81,15 +81,15 @@ public class NFreestyleParentComponent extends NParentComponent {
     }
 
     @Override
-    public void onKeyPressed(int key) {
-        if (getFocus() != null) super.onKeyPressed(key);
-        else keyPressed.trigger(new NKeyPressedEvent(key));
+    public void onKeyPressed(int key, char c) {
+        if (getFocus() != null) super.onKeyPressed(key, c);
+        else keyPressed.trigger(new NKeyPressedEvent(key, c));
     }
 
     @Override
-    public void onKeyReleased(int key) {
-        if (getFocus() != null) super.onKeyReleased(key);
-        else keyReleased.trigger(new NKeyReleasedEvent(key));
+    public void onKeyReleased(int key, char c) {
+        if (getFocus() != null) super.onKeyReleased(key, c);
+        else keyReleased.trigger(new NKeyReleasedEvent(key, c));
     }
 
     public void setKeyboardNeeded(boolean keyboardNeeded) {

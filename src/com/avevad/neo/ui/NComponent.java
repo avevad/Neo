@@ -123,7 +123,7 @@ public abstract class NComponent {
 
 
     public final boolean isFocused() {
-        return parent != null && parent.getFocus() == this;
+        return parent == null || (parent.getFocus() == this && parent.isFocused());
     }
 
 
@@ -143,9 +143,9 @@ public abstract class NComponent {
 
     public abstract boolean onMouseMoved(int x, int y);
 
-    public abstract void onKeyPressed(int key);
+    public abstract void onKeyPressed(int key, char c);
 
-    public abstract void onKeyReleased(int key);
+    public abstract void onKeyReleased(int key, char c);
 
 
     public abstract boolean isKeyboardNeeded();

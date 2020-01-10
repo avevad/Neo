@@ -77,13 +77,13 @@ public class NFreestyleComponent extends NComponent {
     }
 
     @Override
-    public void onKeyPressed(int key) {
-        keyPressed.trigger(new NKeyPressedEvent(key));
+    public void onKeyPressed(int key, char c) {
+        keyPressed.trigger(new NKeyPressedEvent(key, c));
     }
 
     @Override
-    public void onKeyReleased(int key) {
-        keyReleased.trigger(new NKeyReleasedEvent(key));
+    public void onKeyReleased(int key, char c) {
+        keyReleased.trigger(new NKeyReleasedEvent(key, c));
     }
 
     public void setKeyboardNeeded(boolean keyboardNeeded) {
