@@ -1,4 +1,4 @@
 package com.avevad.neo.graphics;
 
-public class NFont {
+public abstract class NFont {
 }
