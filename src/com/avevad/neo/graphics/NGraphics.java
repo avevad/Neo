@@ -104,4 +104,6 @@ public abstract class NGraphics {
         drawImage(img, srcArea.x, srcArea.y, srcArea.w, srcArea.h, dstArea.x, dstArea.y, dstArea.w, dstArea.h);
     }
 
+    public abstract NFontMetrics getFontMetrics(NFont font);
+
 }

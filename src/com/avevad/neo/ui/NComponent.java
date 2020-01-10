@@ -303,5 +303,10 @@ public abstract class NComponent {
             setParameters();
             graphics.drawImage(img, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
         }
+
+        @Override
+        public NFontMetrics getFontMetrics(NFont font) {
+            return graphics.getFontMetrics(font);
+        }
     }
 }
