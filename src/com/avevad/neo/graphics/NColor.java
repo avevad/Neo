@@ -4,6 +4,8 @@ public final class NColor {
     private NColor() {
     }
 
+    public static final int NONE = -1;
+
     public static final int BLACK = 0x000000;
     public static final int BLUE = 0x0000FF;
     public static final int GREEN = 0x00FF00;
