@@ -112,6 +112,43 @@ public class NLabel extends NComponent {
         return s.substring(0, l) + "...";
     }
 
+    public static NPoint alignText(String text, NDimension boundsSize, NFontMetrics fontMetrics,
+                                   NHorizontalTextAlignment hAlign, NVerticalTextAlignment vAlign) {
+        int w = boundsSize.w;
+        int h = boundsSize.h;
+        int tw = fontMetrics.getWidth(text);
+        int ta = fontMetrics.getAscent();
+        int td = fontMetrics.getDescent();
+        int th = ta + td;
+
+        int x, y;
+        switch (hAlign) {
+            case LEFT:
+                x = 0;
+                break;
+            case RIGHT:
+                x = w - tw;
+                break;
+            case CENTER:
+            default:
+                x = (w - tw) / 2;
+                break;
+        }
+        switch (vAlign) {
+            case TOP:
+                y = ta;
+                break;
+            case BOTTOM:
+                y = h - td;
+                break;
+            case CENTER:
+            default:
+                y = (h - th) / 2 + ta;
+                break;
+        }
+        return new NPoint(x, y);
+    }
+
 
     private final static class DefaultUI implements NUI {
         public static final int DEFAULT_COLOR = NColor.BLACK;
@@ -133,39 +170,10 @@ public class NLabel extends NComponent {
             int w = label.getWidth();
             int h = label.getHeight();
             String s = NLabel.cutToFit(label.getText(), w, fontMetrics);
-            int sw = fontMetrics.getWidth(s);
-            int sa = fontMetrics.getAscent();
-            int sd = fontMetrics.getDescent();
-            int sh = sa + sd;
-
-            int x, y;
-            switch (hAlign) {
-                case LEFT:
-                    x = 0;
-                    break;
-                case RIGHT:
-                    x = w - sw;
-                    break;
-                case CENTER:
-                default:
-                    x = (w - sw) / 2;
-                    break;
-            }
-            switch (vAlign) {
-                case TOP:
-                    y = sa;
-                    break;
-                case BOTTOM:
-                    y = h - sd;
-                    break;
-                case CENTER:
-                default:
-                    y = (h - sh) / 2 + sa;
-                    break;
-            }
+            NPoint point = alignText(s, label.getSize(), fontMetrics, hAlign, vAlign);
             g.setFont(font);
             g.setColor(color);
-            g.drawString(s, x, y);
+            g.drawString(s, point.x, point.y);
             return false;
         }
     }
