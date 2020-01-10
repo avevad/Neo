@@ -15,8 +15,7 @@ public class NLabel extends NComponent {
     private int color = NColor.NONE;
 
 
-    public NLabel(NFont font) {
-        this.font = font;
+    public NLabel() {
         setUI(new DefaultUI());
     }
 
