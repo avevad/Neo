@@ -36,60 +36,60 @@ public class NFreestyleParentComponent extends NParentComponent {
     }
 
     @Override
-    public boolean onMousePressed(int x, int y, int button) {
-        if (super.onMousePressed(x, y, button)) return true;
-        if (x < 0 || x >= getWidth()) return false;
-        if (y < 0 || y >= getHeight()) return false;
-        mousePressed.trigger(new NMousePressedEvent(x, y, button));
+    public boolean onMousePressed(NMousePressedEvent event) {
+        if (super.onMousePressed(event)) return true;
+        if (event.x < 0 || event.x >= getWidth()) return false;
+        if (event.y < 0 || event.y >= getHeight()) return false;
+        mousePressed.trigger(event);
         return true;
     }
 
     @Override
-    public boolean onMouseReleased(int x, int y, int button) {
-        if (super.onMouseReleased(x, y, button)) return true;
-        if (x < 0 || x >= getWidth()) return false;
-        if (y < 0 || y >= getHeight()) return false;
-        mouseReleased.trigger(new NMouseReleasedEvent(x, y, button));
+    public boolean onMouseReleased(NMouseReleasedEvent event) {
+        if (super.onMouseReleased(event)) return true;
+        if (event.x < 0 || event.x >= getWidth()) return false;
+        if (event.y < 0 || event.y >= getHeight()) return false;
+        mouseReleased.trigger(event);
         return true;
     }
 
     @Override
-    public boolean onMouseDragged(int x, int y, int button) {
-        if (super.onMouseDragged(x, y, button)) return true;
-        if (x < 0 || x >= getWidth()) return false;
-        if (y < 0 || y >= getHeight()) return false;
-        mouseDragged.trigger(new NMouseDraggedEvent(x, y, button));
+    public boolean onMouseDragged(NMouseDraggedEvent event) {
+        if (super.onMouseDragged(event)) return true;
+        if (event.x < 0 || event.x >= getWidth()) return false;
+        if (event.y < 0 || event.y >= getHeight()) return false;
+        mouseDragged.trigger(event);
         return true;
     }
 
     @Override
-    public boolean onMouseWheelScrolled(int x, int y, int value) {
-        if (super.onMouseWheelScrolled(x, y, value)) return true;
-        if (x < 0 || x >= getWidth()) return false;
-        if (y < 0 || y >= getHeight()) return false;
-        mouseWheelScrolled.trigger(new NMouseWheelScrolledEvent(x, y, value));
+    public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
+        if (super.onMouseWheelScrolled(event)) return true;
+        if (event.x < 0 || event.x >= getWidth()) return false;
+        if (event.y < 0 || event.y >= getHeight()) return false;
+        mouseWheelScrolled.trigger(event);
         return true;
     }
 
     @Override
-    public boolean onMouseMoved(int x, int y) {
-        if (super.onMouseMoved(x, y)) return true;
-        if (x < 0 || x >= getWidth()) return false;
-        if (y < 0 || y >= getHeight()) return false;
-        mouseMoved.trigger(new NMouseMovedEvent(x, y));
+    public boolean onMouseMoved(NMouseMovedEvent event) {
+        if (super.onMouseMoved(event)) return true;
+        if (event.x < 0 || event.x >= getWidth()) return false;
+        if (event.y < 0 || event.y >= getHeight()) return false;
+        mouseMoved.trigger(event);
         return true;
     }
 
     @Override
-    public void onKeyPressed(int key, char c) {
-        if (getFocus() != null) super.onKeyPressed(key, c);
-        else keyPressed.trigger(new NKeyPressedEvent(key, c));
+    public void onKeyPressed(NKeyPressedEvent event) {
+        if (getFocus() != null) super.onKeyPressed(event);
+        else keyPressed.trigger(event);
     }
 
     @Override
-    public void onKeyReleased(int key, char c) {
-        if (getFocus() != null) super.onKeyReleased(key, c);
-        else keyReleased.trigger(new NKeyReleasedEvent(key, c));
+    public void onKeyReleased(NKeyReleasedEvent event) {
+        if (getFocus() != null) super.onKeyReleased(event);
+        else keyReleased.trigger(event);
     }
 
     public void setKeyboardNeeded(boolean keyboardNeeded) {

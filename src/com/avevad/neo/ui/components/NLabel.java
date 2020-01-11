@@ -5,6 +5,7 @@ import com.avevad.neo.ui.NHorizontalTextAlignment;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NUI;
 import com.avevad.neo.ui.NVerticalTextAlignment;
+import com.avevad.neo.ui.events.*;
 
 public class NLabel extends NComponent {
 
@@ -61,37 +62,37 @@ public class NLabel extends NComponent {
     }
 
     @Override
-    public boolean onMousePressed(int x, int y, int button) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    public boolean onMousePressed(NMousePressedEvent event) {
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
-    public boolean onMouseReleased(int x, int y, int button) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    public boolean onMouseReleased(NMouseReleasedEvent event) {
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
-    public boolean onMouseDragged(int x, int y, int button) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    public boolean onMouseDragged(NMouseDraggedEvent event) {
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
-    public boolean onMouseWheelScrolled(int x, int y, int value) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
-    public boolean onMouseMoved(int x, int y) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    public boolean onMouseMoved(NMouseMovedEvent event) {
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
-    public void onKeyPressed(int key, char c) {
+    public void onKeyPressed(NKeyPressedEvent event) {
 
     }
 
     @Override
-    public void onKeyReleased(int key, char c) {
+    public void onKeyReleased(NKeyReleasedEvent event) {
 
     }
 

@@ -1,6 +1,7 @@
 package com.avevad.neo.ui;
 
 import com.avevad.neo.graphics.*;
+import com.avevad.neo.ui.events.*;
 
 public abstract class NComponent {
     private NParentComponent parent;
@@ -133,19 +134,19 @@ public abstract class NComponent {
     }
 
 
-    public abstract boolean onMousePressed(int x, int y, int button);
+    public abstract boolean onMousePressed(NMousePressedEvent event);
 
-    public abstract boolean onMouseReleased(int x, int y, int button);
+    public abstract boolean onMouseReleased(NMouseReleasedEvent event);
 
-    public abstract boolean onMouseDragged(int x, int y, int button);
+    public abstract boolean onMouseDragged(NMouseDraggedEvent event);
 
-    public abstract boolean onMouseWheelScrolled(int x, int y, int value);
+    public abstract boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event);
 
-    public abstract boolean onMouseMoved(int x, int y);
+    public abstract boolean onMouseMoved(NMouseMovedEvent event);
 
-    public abstract void onKeyPressed(int key, char c);
+    public abstract void onKeyPressed(NKeyPressedEvent event);
 
-    public abstract void onKeyReleased(int key, char c);
+    public abstract void onKeyReleased(NKeyReleasedEvent event);
 
 
     public abstract boolean isKeyboardNeeded();

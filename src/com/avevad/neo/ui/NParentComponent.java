@@ -2,6 +2,7 @@ package com.avevad.neo.ui;
 
 
 import com.avevad.neo.graphics.NRectangle;
+import com.avevad.neo.ui.events.*;
 
 import java.util.*;
 
@@ -74,9 +75,9 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     }
 
     @Override
-    public boolean onMousePressed(int x, int y, int button) {
+    public boolean onMousePressed(NMousePressedEvent event) {
         for (NComponent comp : this) {
-            if (comp.onMousePressed(x - comp.getX(), y - comp.getY(), button)) {
+            if (comp.onMousePressed(new NMousePressedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button))) {
                 setFocus(comp);
                 return true;
             }
@@ -86,45 +87,48 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     }
 
     @Override
-    public boolean onMouseReleased(int x, int y, int button) {
+    public boolean onMouseReleased(NMouseReleasedEvent event) {
         for (NComponent comp : this) {
-            if (comp.onMouseReleased(x - comp.getX(), y - comp.getY(), button)) return true;
+            if (comp.onMouseReleased(new NMouseReleasedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button)))
+                return true;
         }
         return false;
     }
 
     @Override
-    public boolean onMouseDragged(int x, int y, int button) {
+    public boolean onMouseDragged(NMouseDraggedEvent event) {
         for (NComponent comp : this) {
-            if (comp.onMouseDragged(x - comp.getX(), y - comp.getY(), button)) return true;
+            if (comp.onMouseDragged(new NMouseDraggedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button)))
+                return true;
         }
         return false;
     }
 
     @Override
-    public boolean onMouseMoved(int x, int y) {
+    public boolean onMouseMoved(NMouseMovedEvent event) {
         for (NComponent comp : this) {
-            if (comp.onMouseMoved(x - comp.getX(), y - comp.getY())) return true;
+            if (comp.onMouseMoved(new NMouseMovedEvent(event.x - comp.getX(), event.y - comp.getY()))) return true;
         }
         return false;
     }
 
     @Override
-    public boolean onMouseWheelScrolled(int x, int y, int value) {
+    public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
         for (NComponent comp : this) {
-            if (comp.onMouseWheelScrolled(x - comp.getX(), y - comp.getY(), value)) return true;
+            if (comp.onMouseWheelScrolled(new NMouseWheelScrolledEvent(event.x - comp.getX(), event.y - comp.getY(), event.value)))
+                return true;
         }
         return false;
     }
 
     @Override
-    public void onKeyPressed(int key, char c) {
-        if (focus != null) focus.onKeyPressed(key, c);
+    public void onKeyPressed(NKeyPressedEvent event) {
+        if (focus != null) focus.onKeyPressed(new NKeyPressedEvent(event.key, event.c));
     }
 
     @Override
-    public void onKeyReleased(int key, char c) {
-        if (focus != null) focus.onKeyReleased(key, c);
+    public void onKeyReleased(NKeyReleasedEvent event) {
+        if (focus != null) focus.onKeyReleased(new NKeyReleasedEvent(event.key, event.c));
     }
 
     @Override

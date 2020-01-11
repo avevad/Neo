@@ -7,6 +7,7 @@ import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NParentComponent;
 import com.avevad.neo.ui.NUI;
+import com.avevad.neo.ui.events.*;
 
 public class NPanel extends NParentComponent {
     private int color = NColor.NONE;
@@ -24,33 +25,33 @@ public class NPanel extends NParentComponent {
     }
 
     @Override
-    public boolean onMousePressed(int x, int y, int button) {
-        if (super.onMousePressed(x, y, button)) return true;
-        return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    public boolean onMousePressed(NMousePressedEvent event) {
+        if (super.onMousePressed(event)) return true;
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
-    public boolean onMouseReleased(int x, int y, int button) {
-        if (super.onMouseReleased(x, y, button)) return true;
-        return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    public boolean onMouseReleased(NMouseReleasedEvent event) {
+        if (super.onMouseReleased(event)) return true;
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
-    public boolean onMouseDragged(int x, int y, int button) {
-        if (super.onMouseDragged(x, y, button)) return true;
-        return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    public boolean onMouseDragged(NMouseDraggedEvent event) {
+        if (super.onMouseDragged(event)) return true;
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
-    public boolean onMouseMoved(int x, int y) {
-        if (super.onMouseMoved(x, y)) return true;
-        return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    public boolean onMouseMoved(NMouseMovedEvent event) {
+        if (super.onMouseMoved(event)) return true;
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
-    public boolean onMouseWheelScrolled(int x, int y, int value) {
-        if (super.onMouseWheelScrolled(x, y, value)) return true;
-        return new NRectangle(NPoint.ZERO, getSize()).contains(x, y);
+    public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
+        if (super.onMouseWheelScrolled(event)) return true;
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     private static final class DefaultUI implements NUI {
