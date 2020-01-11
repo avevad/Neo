@@ -113,40 +113,39 @@ public class NLabel extends NComponent {
         return s.substring(0, l) + "...";
     }
 
-    public static NPoint alignText(String text, NDimension boundsSize, NFontMetrics fontMetrics,
-                                   NHorizontalTextAlignment hAlign, NVerticalTextAlignment vAlign) {
-        int w = boundsSize.w;
-        int h = boundsSize.h;
+
+    public static int alignText(String text, int width, NFontMetrics fontMetrics, NHorizontalTextAlignment align) {
         int tw = fontMetrics.getWidth(text);
+        switch (align) {
+            case LEFT:
+                return 0;
+            case RIGHT:
+                return width - tw;
+            case CENTER:
+            default:
+                return (width - tw) / 2;
+        }
+    }
+
+    public static int alignText(String text, int height, NFontMetrics fontMetrics, NVerticalTextAlignment align) {
         int ta = fontMetrics.getAscent();
         int td = fontMetrics.getDescent();
         int th = ta + td;
-
-        int x, y;
-        switch (hAlign) {
-            case LEFT:
-                x = 0;
-                break;
-            case RIGHT:
-                x = w - tw;
-                break;
-            case CENTER:
-            default:
-                x = (w - tw) / 2;
-                break;
-        }
-        switch (vAlign) {
+        switch (align) {
             case TOP:
-                y = ta;
-                break;
+                return ta;
             case BOTTOM:
-                y = h - td;
-                break;
+                return height - td;
             case CENTER:
             default:
-                y = (h - th) / 2 + ta;
-                break;
+                return (height - th) / 2 + ta;
         }
+    }
+
+    public static NPoint alignText(String text, NDimension boundsSize, NFontMetrics fontMetrics,
+                                   NHorizontalTextAlignment hAlign, NVerticalTextAlignment vAlign) {
+        int x = alignText(text, boundsSize.w, fontMetrics, hAlign);
+        int y = alignText(text, boundsSize.h, fontMetrics, vAlign);
         return new NPoint(x, y);
     }
 
