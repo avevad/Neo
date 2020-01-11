@@ -144,6 +144,10 @@ public abstract class NComponent {
 
     public abstract boolean onMouseMoved(NMouseMovedEvent event);
 
+    public void onMouseExited() {
+
+    }
+
     public abstract void onKeyPressed(NKeyPressedEvent event);
 
     public abstract void onKeyReleased(NKeyReleasedEvent event);

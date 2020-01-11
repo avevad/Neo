@@ -89,6 +89,11 @@ public class NButton extends NComponent {
     }
 
     @Override
+    public void onMouseExited() {
+        isHovered = false;
+    }
+
+    @Override
     public void onKeyPressed(NKeyPressedEvent event) {
         if (event.c == ' ' || event.c == '\n') isPressed = true;
     }

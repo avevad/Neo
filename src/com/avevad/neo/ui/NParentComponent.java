@@ -11,6 +11,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     private final List<NComponent> children = new ArrayList<>();
     private NComponent focus;
     private boolean isMousePressed;
+    private NComponent lastHoveredChild;
 
     public NParentComponent() {
         super();
@@ -105,9 +106,14 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     public boolean onMouseDragged(NMouseDraggedEvent event) {
         if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         for (NComponent comp : this) {
-            if (comp.onMouseDragged(new NMouseDraggedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button)))
+            if (comp.onMouseDragged(new NMouseDraggedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button))) {
+                if (lastHoveredChild != null && lastHoveredChild != comp) lastHoveredChild.onMouseExited();
+                lastHoveredChild = comp;
                 return true;
+            }
         }
+        if (lastHoveredChild != null) lastHoveredChild.onMouseExited();
+        lastHoveredChild = null;
         return false;
     }
 
@@ -115,9 +121,21 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     public boolean onMouseMoved(NMouseMovedEvent event) {
         if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         for (NComponent comp : this) {
-            if (comp.onMouseMoved(new NMouseMovedEvent(event.x - comp.getX(), event.y - comp.getY()))) return true;
+            if (comp.onMouseMoved(new NMouseMovedEvent(event.x - comp.getX(), event.y - comp.getY()))) {
+                if (lastHoveredChild != null && lastHoveredChild != comp) lastHoveredChild.onMouseExited();
+                lastHoveredChild = comp;
+                return true;
+            }
         }
+        if (lastHoveredChild != null) lastHoveredChild.onMouseExited();
+        lastHoveredChild = null;
         return false;
+    }
+
+    @Override
+    public void onMouseExited() {
+        if (lastHoveredChild != null) lastHoveredChild.onMouseExited();
+        lastHoveredChild = null;
     }
 
     @Override
