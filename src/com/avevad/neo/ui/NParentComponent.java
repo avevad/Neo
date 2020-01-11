@@ -1,6 +1,7 @@
 package com.avevad.neo.ui;
 
 
+import com.avevad.neo.graphics.NPoint;
 import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.events.*;
 
@@ -76,6 +77,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         for (NComponent comp : this) {
             if (comp.onMousePressed(new NMousePressedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button))) {
                 setFocus(comp);
@@ -88,6 +90,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         for (NComponent comp : this) {
             if (comp.onMouseReleased(new NMouseReleasedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button)))
                 return true;
@@ -97,6 +100,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         for (NComponent comp : this) {
             if (comp.onMouseDragged(new NMouseDraggedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button)))
                 return true;
@@ -106,6 +110,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         for (NComponent comp : this) {
             if (comp.onMouseMoved(new NMouseMovedEvent(event.x - comp.getX(), event.y - comp.getY()))) return true;
         }
@@ -114,6 +119,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         for (NComponent comp : this) {
             if (comp.onMouseWheelScrolled(new NMouseWheelScrolledEvent(event.x - comp.getX(), event.y - comp.getY(), event.value)))
                 return true;
