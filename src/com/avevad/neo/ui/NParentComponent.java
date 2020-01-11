@@ -10,6 +10,7 @@ import java.util.*;
 public abstract class NParentComponent extends NComponent implements Iterable<NComponent> {
     private final List<NComponent> children = new ArrayList<>();
     private NComponent focus;
+    private boolean isMousePressed;
 
     public NParentComponent() {
         super();
@@ -78,6 +79,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
         if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
+        isMousePressed = true;
         for (NComponent comp : this) {
             if (comp.onMousePressed(new NMousePressedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button))) {
                 setFocus(comp);
@@ -90,7 +92,8 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
-        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y) && !isMousePressed) return false;
+        isMousePressed = false;
         for (NComponent comp : this) {
             if (comp.onMouseReleased(new NMouseReleasedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button)))
                 return true;
