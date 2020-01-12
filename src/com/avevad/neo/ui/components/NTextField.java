@@ -9,6 +9,7 @@ import com.avevad.neo.ui.events.*;
 
 
 public class NTextField extends NComponent {
+    private long lastKeyPressTime = 0;
     private String text;
     private NTextSelection selection = new NTextSelection(0, 0);
     private int caretPosition = 0;
@@ -81,6 +82,9 @@ public class NTextField extends NComponent {
             setSelection(new NTextSelection(caretPosition, caretPosition));
     }
 
+    public long getLastKeyPressTime() {
+        return lastKeyPressTime;
+    }
 
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
@@ -119,6 +123,7 @@ public class NTextField extends NComponent {
 
     @Override
     public void onKeyPressed(NKeyPressedEvent event) {
+        lastKeyPressTime = System.currentTimeMillis();
         if (((short) event.c) != -1) {
             char c = event.c;
             if (c == '\b' || c == 127) {
@@ -148,7 +153,18 @@ public class NTextField extends NComponent {
                 }
             }
         } else {
-
+            if (event.key == NKeyEvent.NKey.ARROW_LEFT) {
+                if (caretPosition != 0) setCaretPosition(caretPosition - 1);
+            }
+            if (event.key == NKeyEvent.NKey.ARROW_RIGHT) {
+                if (caretPosition != text.length()) setCaretPosition(caretPosition + 1);
+            }
+            if (event.key == NKeyEvent.NKey.HOME) {
+                setCaretPosition(0);
+            }
+            if (event.key == NKeyEvent.NKey.END) {
+                setCaretPosition(text.length());
+            }
         }
     }
 
@@ -196,7 +212,7 @@ public class NTextField extends NComponent {
             int textH = fontMetrics.getAscent() + fontMetrics.getDescent();
             int caretX = fontMetrics.getWidth(text.substring(0, caretPosition)) - offset;
 
-            boolean caretVisible = (System.currentTimeMillis() / CARET_BLINK_DURATION) % 2 == 1;
+            boolean caretVisible = ((System.currentTimeMillis() - textField.getLastKeyPressTime()) / CARET_BLINK_DURATION) % 2 == 0;
             caretVisible &= textField.isFocused();
             if (backgroundColor == NColor.NONE) backgroundColor = DEFAULT_BACKGROUND_COLOR;
             int foregroundColor = textField.getForegroundColor();
