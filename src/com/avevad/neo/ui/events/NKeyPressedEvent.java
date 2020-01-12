@@ -4,7 +4,7 @@ import com.avevad.neo.ui.NEvent;
 
 public class NKeyPressedEvent extends NKeyEvent {
 
-    public NKeyPressedEvent(int key, char c) {
+    public NKeyPressedEvent(NKey key, char c) {
         super(key, c);
     }
 }
