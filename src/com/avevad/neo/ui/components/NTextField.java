@@ -109,16 +109,12 @@ public class NTextField extends NComponent {
 
     @Override
     public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
-        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
-
-        return true;
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
-        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
-
-        return true;
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
@@ -244,8 +240,8 @@ public class NTextField extends NComponent {
 
             if (caretX < 0) {
                 textField.setViewOffset(caretX + offset);
-            } else if (caretX > w - 1) {
-                textField.setViewOffset(caretX + offset - w);
+            } else if (caretX > w - 2) {
+                textField.setViewOffset(caretX + offset - w + 2);
             }
 
             return false;
