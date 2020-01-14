@@ -104,7 +104,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
-        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y) && !isMousePressed) return false;
         for (NComponent comp : this) {
             if (comp.onMouseDragged(new NMouseDraggedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button))) {
                 if (lastHoveredChild != null && lastHoveredChild != comp) lastHoveredChild.onMouseExited();

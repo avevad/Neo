@@ -9,6 +9,7 @@ import com.avevad.neo.ui.events.*;
 
 
 public class NTextField extends NComponent {
+    private boolean isMousePressed;
     private long lastKeyPressTime = 0;
     private String text;
     private NTextSelection selection = new NTextSelection(0, 0);
@@ -89,21 +90,44 @@ public class NTextField extends NComponent {
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
         if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
-
+        isMousePressed = true;
+        NFontMetrics fontMetrics = getGraphics().getFontMetrics(font);
+        int pos = 0;
+        for (; pos < text.length(); pos++) {
+            int x = fontMetrics.getWidth(text.substring(0, pos));
+            if (pos < text.length()) x = (x + fontMetrics.getWidth(text.substring(0, pos + 1))) / 2;
+            x -= viewOffset;
+            if (event.x <= x) break;
+        }
+        setCaretPosition(pos);
         return true;
     }
 
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
-        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
-
-        return true;
+        isMousePressed = false;
+        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
-        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
-
+        if (!isMousePressed) return false;
+        NFontMetrics fontMetrics = getGraphics().getFontMetrics(font);
+        int pos = 0;
+        for (; pos < text.length(); pos++) {
+            int x = fontMetrics.getWidth(text.substring(0, pos));
+            if (pos < text.length()) x = (x + fontMetrics.getWidth(text.substring(0, pos + 1))) / 2;
+            x -= viewOffset;
+            if (event.x <= x) break;
+        }
+        int begin = selection.begin, end = selection.end;
+        if (caretPosition == begin) {
+            begin = pos;
+        } else {
+            end = pos;
+        }
+        setSelection(new NTextSelection(Integer.min(begin, end), Integer.max(begin, end)));
+        setCaretPosition(pos);
         return true;
     }
 
