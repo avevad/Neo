@@ -8,6 +8,7 @@ public abstract class NComponent {
     private NRectangle bounds;
     private NGraphics graphics;
     private NUI ui;
+    private int focusIndex = 0;
 
     public NComponent() {
         this.bounds = new NRectangle(0, 0, 0, 0);
@@ -127,6 +128,13 @@ public abstract class NComponent {
         return parent == null || (parent.getFocus() == this && parent.isFocused());
     }
 
+    public int getFocusIndex() {
+        return focusIndex;
+    }
+
+    public void setFocusIndex(int focusIndex) {
+        this.focusIndex = focusIndex;
+    }
 
     public boolean render(int layer) {
         if (ui != null) return ui.render(this, layer);
