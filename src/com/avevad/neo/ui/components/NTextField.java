@@ -99,7 +99,8 @@ public class NTextField extends NComponent {
             x -= viewOffset;
             if (event.x <= x) break;
         }
-        setCaretPosition(pos);
+        setSelection(new NTextSelection(pos, pos));
+        lastKeyPressTime = System.currentTimeMillis();
         return true;
     }
 
@@ -128,6 +129,7 @@ public class NTextField extends NComponent {
         }
         setSelection(new NTextSelection(Integer.min(begin, end), Integer.max(begin, end)));
         setCaretPosition(pos);
+        lastKeyPressTime = System.currentTimeMillis();
         return true;
     }
 
@@ -256,13 +258,14 @@ public class NTextField extends NComponent {
 
             if (caretVisible) {
                 g.setColor(caretColor);
-                g.fillRect(caretX, selectionRectangleY, 2, textH);
+                if (caretPosition == selection.end) g.fillRect(caretX, selectionRectangleY, 2, textH);
+                else g.fillRect(caretX - 2, selectionRectangleY, 2, textH);
             }
 
             g.setColor(foregroundColor);
             g.drawRect(0, 0, w - 1, h - 1);
 
-            if (caretX < 0) {
+            if (caretX < 2) {
                 textField.setViewOffset(caretX + offset);
             } else if (caretX > w - 2) {
                 textField.setViewOffset(caretX + offset - w + 2);
