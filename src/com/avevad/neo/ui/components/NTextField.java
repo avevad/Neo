@@ -90,6 +90,7 @@ public class NTextField extends NComponent {
 
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
+        if (!isEnabled()) return false;
         if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         isMousePressed = true;
         NFontMetrics fontMetrics = getGraphics().getFontMetrics(font);
@@ -110,12 +111,14 @@ public class NTextField extends NComponent {
 
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
+        if (!isEnabled()) return false;
         isMousePressed = false;
         return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
+        if (!isEnabled()) return false;
         if (!isMousePressed) return false;
         NFontMetrics fontMetrics = getGraphics().getFontMetrics(font);
         int pos = 0;
@@ -142,16 +145,19 @@ public class NTextField extends NComponent {
 
     @Override
     public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
+        if (!isEnabled()) return false;
         return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
+        if (!isEnabled()) return false;
         return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public void onKeyPressed(NKeyPressedEvent event) {
+        if (!isEnabled()) return;
         lastKeyPressTime = System.currentTimeMillis();
         if (((short) event.c) != -1) {
             char c = event.c;
@@ -244,7 +250,7 @@ public class NTextField extends NComponent {
 
     @Override
     public boolean isKeyboardNeeded() {
-        return isFocused();
+        return isFocused() && isEnabled();
     }
 
 
@@ -253,6 +259,9 @@ public class NTextField extends NComponent {
         public static final int DEFAULT_FOREGROUND_COLOR = NColor.BLACK;
 
         public static final int CARET_BLINK_DURATION = 500;
+
+        public static final int DISABLED_COVER_COLOR = NColor.WHITE;
+        public static final double DISABLED_COVER_OPACITY = 0.5;
 
         @Override
         public boolean render(NComponent component, int layer) {
@@ -282,11 +291,13 @@ public class NTextField extends NComponent {
             int caretX = fontMetrics.getWidth(text.substring(0, caretPosition)) - offset;
 
             boolean caretVisible = ((System.currentTimeMillis() - textField.getLastKeyPressTime()) / CARET_BLINK_DURATION) % 2 == 0;
-            caretVisible &= textField.isFocused();
+            caretVisible &= textField.isKeyboardNeeded();
             if (backgroundColor == NColor.NONE) backgroundColor = DEFAULT_BACKGROUND_COLOR;
             int foregroundColor = textField.getForegroundColor();
             if (foregroundColor == NColor.NONE) foregroundColor = DEFAULT_FOREGROUND_COLOR;
             int caretColor = foregroundColor;
+
+            g.setOpacity(textField.getOpacity());
 
             g.setColor(backgroundColor);
             g.fillRect(0, 0, w, h);
@@ -311,6 +322,12 @@ public class NTextField extends NComponent {
 
             g.setColor(foregroundColor);
             g.drawRect(0, 0, w - 1, h - 1);
+
+            if (!textField.isEnabled()) {
+                g.setOpacity(DISABLED_COVER_OPACITY * textField.getOpacity());
+                g.setColor(DISABLED_COVER_COLOR);
+                g.fillRect(new NRectangle(NPoint.ZERO, textField.getSize()));
+            }
 
             if (caretX < 2) {
                 textField.setViewOffset(caretX + offset);
