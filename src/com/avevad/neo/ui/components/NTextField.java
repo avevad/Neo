@@ -172,6 +172,7 @@ public class NTextField extends NComponent {
                         selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
                         text = newText;
                         setCaretPosition(caretPosition - 1);
+                        setSelection(newSelection);
                     }
                     if (key == NKeyEvent.NKey.DELETE) if (caretPosition < text.length()) {
                         String newText = text.substring(0, caretPosition) + text.substring(caretPosition + 1);
@@ -185,8 +186,8 @@ public class NTextField extends NComponent {
                     caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caret));
                     selectionChanged.trigger(new NTextSelectionChangedEvent(selection, new NTextSelection(caret, caret)));
                     text = newText;
-                    setSelection(new NTextSelection(caret, caret));
                     setCaretPosition(caret);
+                    setSelection(new NTextSelection(caret, caret));
                 }
             } else if (c >= 32) {
                 if (selection.length() == 0) {
@@ -197,6 +198,7 @@ public class NTextField extends NComponent {
                     selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
                     text = newText;
                     setCaretPosition(caretPosition + 1);
+                    setSelection(newSelection);
                 } else {
                     String newText = text.substring(0, selection.begin) + c + text.substring(selection.end);
                     int caret = selection.begin + 1;
@@ -205,8 +207,8 @@ public class NTextField extends NComponent {
                     caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caret));
                     selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
                     text = newText;
-                    setSelection(newSelection);
                     setCaretPosition(caret);
+                    setSelection(newSelection);
                 }
             }
         } else {
@@ -215,8 +217,8 @@ public class NTextField extends NComponent {
                     NTextSelection newSelection = new NTextSelection(caretPosition - 1, caretPosition - 1);
                     caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caretPosition - 1));
                     selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
-                    setSelection(newSelection);
                     setCaretPosition(caretPosition - 1);
+                    setSelection(newSelection);
                 }
             }
             if (event.key == NKeyEvent.NKey.ARROW_RIGHT) {
@@ -224,23 +226,23 @@ public class NTextField extends NComponent {
                     NTextSelection newSelection = new NTextSelection(caretPosition + 1, caretPosition + 1);
                     caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caretPosition + 1));
                     selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
-                    setSelection(newSelection);
                     setCaretPosition(caretPosition + 1);
+                    setSelection(newSelection);
                 }
             }
             if (event.key == NKeyEvent.NKey.HOME) {
                 NTextSelection newSelection = new NTextSelection(0, 0);
                 caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, 0));
                 selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
-                setSelection(newSelection);
                 setCaretPosition(0);
+                setSelection(newSelection);
             }
             if (event.key == NKeyEvent.NKey.END) {
                 NTextSelection newSelection = new NTextSelection(text.length(), text.length());
                 caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, text.length()));
                 selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
-                setSelection(newSelection);
                 setCaretPosition(text.length());
+                setSelection(newSelection);
             }
         }
     }
