@@ -184,6 +184,7 @@ public class NTextField extends NComponent {
                     textChanged.trigger(new NTextChangedEvent(text, newText));
                     caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caret));
                     selectionChanged.trigger(new NTextSelectionChangedEvent(selection, new NTextSelection(caret, caret)));
+                    text = newText;
                     setSelection(new NTextSelection(caret, caret));
                     setCaretPosition(caret);
                 }
@@ -203,6 +204,7 @@ public class NTextField extends NComponent {
                     textChanged.trigger(new NTextChangedEvent(text, newText));
                     caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caret));
                     selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
+                    text = newText;
                     setSelection(newSelection);
                     setCaretPosition(caret);
                 }
