@@ -229,11 +229,9 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     public void onKeyPressed(NKeyPressedEvent event) {
         if (reverseFocusMovementKeys.contains(event.key)) {
             pressedReverseFocusMovementKeys.add(event.key);
-            System.out.println("added reverse");
         }
         if (focusMovementKeys.contains(event.key)) {
             pressedFocusMovementKeys.add(event.key);
-            System.out.println("added straight");
         }
         if (pressedReverseFocusMovementKeys.size() == reverseFocusMovementKeys.size()) {
             moveFocusBackward();
