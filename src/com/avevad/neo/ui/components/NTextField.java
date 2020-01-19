@@ -11,7 +11,7 @@ import com.avevad.neo.ui.events.*;
 public class NTextField extends NComponent {
     private boolean isMousePressed;
     private long lastKeyPressTime = 0;
-    private String text;
+    private String text = "";
     private NTextSelection selection = new NTextSelection(0, 0);
     private int caretPosition = 0;
     private NFont font;
