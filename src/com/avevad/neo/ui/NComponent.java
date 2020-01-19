@@ -9,6 +9,8 @@ public abstract class NComponent {
     private NGraphics graphics;
     private NUI ui;
     private int focusIndex = 0;
+    private boolean enabled = true;
+    private double opacity = 1;
 
     public NComponent() {
         this.bounds = new NRectangle(0, 0, 0, 0);
@@ -134,6 +136,23 @@ public abstract class NComponent {
 
     public void setFocusIndex(int focusIndex) {
         this.focusIndex = focusIndex;
+    }
+
+
+    public final boolean isEnabled() {
+        return enabled;
+    }
+
+    public final void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public final void setOpacity(double opacity) {
+        this.opacity = opacity;
+    }
+
+    public final double getOpacity() {
+        return opacity;
     }
 
     public boolean render(int layer) {
