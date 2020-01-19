@@ -61,11 +61,13 @@ public class NButton extends NComponent {
 
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
+        if (!isEnabled()) return false;
         return isPressed = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
+        if (!isEnabled()) return false;
         boolean ret = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
         boolean isClicked = isPressed && ret;
         isPressed = false;
@@ -75,16 +77,19 @@ public class NButton extends NComponent {
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
+        if (!isEnabled()) return false;
         return isHovered = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
+        if (!isEnabled()) return false;
         return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
+        if (!isEnabled()) return false;
         return isHovered = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
@@ -95,11 +100,13 @@ public class NButton extends NComponent {
 
     @Override
     public void onKeyPressed(NKeyPressedEvent event) {
+        if (!isEnabled()) return;
         if (event.c == ' ' || event.c == '\n') isPressed = true;
     }
 
     @Override
     public void onKeyReleased(NKeyReleasedEvent event) {
+        if (!isEnabled()) return;
         if (isPressed) clicked.trigger(new ClickedEvent());
         if (event.c == ' ' || event.c == '\n') isPressed = false;
     }
@@ -116,6 +123,9 @@ public class NButton extends NComponent {
         public static final double PRESS_COLOR_RATIO = 0.25;
         public static final double HOVER_COLOR_RATIO = 0.75;
         public static final double FOCUS_COLOR_RATIO = 0.5;
+
+        public static final int DISABLED_COVER_COLOR = NColor.WHITE;
+        public static final double DISABLED_COVER_OPACITY = 0.5;
 
         @Override
         public boolean render(NComponent component, int layer) {
@@ -146,6 +156,8 @@ public class NButton extends NComponent {
             if (pressed) backgroundColor = pressColor;
             else if (hovered) backgroundColor = hoverColor;
 
+            g.setOpacity(button.getOpacity());
+
             g.setColor(backgroundColor);
             g.fillRect(0, 0, w, h);
 
@@ -157,6 +169,12 @@ public class NButton extends NComponent {
 
             g.setColor(focusColor);
             if (focused) g.drawRect(point.x / 2, (point.y - ascent) / 2, w - point.x - 1, h - (point.y - ascent) - 1);
+
+            if (!button.isEnabled()) {
+                g.setOpacity(DISABLED_COVER_OPACITY * button.getOpacity());
+                g.setColor(DISABLED_COVER_COLOR);
+                g.fillRect(new NRectangle(NPoint.ZERO, button.getSize()));
+            }
 
             return false;
         }
