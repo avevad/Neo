@@ -12,6 +12,8 @@ public abstract class NKeyEvent extends NEvent {
     }
 
     public enum NKey {
+        CTRL, ALT, SHIFT,
+        TAB,
         INSERT, DELETE, HOME, END, PAGE_UP, PAGE_DOWN,
         ARROW_UP, ARROW_LEFT, ARROW_DOWN, ARROW_RIGHT,
         UNKNOWN
