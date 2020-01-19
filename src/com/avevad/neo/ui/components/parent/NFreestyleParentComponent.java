@@ -31,12 +31,14 @@ public class NFreestyleParentComponent extends NParentComponent {
     @Override
     public boolean render(int layer) {
         NGraphics g = getParent().getGraphics();
+        g.setOpacity(getOpacity());
         g.drawImage(canvas, getLocation(), getSize());
         return super.render(layer);
     }
 
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
+        if (!isEnabled()) return false;
         if (super.onMousePressed(event)) return true;
         if (event.x < 0 || event.x >= getWidth()) return false;
         if (event.y < 0 || event.y >= getHeight()) return false;
@@ -46,6 +48,7 @@ public class NFreestyleParentComponent extends NParentComponent {
 
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
+        if (!isEnabled()) return false;
         if (super.onMouseReleased(event)) return true;
         if (event.x < 0 || event.x >= getWidth()) return false;
         if (event.y < 0 || event.y >= getHeight()) return false;
@@ -55,6 +58,7 @@ public class NFreestyleParentComponent extends NParentComponent {
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
+        if (!isEnabled()) return false;
         if (super.onMouseDragged(event)) return true;
         if (event.x < 0 || event.x >= getWidth()) return false;
         if (event.y < 0 || event.y >= getHeight()) return false;
@@ -64,6 +68,7 @@ public class NFreestyleParentComponent extends NParentComponent {
 
     @Override
     public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
+        if (!isEnabled()) return false;
         if (super.onMouseWheelScrolled(event)) return true;
         if (event.x < 0 || event.x >= getWidth()) return false;
         if (event.y < 0 || event.y >= getHeight()) return false;
@@ -73,6 +78,7 @@ public class NFreestyleParentComponent extends NParentComponent {
 
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
+        if (!isEnabled()) return false;
         if (super.onMouseMoved(event)) return true;
         if (event.x < 0 || event.x >= getWidth()) return false;
         if (event.y < 0 || event.y >= getHeight()) return false;
@@ -82,12 +88,14 @@ public class NFreestyleParentComponent extends NParentComponent {
 
     @Override
     public void onKeyPressed(NKeyPressedEvent event) {
+        if (!isEnabled()) return;
         if (getFocus() != null) super.onKeyPressed(event);
         else keyPressed.trigger(event);
     }
 
     @Override
     public void onKeyReleased(NKeyReleasedEvent event) {
+        if (!isEnabled()) return;
         if (getFocus() != null) super.onKeyReleased(event);
         else keyReleased.trigger(event);
     }

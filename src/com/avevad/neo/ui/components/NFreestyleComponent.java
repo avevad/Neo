@@ -32,12 +32,14 @@ public class NFreestyleComponent extends NComponent {
     @Override
     public boolean render(int layer) {
         NGraphics g = getParent().getGraphics();
+        g.setOpacity(getOpacity());
         g.drawImage(canvas, getLocation(), getSize());
         return false;
     }
 
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
+        if (!isEnabled()) return false;
         if (event.x < 0 || event.x >= getWidth()) return false;
         if (event.y < 0 || event.y >= getHeight()) return false;
         mousePressed.trigger(event);
@@ -46,6 +48,7 @@ public class NFreestyleComponent extends NComponent {
 
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
+        if (!isEnabled()) return false;
         if (event.x < 0 || event.x >= getWidth()) return false;
         if (event.y < 0 || event.y >= getHeight()) return false;
         mouseReleased.trigger(event);
@@ -54,6 +57,7 @@ public class NFreestyleComponent extends NComponent {
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
+        if (!isEnabled()) return false;
         if (event.x < 0 || event.x >= getWidth()) return false;
         if (event.y < 0 || event.y >= getHeight()) return false;
         mouseDragged.trigger(event);
@@ -62,6 +66,7 @@ public class NFreestyleComponent extends NComponent {
 
     @Override
     public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
+        if (!isEnabled()) return false;
         if (event.x < 0 || event.x >= getWidth()) return false;
         if (event.y < 0 || event.y >= getHeight()) return false;
         mouseWheelScrolled.trigger(event);
@@ -70,6 +75,7 @@ public class NFreestyleComponent extends NComponent {
 
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
+        if (!isEnabled()) return false;
         if (event.x < 0 || event.x >= getWidth()) return false;
         if (event.y < 0 || event.y >= getHeight()) return false;
         mouseMoved.trigger(event);
@@ -78,11 +84,13 @@ public class NFreestyleComponent extends NComponent {
 
     @Override
     public void onKeyPressed(NKeyPressedEvent event) {
+        if (!isEnabled()) return;
         keyPressed.trigger(event);
     }
 
     @Override
     public void onKeyReleased(NKeyReleasedEvent event) {
+        if (!isEnabled()) return;
         keyReleased.trigger(event);
     }
 
