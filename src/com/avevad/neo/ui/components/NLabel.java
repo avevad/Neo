@@ -171,9 +171,12 @@ public class NLabel extends NComponent {
             int h = label.getHeight();
             String s = NLabel.cutToFit(label.getText(), w, fontMetrics);
             NPoint point = alignText(s, label.getSize(), fontMetrics, hAlign, vAlign);
+
+            g.setOpacity(label.getOpacity());
             g.setFont(font);
             g.setColor(color);
             g.drawString(s, point.x, point.y);
+
             return false;
         }
     }
