@@ -333,6 +333,20 @@ public class NTextField extends NComponent {
         public final int length() {
             return end - begin;
         }
+
+        @Override
+        public String toString() {
+            return "[" + begin + "; " + end + ")";
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null) return false;
+            if (!(o instanceof NTextSelection)) return false;
+            NTextSelection selection = (NTextSelection) o;
+            return selection.begin == begin && selection.end == end;
+        }
+
     }
 
     public static final class NTextChangedEvent extends NEvent {
