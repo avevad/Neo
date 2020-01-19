@@ -1,10 +1,7 @@
 package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.*;
-import com.avevad.neo.ui.NComponent;
-import com.avevad.neo.ui.NHorizontalTextAlignment;
-import com.avevad.neo.ui.NUI;
-import com.avevad.neo.ui.NVerticalTextAlignment;
+import com.avevad.neo.ui.*;
 import com.avevad.neo.ui.events.*;
 
 
@@ -18,6 +15,10 @@ public class NTextField extends NComponent {
     private int backgroundColor = NColor.NONE;
     private int foregroundColor = NColor.NONE;
     private int viewOffset = 0;
+
+    public final NEventDispatcher<NTextChangedEvent> textChanged = new NEventDispatcher<>();
+    public final NEventDispatcher<NCaretPositionChangedEvent> caretPositionChanged = new NEventDispatcher<>();
+    public final NEventDispatcher<NTextSelectionChangedEvent> selectionChanged = new NEventDispatcher<>();
 
     public NTextField() {
         setUI(new DefaultUI());
@@ -99,7 +100,10 @@ public class NTextField extends NComponent {
             x -= viewOffset;
             if (event.x <= x) break;
         }
-        setSelection(new NTextSelection(pos, pos));
+        NTextSelection newSelection = new NTextSelection(pos, pos);
+        caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, pos));
+        selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
+        setSelection(newSelection);
         lastKeyPressTime = System.currentTimeMillis();
         return true;
     }
@@ -127,7 +131,10 @@ public class NTextField extends NComponent {
         } else {
             end = pos;
         }
-        setSelection(new NTextSelection(Integer.min(begin, end), Integer.max(begin, end)));
+        NTextSelection newSelection = new NTextSelection(Integer.min(begin, end), Integer.max(begin, end));
+        caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, pos));
+        selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
+        setSelection(newSelection);
         setCaretPosition(pos);
         lastKeyPressTime = System.currentTimeMillis();
         return true;
@@ -148,43 +155,83 @@ public class NTextField extends NComponent {
         lastKeyPressTime = System.currentTimeMillis();
         if (((short) event.c) != -1) {
             char c = event.c;
-            if (c == '\b' || c == 127) {
+            NKeyEvent.NKey key = event.key;
+            if (c == '\b' || key == NKeyEvent.NKey.DELETE) {
                 if (selection.length() == 0) {
                     if (c == '\b') if (caretPosition > 0) {
-                        text = text.substring(0, caretPosition - 1) + text.substring(caretPosition);
+                        String newText = text.substring(0, caretPosition - 1) + text.substring(caretPosition);
+                        NTextSelection newSelection = new NTextSelection(caretPosition - 1, caretPosition - 1);
+                        textChanged.trigger(new NTextChangedEvent(text, newText));
+                        caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caretPosition - 1));
+                        selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
+                        text = newText;
                         setCaretPosition(caretPosition - 1);
                     }
-                    if (c == 127) if (caretPosition < text.length()) {
-                        text = text.substring(0, caretPosition) + text.substring(caretPosition + 1);
+                    if (key == NKeyEvent.NKey.DELETE) if (caretPosition < text.length()) {
+                        String newText = text.substring(0, caretPosition) + text.substring(caretPosition + 1);
+                        textChanged.trigger(new NTextChangedEvent(text, newText));
+                        text = newText;
                     }
                 } else {
-                    text = text.substring(0, selection.begin) + text.substring(selection.end);
+                    String newText = text.substring(0, selection.begin) + text.substring(selection.end);
                     int caret = selection.begin;
-                    setSelection(new NTextSelection(0, 0));
+                    textChanged.trigger(new NTextChangedEvent(text, newText));
+                    caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caret));
+                    selectionChanged.trigger(new NTextSelectionChangedEvent(selection, new NTextSelection(caret, caret)));
+                    setSelection(new NTextSelection(caret, caret));
                     setCaretPosition(caret);
                 }
             } else if (c >= 32) {
                 if (selection.length() == 0) {
-                    text = text.substring(0, caretPosition) + c + text.substring(caretPosition);
+                    String newText = text.substring(0, caretPosition) + c + text.substring(caretPosition);
+                    NTextSelection newSelection = new NTextSelection(caretPosition + 1, caretPosition + 1);
+                    textChanged.trigger(new NTextChangedEvent(text, newText));
+                    caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caretPosition + 1));
+                    selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
+                    text = newText;
                     setCaretPosition(caretPosition + 1);
                 } else {
-                    text = text.substring(0, selection.begin) + c + text.substring(selection.end);
+                    String newText = text.substring(0, selection.begin) + c + text.substring(selection.end);
                     int caret = selection.begin + 1;
-                    setSelection(new NTextSelection(0, 0));
+                    NTextSelection newSelection = new NTextSelection(caret, caret);
+                    textChanged.trigger(new NTextChangedEvent(text, newText));
+                    caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caret));
+                    selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
+                    setSelection(newSelection);
                     setCaretPosition(caret);
                 }
             }
         } else {
             if (event.key == NKeyEvent.NKey.ARROW_LEFT) {
-                if (caretPosition != 0) setCaretPosition(caretPosition - 1);
+                if (caretPosition != 0) {
+                    NTextSelection newSelection = new NTextSelection(caretPosition - 1, caretPosition - 1);
+                    caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caretPosition - 1));
+                    selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
+                    setSelection(newSelection);
+                    setCaretPosition(caretPosition - 1);
+                }
             }
             if (event.key == NKeyEvent.NKey.ARROW_RIGHT) {
-                if (caretPosition != text.length()) setCaretPosition(caretPosition + 1);
+                if (caretPosition != text.length()) {
+                    NTextSelection newSelection = new NTextSelection(caretPosition + 1, caretPosition + 1);
+                    caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, caretPosition + 1));
+                    selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
+                    setSelection(newSelection);
+                    setCaretPosition(caretPosition + 1);
+                }
             }
             if (event.key == NKeyEvent.NKey.HOME) {
+                NTextSelection newSelection = new NTextSelection(0, 0);
+                caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, 0));
+                selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
+                setSelection(newSelection);
                 setCaretPosition(0);
             }
             if (event.key == NKeyEvent.NKey.END) {
+                NTextSelection newSelection = new NTextSelection(text.length(), text.length());
+                caretPositionChanged.trigger(new NCaretPositionChangedEvent(caretPosition, text.length()));
+                selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
+                setSelection(newSelection);
                 setCaretPosition(text.length());
             }
         }
@@ -285,6 +332,33 @@ public class NTextField extends NComponent {
 
         public final int length() {
             return end - begin;
+        }
+    }
+
+    public static final class NTextChangedEvent extends NEvent {
+        public final String oldText, newText;
+
+        public NTextChangedEvent(String oldText, String newText) {
+            this.oldText = oldText;
+            this.newText = newText;
+        }
+    }
+
+    public static final class NCaretPositionChangedEvent extends NEvent {
+        public final int oldPos, newPos;
+
+        public NCaretPositionChangedEvent(int oldPos, int newPos) {
+            this.oldPos = oldPos;
+            this.newPos = newPos;
+        }
+    }
+
+    public static final class NTextSelectionChangedEvent extends NEvent {
+        public final NTextSelection oldSelection, newSelection;
+
+        public NTextSelectionChangedEvent(NTextSelection oldSelection, NTextSelection newSelection) {
+            this.oldSelection = oldSelection;
+            this.newSelection = newSelection;
         }
     }
 }
