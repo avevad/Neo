@@ -26,36 +26,61 @@ public class NPanel extends NParentComponent {
 
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
+        if (!isEnabled()) return false;
         if (super.onMousePressed(event)) return true;
         return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
+        if (!isEnabled()) return false;
         if (super.onMouseReleased(event)) return true;
         return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
+        if (!isEnabled()) return false;
         if (super.onMouseDragged(event)) return true;
         return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
+        if (!isEnabled()) return false;
         if (super.onMouseMoved(event)) return true;
         return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
     @Override
     public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
+        if (!isEnabled()) return false;
         if (super.onMouseWheelScrolled(event)) return true;
         return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
+    @Override
+    public void onMouseExited() {
+        if (!isEnabled()) return;
+        super.onMouseExited();
+    }
+
+    @Override
+    public void onKeyPressed(NKeyPressedEvent event) {
+        if (!isEnabled()) return;
+        super.onKeyPressed(event);
+    }
+
+    @Override
+    public void onKeyReleased(NKeyReleasedEvent event) {
+        if (!isEnabled()) return;
+        super.onKeyReleased(event);
+    }
+
     private static final class DefaultUI implements NUI {
         public static final int DEFAULT_COLOR = NColor.WHITE;
+        public static final int DISABLED_COVER_COLOR = NColor.WHITE;
+        public static final double DISABLED_COVER_OPACITY = 0.5;
 
         @Override
         public boolean render(NComponent component, int layer) {
@@ -63,10 +88,16 @@ public class NPanel extends NParentComponent {
             NPanel panel = (NPanel) component;
             NGraphics g = panel.getParent().getGraphics();
             if (layer == 0) {
+                g.setOpacity(panel.getOpacity());
                 g.setColor(panel.getColor());
-                g.fillRect(panel.getX(), panel.getY(), panel.getWidth(), panel.getHeight());
+                g.fillRect(panel.getBounds());
             }
-            return false;
+            if (layer == 1 && !panel.isEnabled()) {
+                g.setOpacity(DISABLED_COVER_OPACITY * panel.getOpacity());
+                g.setColor(DISABLED_COVER_COLOR);
+                g.fillRect(panel.getBounds());
+            }
+            return layer < 1;
         }
     }
 }
