@@ -171,6 +171,7 @@ public abstract class NComponent {
         private NGraphics lastGraphics;
         private NGraphics graphics;
         private int color;
+        private double opacity = 1;
         private NFont font;
         private final NRectangle clip;
 
@@ -196,7 +197,18 @@ public abstract class NComponent {
 
         private void setParameters() {
             graphics.setColor(color);
+            graphics.setOpacity(opacity);
             if (font != null) graphics.setFont(font);
+        }
+
+        @Override
+        public void setOpacity(double opacity) {
+            this.opacity = opacity;
+        }
+
+        @Override
+        public double getOpacity() {
+            return opacity;
         }
 
         @Override

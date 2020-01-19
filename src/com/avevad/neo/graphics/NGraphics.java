@@ -2,6 +2,10 @@ package com.avevad.neo.graphics;
 
 
 public abstract class NGraphics {
+    public abstract void setOpacity(double opacity);
+
+    public abstract double getOpacity();
+
     public abstract void setColor(int color);
 
     public abstract int getColor();
