@@ -46,4 +46,8 @@ public final class NColor {
     public static int mix(int first, int second) {
         return mix(first, second, 0.5, 0.5);
     }
+
+    public static int negative(int color) {
+        return rgb(0xFF - red(color), 0xFF - green(color), 0xFF - blue(color));
+    }
 }
