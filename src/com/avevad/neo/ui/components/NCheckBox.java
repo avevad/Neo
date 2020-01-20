@@ -4,6 +4,9 @@ import com.avevad.neo.graphics.*;
 import com.avevad.neo.ui.*;
 import com.avevad.neo.ui.events.*;
 
+import static com.avevad.neo.ui.components.NButton.EMULATE_MOUSE_CLICK_KEY;
+import static com.avevad.neo.ui.components.NButton.EMULATE_MOUSE_PRESS_KEY;
+
 public class NCheckBox extends NComponent {
     private int backgroundColor = NColor.NONE;
     private int foregroundColor = NColor.NONE;
@@ -96,17 +99,20 @@ public class NCheckBox extends NComponent {
     @Override
     public void onKeyPressed(NKeyPressedEvent event) {
         if (!isEnabled()) return;
-        if (event.c == ' ' || event.c == '\n') isPressed = true;
+        if (event.key == EMULATE_MOUSE_PRESS_KEY) {
+            isPressed = true;
+        }
+        if (event.key == EMULATE_MOUSE_CLICK_KEY) {
+            if (isPressed) stateChanged.trigger(new NCheckStateChangedEvent(isChecked, !isChecked));
+            isPressed = !isPressed;
+        }
     }
 
     @Override
     public void onKeyReleased(NKeyReleasedEvent event) {
         if (!isEnabled()) return;
-        if (event.c == ' ' || event.c == '\n') {
-            if (isPressed) {
-                stateChanged.trigger(new NCheckStateChangedEvent(isChecked, !isChecked));
-                isChecked = !isChecked;
-            }
+        if (event.key == EMULATE_MOUSE_CLICK_KEY || event.key == EMULATE_MOUSE_PRESS_KEY) {
+            if (isPressed) stateChanged.trigger(new NCheckStateChangedEvent(isChecked, !isChecked));
             isPressed = false;
         }
     }

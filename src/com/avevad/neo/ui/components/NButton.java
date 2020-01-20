@@ -5,6 +5,9 @@ import com.avevad.neo.ui.*;
 import com.avevad.neo.ui.events.*;
 
 public class NButton extends NComponent {
+    public static final NKeyEvent.NKey EMULATE_MOUSE_PRESS_KEY = NKeyEvent.NKey.SPACE;
+    public static final NKeyEvent.NKey EMULATE_MOUSE_CLICK_KEY = NKeyEvent.NKey.ENTER;
+
     private String text = "";
     private NFont font;
     private int backgroundColor = NColor.NONE;
@@ -101,14 +104,22 @@ public class NButton extends NComponent {
     @Override
     public void onKeyPressed(NKeyPressedEvent event) {
         if (!isEnabled()) return;
-        if (event.c == ' ' || event.c == '\n') isPressed = true;
+        if (event.key == EMULATE_MOUSE_PRESS_KEY) {
+            isPressed = true;
+        }
+        if (event.key == EMULATE_MOUSE_CLICK_KEY) {
+            if (isPressed) clicked.trigger(new ClickedEvent());
+            isPressed = !isPressed;
+        }
     }
 
     @Override
     public void onKeyReleased(NKeyReleasedEvent event) {
         if (!isEnabled()) return;
-        if (isPressed) clicked.trigger(new ClickedEvent());
-        if (event.c == ' ' || event.c == '\n') isPressed = false;
+        if (event.key == EMULATE_MOUSE_CLICK_KEY || event.key == EMULATE_MOUSE_PRESS_KEY) {
+            if (isPressed) clicked.trigger(new ClickedEvent());
+            isPressed = false;
+        }
     }
 
     @Override
