@@ -30,6 +30,7 @@ public class NTextField extends NComponent {
     }
 
     public void setText(String text) {
+        if (caretPosition > text.length()) setCaretPosition(text.length());
         this.text = text;
     }
 
