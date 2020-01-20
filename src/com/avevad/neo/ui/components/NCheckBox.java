@@ -103,7 +103,10 @@ public class NCheckBox extends NComponent {
             isPressed = true;
         }
         if (event.key == EMULATE_MOUSE_CLICK_KEY) {
-            if (isPressed) stateChanged.trigger(new NCheckStateChangedEvent(isChecked, !isChecked));
+            if (isPressed) {
+                stateChanged.trigger(new NCheckStateChangedEvent(isChecked, !isChecked));
+                isChecked = !isChecked;
+            }
             isPressed = !isPressed;
         }
     }
@@ -112,7 +115,10 @@ public class NCheckBox extends NComponent {
     public void onKeyReleased(NKeyReleasedEvent event) {
         if (!isEnabled()) return;
         if (event.key == EMULATE_MOUSE_CLICK_KEY || event.key == EMULATE_MOUSE_PRESS_KEY) {
-            if (isPressed) stateChanged.trigger(new NCheckStateChangedEvent(isChecked, !isChecked));
+            if (isPressed) {
+                stateChanged.trigger(new NCheckStateChangedEvent(isChecked, !isChecked));
+                isChecked = !isChecked;
+            }
             isPressed = false;
         }
     }
