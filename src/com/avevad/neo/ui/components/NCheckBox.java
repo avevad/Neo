@@ -133,9 +133,9 @@ public class NCheckBox extends NComponent {
         public static final int DISABLED_COVER_COLOR = NColor.WHITE;
         public static final double DISABLED_COVER_OPACITY = 0.5;
 
-        public static final double CHECK_X1 = 0.3, CHECK_Y1 = 0.3;
-        public static final double CHECK_X2 = 0.5, CHECK_Y2 = 0.7;
-        public static final double CHECK_X3 = 0.7, CHECK_Y3 = 0.3;
+        public static final double CHECK_X1 = 0.2, CHECK_Y1 = 0.2;
+        public static final double CHECK_X2 = 0.5, CHECK_Y2 = 0.8;
+        public static final double CHECK_X3 = 0.8, CHECK_Y3 = 0.2;
 
         @Override
         public boolean render(NComponent component, int layer) {
@@ -154,6 +154,12 @@ public class NCheckBox extends NComponent {
             int y2 = (int) (h * CHECK_Y2);
             int x3 = (int) (w * CHECK_X3);
             int y3 = (int) (h * CHECK_Y3);
+            int fx1 = Integer.min(Integer.min(x1, x2), x3);
+            int fy1 = Integer.min(Integer.min(y1, y2), y3);
+            int fx2 = Integer.max(Integer.max(x1, x2), x3);
+            int fy2 = Integer.max(Integer.max(y1, y2), y3);
+            int fw = fx2 - fx1;
+            int fh = fy2 - fy1;
             boolean pressed = checkBox.isPressed();
             boolean hovered = checkBox.isHovered();
             boolean focused = checkBox.isFocused();
@@ -178,6 +184,11 @@ public class NCheckBox extends NComponent {
                 g.setColor(foregroundColor);
                 g.drawLine(x1, y1, x2, y2);
                 g.drawLine(x2, y2, x3, y3);
+            }
+
+            if (focused) {
+                g.setColor(focusColor);
+                g.drawRect(fx1, fy1, fw, fh);
             }
 
             g.setColor(foregroundColor);
