@@ -4,8 +4,10 @@ import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NEvent;
 import com.avevad.neo.ui.NEventDispatcher;
 import com.avevad.neo.ui.NUI;
-import com.avevad.neo.ui.components.NCheckBox;
 import com.avevad.neo.ui.events.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.avevad.neo.ui.components.NButton.EMULATE_MOUSE_CLICK_KEY;
 import static com.avevad.neo.ui.components.NButton.EMULATE_MOUSE_PRESS_KEY;
@@ -205,6 +207,38 @@ public class NRadioButton extends NComponent {
     public static final class NCheckedEvent extends NEvent {
 
         public NCheckedEvent() {
+        }
+    }
+
+
+    public static final class NRadioButtonGroup {
+        private final List<NRadioButton> buttons = new ArrayList<>();
+        private final List<NEventDispatcher.NEventHandler<NCheckedEvent>> handlers = new ArrayList<>();
+
+        public void addButton(final NRadioButton button) {
+            if (buttons.contains(button)) throw new IllegalArgumentException("group contains that button");
+            synchronized (handlers) {
+                synchronized (buttons) {
+                    buttons.add(button);
+                    NEventDispatcher.NEventHandler<NCheckedEvent> handler = event -> {
+                        for (NRadioButton button2 : buttons) if (button2 != button) button2.setChecked(false);
+                    };
+                    button.checked.addHandler(handler);
+                    handlers.add(handler);
+                }
+            }
+        }
+
+        public void removeButton(final NRadioButton button) {
+            if (!buttons.contains(button)) return;
+            synchronized (handlers) {
+                synchronized (buttons) {
+                    int i = buttons.indexOf(button);
+                    buttons.remove(i);
+                    button.checked.removeHandler(handlers.get(i));
+                    handlers.remove(i);
+                }
+            }
         }
     }
 }
