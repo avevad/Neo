@@ -215,13 +215,21 @@ public class NRadioButton extends NComponent {
         private final List<NRadioButton> buttons = new ArrayList<>();
         private final List<NEventDispatcher.NEventHandler<NCheckedEvent>> handlers = new ArrayList<>();
 
+        public final NEventDispatcher<NCheckPositionChangedEvent> checkPositionChanged = new NEventDispatcher<>();
+
         public void addButton(final NRadioButton button) {
             if (buttons.contains(button)) throw new IllegalArgumentException("group contains that button");
             synchronized (handlers) {
                 synchronized (buttons) {
                     buttons.add(button);
                     NEventDispatcher.NEventHandler<NCheckedEvent> handler = event -> {
-                        for (NRadioButton button2 : buttons) if (button2 != button) button2.setChecked(false);
+                        NRadioButton oldCheck = null;
+                        for (NRadioButton button2 : buttons) {
+                            if (button2.isChecked()) oldCheck = button2;
+                            if (button2 != button) button2.setChecked(false);
+                        }
+                        if (oldCheck != button)
+                            checkPositionChanged.trigger(new NCheckPositionChangedEvent(oldCheck, button));
                     };
                     button.checked.addHandler(handler);
                     handlers.add(handler);
@@ -238,6 +246,19 @@ public class NRadioButton extends NComponent {
                     button.checked.removeHandler(handlers.get(i));
                     handlers.remove(i);
                 }
+            }
+        }
+
+        public int getButtonIndex(NRadioButton button) {
+            return buttons.indexOf(button);
+        }
+
+        public static final class NCheckPositionChangedEvent extends NEvent {
+            public final NRadioButton oldCheck, newCheck;
+
+            public NCheckPositionChangedEvent(NRadioButton oldCheck, NRadioButton newCheck) {
+                this.oldCheck = oldCheck;
+                this.newCheck = newCheck;
             }
         }
     }
