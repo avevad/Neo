@@ -17,7 +17,7 @@ public class NRadioButton extends NComponent {
     private boolean isHovered = false;
     private boolean isChecked = false;
 
-    public final NEventDispatcher<NCheckedEvent> stateChanged = new NEventDispatcher<>();
+    public final NEventDispatcher<NCheckedEvent> checked = new NEventDispatcher<>();
 
 
     public NRadioButton() {
@@ -70,7 +70,7 @@ public class NRadioButton extends NComponent {
         boolean isClicked = isPressed && ret;
         isPressed = false;
         if (isClicked) {
-            if (!isChecked) stateChanged.trigger(new NCheckedEvent());
+            if (!isChecked) checked.trigger(new NCheckedEvent());
             isChecked = true;
         }
         return ret;
@@ -107,7 +107,7 @@ public class NRadioButton extends NComponent {
         }
         if (event.key == EMULATE_MOUSE_CLICK_KEY) {
             if (isPressed) {
-                if (!isChecked) stateChanged.trigger(new NCheckedEvent());
+                if (!isChecked) checked.trigger(new NCheckedEvent());
                 isChecked = true;
             }
             isPressed = !isPressed;
@@ -119,7 +119,7 @@ public class NRadioButton extends NComponent {
         if (!isEnabled()) return;
         if (event.key == EMULATE_MOUSE_CLICK_KEY || event.key == EMULATE_MOUSE_PRESS_KEY) {
             if (isPressed) {
-                if (!isChecked) stateChanged.trigger(new NCheckedEvent());
+                if (!isChecked) checked.trigger(new NCheckedEvent());
                 isChecked = true;
             }
             isPressed = false;
