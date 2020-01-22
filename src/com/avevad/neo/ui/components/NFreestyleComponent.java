@@ -2,7 +2,6 @@ package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.NGraphics;
 import com.avevad.neo.graphics.NImage;
-import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NEventDispatcher;
 import com.avevad.neo.ui.NUI;

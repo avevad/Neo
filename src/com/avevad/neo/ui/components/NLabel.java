@@ -1,8 +1,8 @@
 package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.*;
-import com.avevad.neo.ui.NHorizontalTextAlignment;
 import com.avevad.neo.ui.NComponent;
+import com.avevad.neo.ui.NHorizontalTextAlignment;
 import com.avevad.neo.ui.NUI;
 import com.avevad.neo.ui.NVerticalTextAlignment;
 import com.avevad.neo.ui.events.*;

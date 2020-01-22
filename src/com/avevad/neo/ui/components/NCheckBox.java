@@ -1,7 +1,10 @@
 package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.*;
-import com.avevad.neo.ui.*;
+import com.avevad.neo.ui.NComponent;
+import com.avevad.neo.ui.NEvent;
+import com.avevad.neo.ui.NEventDispatcher;
+import com.avevad.neo.ui.NUI;
 import com.avevad.neo.ui.events.*;
 
 import static com.avevad.neo.ui.components.NButton.EMULATE_MOUSE_CLICK_KEY;
