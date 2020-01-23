@@ -1,4 +1,4 @@
 .idea/*
 *.iml
-../Neo-desktop/src/test/*
+src/com/avevad/neo/test
 out
