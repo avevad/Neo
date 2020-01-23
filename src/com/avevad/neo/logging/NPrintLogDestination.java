@@ -2,7 +2,7 @@ package com.avevad.neo.logging;
 
 import com.avevad.neo.util.NFunction;
 
-import java.io.PrintWriter;
+import java.io.PrintStream;
 import java.util.Date;
 
 public class NPrintLogDestination implements NLogDestination {
@@ -13,15 +13,16 @@ public class NPrintLogDestination implements NLogDestination {
         return String.format("[%s] [%s] [%s] %s", date, label, severity, message.message);
     };
 
-    public final PrintWriter out;
+    public final PrintStream out;
     public final NFunction<NLogMessage, String> format;
 
-    public NPrintLogDestination(PrintWriter out, NFunction<NLogMessage, String> format) {
+    public NPrintLogDestination(PrintStream out, NFunction<NLogMessage, String> format) {
         this.out = out;
         this.format = format;
     }
 
-    public NPrintLogDestination(PrintWriter out) {
+
+    public NPrintLogDestination(PrintStream out) {
         this(out, DEFAULT_FORMAT);
     }
 
