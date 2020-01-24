@@ -20,10 +20,18 @@ public class NLogger {
         }
     }
 
+    public void log(NLogMessage.NSeverity severity, String message) {
+        log(severity, null, message);
+    }
+
     public void log(NLogMessage.NSeverity severity, String label, Exception ex) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         ex.printStackTrace(printWriter);
         log(severity, label, stringWriter.toString());
+    }
+
+    public void log(NLogMessage.NSeverity severity, Exception ex) {
+        log(severity, null, ex);
     }
 }
