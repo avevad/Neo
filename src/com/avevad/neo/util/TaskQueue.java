@@ -21,6 +21,10 @@ public final class TaskQueue {
         worker = new Thread(this::run, toString() + ":worker");
     }
 
+    public TaskQueue(String name) {
+        this(name, null);
+    }
+
     @Override
     public String toString() {
         return "TaskQueue('" + name + "')";
