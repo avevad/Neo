@@ -40,12 +40,15 @@ public final class NTaskQueue {
 
     public void start() {
         worker.start();
+        logger.log(NLogMessage.NSeverity.DEBUG, "started");
     }
 
     public void destroy() {
+        if (destroyed) throw new IllegalStateException("already destroyed");
         worker.stop();
         queue.clear();
         destroyed = true;
+        logger.log(NLogMessage.NSeverity.DEBUG, "destroyed");
     }
 
     private void run() {
