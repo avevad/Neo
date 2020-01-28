@@ -161,7 +161,7 @@ public final class NSocketClient {
                     } else if (o instanceof NCommandPacket) {
                         NCommandPacket commandPacket = (NCommandPacket) o;
                         Class<? extends NSocketCommand> commandClass = commandPacket.command.getClass();
-                        if (messageHandlers.containsKey(commandClass)) {
+                        if (commandHandlers.containsKey(commandClass)) {
                             taskQueue.join(() -> {
                                 try {
                                     Serializable response = commandHandlers.get(commandClass).handleCommand(commandPacket.command);
