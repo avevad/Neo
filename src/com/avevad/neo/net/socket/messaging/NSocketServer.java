@@ -36,9 +36,9 @@ public final class NSocketServer {
 
     private boolean destroyed = false;
 
-    public NSocketServer(int port, NLogDestination destination) throws IOException {
-        logger = new NLogger(toString(), destination);
+    public NSocketServer(int port, NLogDestination destination) {
         this.port = port;
+        logger = new NLogger(toString(), destination);
         taskQueue = new NTaskQueue(toString() + ":taskQueue");
         taskQueue.start();
     }
