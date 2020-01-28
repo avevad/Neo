@@ -63,6 +63,12 @@ public final class NSocketServer {
         }, toString() + ":connector");
     }
 
+    public void close() throws IOException {
+        if (socket == null) throw new IllegalStateException("already closed");
+        socket.close();
+        socket = null;
+    }
+
     public void disconnect(int id) throws IOException {
         Client client = clients.get(id);
         if (client == null) throw new IllegalArgumentException("no such client");
