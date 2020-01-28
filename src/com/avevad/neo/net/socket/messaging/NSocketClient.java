@@ -215,6 +215,8 @@ public final class NSocketClient {
             synchronized (lock) {
                 lock.notifyAll();
             }
+            taskQueue.join(disconnectedHandler::onDisconnected);
+            taskQueue.join(taskQueue::destroy);
         }
     }
 
