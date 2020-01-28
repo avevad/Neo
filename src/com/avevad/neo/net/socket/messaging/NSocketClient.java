@@ -49,6 +49,7 @@ public final class NSocketClient {
         taskQueue = new NTaskQueue(toString() + ":taskQueue", logDestination);
         listener = new Thread(this::listen, toString() + "listener");
         listener.start();
+        taskQueue.start();
     }
 
     public boolean isConnected() {
@@ -142,6 +143,9 @@ public final class NSocketClient {
         else commandHandlers.put(commandClass, handler);
     }
 
+    public void setDisconnectedHandler(NDisconnectedHandler disconnectedHandler) {
+        this.disconnectedHandler = disconnectedHandler;
+    }
 
     private void listen() {
         String label = "listener";

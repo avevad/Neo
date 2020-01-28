@@ -38,6 +38,7 @@ public final class NSocketServer {
         logger = new NLogger(toString(), destination);
         this.port = port;
         taskQueue = new NTaskQueue(toString() + ":taskQueue");
+        taskQueue.start();
     }
 
     public void open() throws IOException {
