@@ -113,7 +113,7 @@ public final class NSocketClient {
                 try {
                     lock.wait();
                 } catch (InterruptedException e) {
-                    logger.log(NLogMessage.NSeverity.WARNING, "Interrupted while waiting for server response");
+                    logger.log(NLogMessage.NSeverity.DEBUG, "Interrupted while waiting for server response");
                 }
             }
         }
@@ -172,17 +172,17 @@ public final class NSocketClient {
                                     try {
                                         sendObject(new NResponsePacket(commandPacket.id, response));
                                     } catch (IOException ioex) {
-                                        logger.log(NLogMessage.NSeverity.ERROR, label, "IOException while sending response to server");
-                                        logger.log(NLogMessage.NSeverity.ERROR, label, ioex);
+                                        logger.log(NLogMessage.NSeverity.DEBUG, label, "IOException while sending response to server");
+                                        logger.log(NLogMessage.NSeverity.DEBUG, label, ioex);
                                     }
                                 } catch (RuntimeException ex) {
-                                    logger.log(NLogMessage.NSeverity.WARNING, label, "Exception in command handler for class " + commandClass + ":");
-                                    logger.log(NLogMessage.NSeverity.WARNING, label, ex);
+                                    logger.log(NLogMessage.NSeverity.ERROR, label, "Exception in command handler for class " + commandClass + ":");
+                                    logger.log(NLogMessage.NSeverity.ERROR, label, ex);
                                     try {
                                         sendObject(new NExceptionPacket(commandPacket.id, ex));
                                     } catch (IOException ioex) {
-                                        logger.log(NLogMessage.NSeverity.ERROR, label, "IOException while sending exception to server");
-                                        logger.log(NLogMessage.NSeverity.ERROR, label, ioex);
+                                        logger.log(NLogMessage.NSeverity.DEBUG, label, "IOException while sending exception to server");
+                                        logger.log(NLogMessage.NSeverity.DEBUG, label, ioex);
                                     }
                                 }
                             });
@@ -209,13 +209,13 @@ public final class NSocketClient {
                 }
             }
         } catch (IOException e) {
-            logger.log(NLogMessage.NSeverity.INFO, label, "Lost connection with server:");
-            logger.log(NLogMessage.NSeverity.INFO, label, e);
+            logger.log(NLogMessage.NSeverity.DEBUG, label, "Lost connection with server:");
+            logger.log(NLogMessage.NSeverity.DEBUG, label, e);
             connected = false;
             synchronized (lock) {
                 lock.notifyAll();
             }
-            taskQueue.join(disconnectedHandler::onDisconnected);
+            if (disconnectedHandler != null) taskQueue.join(disconnectedHandler::onDisconnected);
             taskQueue.join(taskQueue::destroy);
         }
     }
