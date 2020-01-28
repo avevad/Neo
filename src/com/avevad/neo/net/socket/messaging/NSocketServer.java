@@ -60,7 +60,7 @@ public final class NSocketServer {
                     logger.log(NLogMessage.NSeverity.ERROR, "connector", e);
                 }
             }
-        }, toString() + ":connector");
+        }, toString() + ":connector").start();
     }
 
     public void close() throws IOException {

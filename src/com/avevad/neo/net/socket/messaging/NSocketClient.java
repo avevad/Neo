@@ -43,8 +43,8 @@ public final class NSocketClient {
         this.address = address;
         this.port = port;
         socket = new Socket(address, port);
-        in = new ObjectInputStream(socket.getInputStream());
         out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
         logger = new NLogger(toString(), logDestination);
         taskQueue = new NTaskQueue(toString() + ":taskQueue", logDestination);
         listener = new Thread(this::listen, toString() + "listener");
