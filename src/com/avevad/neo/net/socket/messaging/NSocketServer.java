@@ -34,6 +34,8 @@ public final class NSocketServer {
 
     private final Map<Integer, Client> clients = new HashMap<>();
 
+    private boolean destroyed = false;
+
     public NSocketServer(int port, NLogDestination destination) throws IOException {
         logger = new NLogger(toString(), destination);
         this.port = port;
@@ -42,6 +44,7 @@ public final class NSocketServer {
     }
 
     public void open() throws IOException {
+        if (destroyed) throw new IllegalStateException("destroyed");
         if (socket != null) throw new IllegalStateException("already open");
         socket = new ServerSocket(port);
         new Thread(() -> {
@@ -68,6 +71,13 @@ public final class NSocketServer {
         if (socket == null) throw new IllegalStateException("already closed");
         socket.close();
         socket = null;
+    }
+
+    public void destroy() {
+        if (socket != null) throw new IllegalStateException("server is open");
+        if (clients.size() != 0) throw new IllegalStateException("server have clients connected");
+        destroyed = true;
+        taskQueue.join(taskQueue::destroy);
     }
 
     public void disconnect(int id) throws IOException {
