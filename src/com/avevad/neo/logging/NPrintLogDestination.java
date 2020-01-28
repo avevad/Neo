@@ -11,6 +11,9 @@ public class NPrintLogDestination implements NLogDestination {
         String date = String.format(DEFAULT_DATE_FORMAT, message.time);
         String label = message.logger + (message.label == null ? "" : (":" + message.label));
         String severity = String.valueOf(message.severity.toString().charAt(0));
+        String file = message.stackTrace.get(0).getFileName();
+        String line = message.stackTrace.get(0).getLineNumber() + "";
+        //return String.format("[%s] [%s] (%s:%s) [%s] %s", severity, date, file, line, label, message.message);
         return String.format("[%s] [%s] [%s] %s", severity, date, label, message.message);
     };
 
