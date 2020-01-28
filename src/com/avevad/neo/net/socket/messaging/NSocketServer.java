@@ -246,8 +246,15 @@ public final class NSocketServer {
                                     }
                                 }
                             });
-                        } else
+                        } else {
                             logger.log(NLogMessage.NSeverity.ERROR, label, "No handler for command class " + commandClass);
+                            try {
+                                client.send(new NExceptionPacket(commandPacket.id, new NNoSuitableSocketCommandHandlerException()));
+                            } catch (IOException ioex) {
+                                logger.log(NLogMessage.NSeverity.DEBUG, label, "IOException while sending exception to client");
+                                logger.log(NLogMessage.NSeverity.DEBUG, label, ioex);
+                            }
+                        }
                     } else if (o instanceof NResponsePacket) {
                         NResponsePacket responsePacket = (NResponsePacket) o;
                         responses.put(responsePacket.id, responsePacket.response);
