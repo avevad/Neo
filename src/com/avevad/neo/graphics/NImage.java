@@ -13,4 +13,11 @@ public abstract class NImage {
     public NDimension getSize() {
         return new NDimension(w, h);
     }
+
+
+    public interface NImageIO<I extends NImage> {
+        I loadImage(InputStream from, String format);
+
+        void saveImage(I image, OutputStream to, String format);
+    }
 }
