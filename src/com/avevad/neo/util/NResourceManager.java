@@ -10,10 +10,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public final class NResourceManager {
-    private String locale = "EN";
-    private final Map<String, String> cachedStrings = new HashMap<>();
-    private final Set<String> cachedFiles = new HashSet<>();
-    private final Map<String, File> stringSets = new HashMap<>();
     private final NLogger logger;
 
     public NResourceManager(NLogDestination logDestination) {
@@ -23,6 +19,21 @@ public final class NResourceManager {
     public NResourceManager() {
         this(null);
     }
+
+    @Override
+    public String toString() {
+        return "NResourceManager@" + super.toString().substring(super.toString().lastIndexOf('@') + 1);
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // STRINGS
+    ///////////////////////////////////////////////////////////////////////////
+
+    private String locale = "EN";
+    private final Map<String, String> cachedStrings = new HashMap<>();
+    private final Set<String> cachedFiles = new HashSet<>();
+    private final Map<String, File> stringSets = new HashMap<>();
 
     public void setLocale(String locale) {
         this.locale = locale;
@@ -94,12 +105,9 @@ public final class NResourceManager {
         return String.format(ret, objects);
     }
 
-    public interface NImageFactory {
-        NImage getImage(File file);
-    }
+    ///////////////////////////////////////////////////////////////////////////
+    // IMAGES
+    ///////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public String toString() {
-        return "NResourceManager@" + super.toString().substring(super.toString().lastIndexOf('@') + 1);
-    }
+
 }
