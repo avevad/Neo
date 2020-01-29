@@ -61,6 +61,7 @@ public final class NSocketClient {
         try {
             socket.close();
             listener.stop();
+            taskQueue.join(taskQueue::destroy);
         } catch (IOException e) {
             throw new IllegalStateException("already disconnected");
         }
