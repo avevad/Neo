@@ -32,7 +32,7 @@ public final class NResourceManager {
 
     private String locale = "EN";
     private final Map<String, String> cachedStrings = new HashMap<>();
-    private final Set<String> cachedFiles = new HashSet<>();
+    private final Set<String> cachedStringFiles = new HashSet<>();
     private final Map<String, File> stringSets = new HashMap<>();
 
     public void setLocale(String locale) {
@@ -58,7 +58,7 @@ public final class NResourceManager {
         String setName = name.substring(0, div1);
         String fileName = name.substring(div1 + 1, div2);
         String id = name.substring(div2 + 1);
-        if (cachedFiles.contains(setName + "/" + fileName + "_" + locale)) {
+        if (cachedStringFiles.contains(setName + "/" + fileName + "_" + locale)) {
             if (cachedStrings.containsKey(name + "_" + locale))
                 return String.format(cachedStrings.get(name + "_" + locale), objects);
             else {
@@ -97,7 +97,7 @@ public final class NResourceManager {
             cachedStrings.put(setName + "/" + fileName + ":" + key + "_" + locale, value);
         }
         logger.log(NLogMessage.NSeverity.DEBUG, "Cached " + line + " line(s) from file '" + file.getAbsolutePath() + "'");
-        cachedFiles.add(setName + "/" + fileName + "_" + locale);
+        cachedStringFiles.add(setName + "/" + fileName + "_" + locale);
         if (ret == null) {
             logger.log(NLogMessage.NSeverity.WARNING, "String '" + name + "' (" + locale + ") with nonexistent id was queried");
             return name;
