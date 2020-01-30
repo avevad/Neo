@@ -20,6 +20,18 @@ public abstract class NImage {
 
     public abstract void draw(NGraphics g, int srcX, int srcY, int srcW, int srcH, int dstX, int dstY, int dstW, int dstH);
 
+    public abstract NImage copyReadonly(int x, int y, int w, int h);
+
+    public final NImage copyReadonly() {
+        return copyReadonly(0, 0, w, h);
+    }
+
+    public abstract NEditableImage copyEditable(int x, int y, int w, int h);
+
+    public final NEditableImage copyEditable() {
+        return copyEditable(0, 0, w, h);
+    }
+
     public final NDimension getSize() {
         return new NDimension(w, h);
     }
