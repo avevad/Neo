@@ -15,12 +15,6 @@ public abstract class NImage {
 
     public abstract int getPixel(int x, int y);
 
-    public abstract void draw(NGraphics g, int x, int y);
-
-    public abstract void draw(NGraphics g, int x, int y, int w, int h);
-
-    public abstract void draw(NGraphics g, int srcX, int srcY, int srcW, int srcH, int dstX, int dstY, int dstW, int dstH);
-
     public abstract NImage copyReadonly(int x, int y, int w, int h);
 
     public final NImage copyReadonly() {

@@ -82,17 +82,13 @@ public abstract class NGraphics {
         return create(bounds.x, bounds.y, bounds.w, bounds.h);
     }
 
-    public final void drawImage(NImage img, int x, int y) {
-        img.draw(this, x, y);
-    }
+    public abstract void drawImage(NImage img, int x, int y);
 
     public final void drawImage(NImage img, NPoint point) {
         drawImage(img, point.x, point.y);
     }
 
-    public final void drawImage(NImage img, int x, int y, int w, int h) {
-        img.draw(this, x, y, w, h);
-    }
+    public abstract void drawImage(NImage img, int x, int y, int w, int h);
 
     public final void drawImage(NImage img, NPoint point, NDimension size) {
         drawImage(img, point.x, point.y, size.w, size.h);
@@ -102,9 +98,7 @@ public abstract class NGraphics {
         drawImage(img, bounds.x, bounds.y, bounds.w, bounds.h);
     }
 
-    public final void drawImage(NImage img, int srcX, int srcY, int srcW, int srcH, int dstX, int dstY, int dstW, int dstH) {
-        img.draw(this, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
-    }
+    public abstract void drawImage(NImage img, int srcX, int srcY, int srcW, int srcH, int dstX, int dstY, int dstW, int dstH);
 
     public final void drawImage(NImage img, NPoint srcPoint, NDimension srcSize, NPoint dstPoint, NDimension dstSize) {
         drawImage(img, srcPoint.x, srcPoint.y, srcSize.w, srcSize.h, dstPoint.x, dstPoint.y, dstSize.w, dstSize.h);

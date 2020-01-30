@@ -328,6 +328,27 @@ public abstract class NComponent {
         }
 
         @Override
+        public void drawImage(NImage img, int x, int y) {
+            updateGraphics();
+            setParameters();
+            graphics.drawImage(img, x, y);
+        }
+
+        @Override
+        public void drawImage(NImage img, int x, int y, int w, int h) {
+            updateGraphics();
+            setParameters();
+            graphics.drawImage(img, x, y, w, h);
+        }
+
+        @Override
+        public void drawImage(NImage img, int srcX, int srcY, int srcW, int srcH, int dstX, int dstY, int dstW, int dstH) {
+            updateGraphics();
+            setParameters();
+            graphics.drawImage(img, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
+        }
+
+        @Override
         public NFontMetrics getFontMetrics(NFont font) {
             updateGraphics();
             return graphics.getFontMetrics(font);
