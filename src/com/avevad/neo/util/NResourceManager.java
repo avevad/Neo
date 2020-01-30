@@ -1,12 +1,15 @@
 package com.avevad.neo.util;
 
 import com.avevad.neo.graphics.NImage;
+import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.logging.NLogDestination;
 import com.avevad.neo.logging.NLogMessage;
 import com.avevad.neo.logging.NLogger;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public final class NResourceManager {
@@ -87,7 +90,6 @@ public final class NResourceManager {
             int delim = entry.indexOf('=');
             if (delim == -1) {
                 logger.log(NLogMessage.NSeverity.WARNING, "Invalid string entry in file '" + file.getAbsolutePath() + "', line " + line);
-
                 continue;
             }
             String key = entry.substring(0, delim).trim();
@@ -110,10 +112,111 @@ public final class NResourceManager {
     ///////////////////////////////////////////////////////////////////////////
 
     private NImage.NImageIO<? extends NImage> imageIO;
+    private final Map<String, NImage> cachedImages = new HashMap<>();
+    private final Map<String, Atlas> cachedAtlases = new HashMap<>();
+    private final Map<String, File> imageSets = new HashMap<>();
 
     public void setImageIO(NImage.NImageIO<? extends NImage> imageIO) {
         this.imageIO = imageIO;
     }
 
+    public void addImageSet(String name, File dir) {
+        imageSets.put(name, dir);
+    }
 
+    public NImage image(String name) {
+        if (name == null) {
+            logger.log(NLogMessage.NSeverity.WARNING, "Invalid image '" + name + "' was queried");
+            return null;
+        }
+        int div1 = name.indexOf('/');
+        int div2 = name.indexOf(':');
+        if (div1 == -1 || div2 == -1) {
+            logger.log(NLogMessage.NSeverity.WARNING, "Invalid image '" + name + "' was queried");
+            return null;
+        }
+        String setName = name.substring(0, div1);
+        String fileName = name.substring(div1 + 1, div2);
+        String id = name.substring(div2 + 1);
+        NImage image = cachedImages.get(name);
+        if (image != null) return image;
+        Atlas atlas = cachedAtlases.get(setName + "/" + fileName);
+        if (atlas != null) {
+            NRectangle bounds = atlas.bounds.get(id);
+            if (bounds == null) {
+                logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent id was queried");
+                return null;
+            } else {
+                image = atlas.image.copyReadonly(bounds.x, bounds.y, bounds.w, bounds.h);
+                cachedImages.put(name, image);
+                logger.log(NLogMessage.NSeverity.DEBUG, "Cached image '" + name + "' from atlas '" + (setName + "/" + fileName) + "'");
+                return image;
+            }
+        }
+        File set = imageSets.get(setName);
+        if (set == null) {
+            logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent set was queried");
+            return null;
+        }
+        File atlasFile = new File(set, fileName.replaceAll("\\.", "/") + ".atlas");
+        Scanner scanner;
+        try {
+            scanner = new Scanner(atlasFile);
+        } catch (FileNotFoundException e) {
+            logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent atlas file was queried");
+            return null;
+        }
+        String suffix = scanner.nextLine();
+        File imageFile = new File(set, fileName.replaceAll("\\.", "/") + suffix);
+        FileInputStream in;
+        try {
+            in = new FileInputStream(imageFile);
+        } catch (FileNotFoundException e) {
+            logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent image file was queried");
+            return null;
+        }
+        try {
+            image = imageIO.loadImage(in);
+        } catch (IOException e) {
+            logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with invalid image file was queried");
+            return null;
+        }
+        Map<String, NRectangle> bounds = new HashMap<>();
+        atlas = new Atlas(image, bounds);
+        int line = 1;
+        while (scanner.hasNextLine()) {
+            line++;
+            String entry = scanner.nextLine();
+            String[] tokens = entry.split("\\s+");
+            if (tokens.length != 5) {
+                logger.log(NLogMessage.NSeverity.WARNING, "Invalid string entry in file '" + atlasFile.getAbsolutePath() + "', line " + line);
+                continue;
+            }
+            String key = tokens[0];
+            int x, y, w, h;
+            try {
+                x = Integer.parseInt(tokens[1]);
+                y = Integer.parseInt(tokens[2]);
+                w = Integer.parseInt(tokens[3]);
+                h = Integer.parseInt(tokens[4]);
+            } catch (NumberFormatException ex) {
+                logger.log(NLogMessage.NSeverity.WARNING, "Invalid string entry in file '" + atlasFile.getAbsolutePath() + "', line " + line);
+                continue;
+            }
+            bounds.put(key, new NRectangle(x, y, w, h));
+        }
+        cachedAtlases.put(setName + "/" + fileName, atlas);
+        logger.log(NLogMessage.NSeverity.DEBUG, "Cached " + (line - 1) + " atlas entries from file '" + atlasFile.getAbsolutePath() + "'");
+        return image(name);
+    }
+
+    private static final class Atlas {
+        public final NImage image;
+        public final Map<String, NRectangle> bounds;
+
+        private Atlas(NImage image, Map<String, NRectangle> bounds) {
+            this.image = image;
+            this.bounds = bounds;
+        }
+    }
 }
