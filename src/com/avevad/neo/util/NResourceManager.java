@@ -109,5 +109,11 @@ public final class NResourceManager {
     // IMAGES
     ///////////////////////////////////////////////////////////////////////////
 
+    private NImage.NImageIO<? extends NImage> imageIO;
+
+    public void setImageIO(NImage.NImageIO<? extends NImage> imageIO) {
+        this.imageIO = imageIO;
+    }
+
 
 }

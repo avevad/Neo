@@ -1,6 +1,7 @@
 package com.avevad.neo.graphics;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -38,8 +39,8 @@ public abstract class NImage {
 
 
     public interface NImageIO<I extends NImage> {
-        I loadImage(InputStream from, String format);
+        I loadImage(InputStream from) throws IOException;
 
-        void saveImage(I image, OutputStream to, String format);
+        void saveImage(I image, OutputStream to, String format) throws IOException;
     }
 }
