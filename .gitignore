@@ -1,5 +1,3 @@
-.idea/*
-*.iml
-src/com/avevad/neo/test
-out
-test
+/.idea/
+/.gradle/
+/core/build

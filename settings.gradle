@@ -1,0 +1,5 @@
+rootProject.name = 'neo'
+include 'core'
+include 'core'
+include 'desktop'
+
