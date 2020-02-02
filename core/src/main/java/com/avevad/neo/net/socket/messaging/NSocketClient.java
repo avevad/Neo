@@ -189,8 +189,8 @@ public final class NSocketClient {
                                         logger.log(NLogMessage.NSeverity.DEBUG, label, ioex);
                                     }
                                 } catch (RuntimeException ex) {
-                                    logger.log(NLogMessage.NSeverity.ERROR, label, "Exception in command handler for class " + commandClass + ":");
-                                    logger.log(NLogMessage.NSeverity.ERROR, label, ex);
+                                    logger.log(NLogMessage.NSeverity.DEBUG, label, "Exception in command handler for class " + commandClass + ":");
+                                    logger.log(NLogMessage.NSeverity.DEBUG, label, ex);
                                     try {
                                         sendObject(new NExceptionPacket(commandPacket.id, ex));
                                     } catch (IOException ioex) {

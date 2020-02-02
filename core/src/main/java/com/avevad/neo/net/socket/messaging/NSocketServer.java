@@ -247,8 +247,8 @@ public final class NSocketServer {
                                         logger.log(NLogMessage.NSeverity.DEBUG, label, ioex);
                                     }
                                 } catch (RuntimeException ex) {
-                                    logger.log(NLogMessage.NSeverity.WARNING, label, "Exception in command handler for class " + commandClass + ":");
-                                    logger.log(NLogMessage.NSeverity.WARNING, label, ex);
+                                    logger.log(NLogMessage.NSeverity.DEBUG, label, "Exception in command handler for class " + commandClass + ":");
+                                    logger.log(NLogMessage.NSeverity.DEBUG, label, ex);
                                     try {
                                         client.send(new NExceptionPacket(commandPacket.id, ex));
                                     } catch (IOException ioex) {
