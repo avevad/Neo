@@ -27,7 +27,7 @@ public final class NTaskQueue {
 
     @Override
     public String toString() {
-        return "NTaskQueue('" + name + "')";
+        return name;
     }
 
     public void join(Runnable task) {
