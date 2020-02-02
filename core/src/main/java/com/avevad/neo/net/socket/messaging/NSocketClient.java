@@ -4,6 +4,7 @@ import com.avevad.neo.logging.NLogDestination;
 import com.avevad.neo.logging.NLogMessage;
 import com.avevad.neo.logging.NLogger;
 import com.avevad.neo.util.NTaskQueue;
+import com.avevad.neo.util.NVoid;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -132,6 +133,10 @@ public final class NSocketClient {
         }
     }
 
+    public void invoke(NVoidSocketCommand command) {
+        invoke((NSocketCommand<NVoid>) command);
+    }
+
     public <M extends NSocketMessage> void setMessageHandler(Class<M> messageClass, NSocketMessageHandler<M> handler) {
         if (messageClass == null) throw new IllegalArgumentException("invalid message class " + messageClass);
         if (handler == null) messageHandlers.remove(messageClass);
@@ -142,6 +147,13 @@ public final class NSocketClient {
         if (commandClass == null) throw new IllegalArgumentException("invalid command class " + commandClass);
         if (handler == null) commandHandlers.remove(commandClass);
         else commandHandlers.put(commandClass, handler);
+    }
+
+    public <C extends NVoidSocketCommand> void setCommandHandler(Class<C> commandClass, NVoidSocketCommandHandler<C> handler) {
+        setCommandHandler(commandClass, command -> {
+            handler.handleCommand(command);
+            return null;
+        });
     }
 
     public void setDisconnectedHandler(NDisconnectedHandler disconnectedHandler) {
@@ -244,5 +256,9 @@ public final class NSocketClient {
 
     public interface NSocketCommandHandler<C extends NSocketCommand<R>, R extends Serializable> {
         R handleCommand(C command);
+    }
+
+    public interface NVoidSocketCommandHandler<C extends NVoidSocketCommand> {
+        void handleCommand(C command);
     }
 }

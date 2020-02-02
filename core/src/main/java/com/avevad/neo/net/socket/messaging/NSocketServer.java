@@ -4,6 +4,7 @@ import com.avevad.neo.logging.NLogDestination;
 import com.avevad.neo.logging.NLogMessage;
 import com.avevad.neo.logging.NLogger;
 import com.avevad.neo.util.NTaskQueue;
+import com.avevad.neo.util.NVoid;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,7 +13,6 @@ import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public final class NSocketServer {
@@ -135,6 +135,13 @@ public final class NSocketServer {
         else commandHandlers.put(commandClass, handler);
     }
 
+    public <C extends NVoidSocketCommand> void setCommandHandler(Class<C> commandClass, NVoidSocketCommandHandler<C> handler) {
+        setCommandHandler(commandClass, (clientId, command) -> {
+            handler.handleCommand(clientId, command);
+            return null;
+        });
+    }
+
     public void send(NSocketMessage message, int to) {
         Client client = clients.get(to);
         if (client == null) throw new IllegalArgumentException("no such client");
@@ -203,6 +210,10 @@ public final class NSocketServer {
             logger.log(NLogMessage.NSeverity.WARNING, "Client #" + to + " has disconnected while receiving response");
             throw new IllegalArgumentException("no such client");
         }
+    }
+
+    public void invoke(NVoidSocketCommand command, int to) {
+        invoke((NSocketCommand<NVoid>) command, to);
     }
 
 
@@ -330,5 +341,9 @@ public final class NSocketServer {
 
     public interface NSocketCommandHandler<C extends NSocketCommand<R>, R extends Serializable> {
         R handleCommand(int clientId, C command);
+    }
+
+    public interface NVoidSocketCommandHandler<C extends NVoidSocketCommand> {
+        void handleCommand(int clientId, C command);
     }
 }
