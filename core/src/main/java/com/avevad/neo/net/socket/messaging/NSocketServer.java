@@ -30,7 +30,7 @@ public final class NSocketServer {
     private final Map<Class<? extends NSocketCommand>, NSocketCommandHandler> commandHandlers = new HashMap<>();
 
     private final Map<Long, RuntimeException> exceptions = new HashMap<>();
-    private final Map<Long, Serializable> responses = new HashMap<>();
+    private final Map<Long, NResponsePacket> responses = new HashMap<>();
 
     private final Map<Integer, Client> clients = new HashMap<>();
 
@@ -198,14 +198,14 @@ public final class NSocketServer {
                 }
             }
         }
-        Serializable response = responses.get(commandPacket.id);
+        NResponsePacket response = responses.get(commandPacket.id);
         RuntimeException exception = exceptions.get(commandPacket.id);
         if (exception != null) {
             exceptions.remove(commandPacket.id);
             throw exception;
         } else if (response != null) {
             responses.remove(commandPacket.id);
-            return (R) response;
+            return (R) response.response;
         } else {
             logger.log(NLogMessage.NSeverity.WARNING, "Client #" + to + " has disconnected while receiving response");
             throw new IllegalArgumentException("no such client");
@@ -268,7 +268,7 @@ public final class NSocketServer {
                         }
                     } else if (o instanceof NResponsePacket) {
                         NResponsePacket responsePacket = (NResponsePacket) o;
-                        responses.put(responsePacket.id, responsePacket.response);
+                        responses.put(responsePacket.id, responsePacket);
                         synchronized (lock) {
                             lock.notifyAll();
                         }
