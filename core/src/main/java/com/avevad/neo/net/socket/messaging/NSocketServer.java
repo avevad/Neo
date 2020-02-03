@@ -13,9 +13,10 @@ import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-public final class NSocketServer {
+public final class NSocketServer implements Iterable<Integer>{
     private final Object lock = new Object();
 
     private final int port;
@@ -302,6 +303,11 @@ public final class NSocketServer {
     @Override
     public String toString() {
         return "NSocketServer(:" + port + ")";
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return clients.keySet().iterator();
     }
 
     private static final class Client {
