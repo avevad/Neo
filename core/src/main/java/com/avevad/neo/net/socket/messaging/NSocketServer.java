@@ -81,12 +81,18 @@ public final class NSocketServer implements Iterable<Integer>{
         taskQueue.join(taskQueue::destroy);
     }
 
-    public void disconnect(int id) throws IOException {
+    public void disconnect(int id) {
         Client client = clients.get(id);
         if (client == null) throw new IllegalArgumentException("no such client");
+        client.listener.suspend();
+        try{
+            client.socket.close();
+        } catch (IOException ex) {
+            client.listener.resume();
+            throw new IllegalArgumentException("no such client");
+        }
         client.listener.stop();
         clients.remove(id);
-        client.socket.close();
         synchronized (lock) {
             lock.notifyAll();
         }
