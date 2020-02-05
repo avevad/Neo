@@ -7,4 +7,6 @@ public abstract class NEditableImage extends NImage {
     }
 
     public abstract void setPixel(int x, int y, int rgb);
+
+    public abstract NGraphics getGraphics();
 }

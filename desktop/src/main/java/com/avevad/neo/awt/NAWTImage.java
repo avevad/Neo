@@ -1,6 +1,7 @@
 package com.avevad.neo.awt;
 
 import com.avevad.neo.graphics.NEditableImage;
+import com.avevad.neo.graphics.NGraphics;
 import com.avevad.neo.graphics.NImage;
 
 import javax.imageio.ImageIO;
@@ -46,6 +47,11 @@ public final class NAWTImage extends NEditableImage {
     @Override
     public void setPixel(int x, int y, int rgb) {
         img.setRGB(x, y, rgb);
+    }
+
+    @Override
+    public NGraphics getGraphics() {
+        return new NAWTGraphics(img.getGraphics());
     }
 
     @Override
