@@ -51,7 +51,7 @@ public final class NAWTImage extends NEditableImage {
 
     @Override
     public NGraphics getGraphics() {
-        return new NAWTGraphics(img.getGraphics());
+        return new NAWTGraphics((Graphics2D) img.getGraphics());
     }
 
     @Override

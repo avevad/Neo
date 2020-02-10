@@ -162,7 +162,7 @@ public final class NAWTUIRenderer {
                 //buffer & components setup:
                 if(buffer == null || buffer.getWidth() != component.getWidth() || buffer.getHeight() != component.getHeight()) {
                     buffer = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_ARGB);
-                    root.graphics = new NAWTGraphics(buffer.getGraphics());
+                    root.graphics = new NAWTGraphics((Graphics2D) buffer.getGraphics());
                     panel.setSize(component.getWidth(), component.getHeight());
                 }
                 if(component.getX() != 0) component.setX(0);

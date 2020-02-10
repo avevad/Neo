@@ -353,5 +353,11 @@ public abstract class NComponent {
             updateGraphics();
             return graphics.getFontMetrics(font);
         }
+
+        @Override
+        public void rotate(int x, int y, double a) {
+            updateGraphics();
+            graphics.rotate(x, y, a);
+        }
     }
 }

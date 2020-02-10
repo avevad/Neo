@@ -6,12 +6,12 @@ import java.awt.*;
 import java.util.Objects;
 
 public final class NAWTGraphics extends NGraphics {
-    public final Graphics graphics;
+    public final Graphics2D graphics;
     private int color;
     private double opacity = 1;
     private NAWTFont font;
 
-    public NAWTGraphics(Graphics graphics) {
+    public NAWTGraphics(Graphics2D graphics) {
         this.graphics = graphics;
         this.font = new NAWTFont(new Font(Font.SERIF, Font.PLAIN, 14));
     }
@@ -109,12 +109,12 @@ public final class NAWTGraphics extends NGraphics {
 
     @Override
     public NGraphics create() {
-        return new NAWTGraphics(graphics.create());
+        return new NAWTGraphics((Graphics2D) graphics.create());
     }
 
     @Override
     public NGraphics create(int x, int y, int w, int h) {
-        return new NAWTGraphics(graphics.create(x, y, w, h));
+        return new NAWTGraphics((Graphics2D) graphics.create(x, y, w, h));
     }
 
     @Override
@@ -156,5 +156,10 @@ public final class NAWTGraphics extends NGraphics {
     public NFontMetrics getFontMetrics(NFont font) {
         if(!(font instanceof NAWTFont)) throw new IllegalArgumentException("Font must be an AWT font");
         return new NAWTFontMetrics(graphics.getFontMetrics(((NAWTFont) font).font));
+    }
+
+    @Override
+    public void rotate(int x, int y, double a) {
+        graphics.rotate(a, x, y);
     }
 }

@@ -110,4 +110,6 @@ public abstract class NGraphics {
 
     public abstract NFontMetrics getFontMetrics(NFont font);
 
+    public abstract void rotate(int x, int y, double a);
+
 }
