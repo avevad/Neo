@@ -14,6 +14,11 @@ import java.io.OutputStream;
 public final class NAWTImage extends NEditableImage {
     public static final NImageIO<NAWTImage> AWT_IMAGE_IO = new NImageIO<NAWTImage>() {
         @Override
+        public NAWTImage newImage(int w, int h) {
+            return new NAWTImage(new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB));
+        }
+
+        @Override
         public NAWTImage loadImage(InputStream from) throws IOException {
             return new NAWTImage(ImageIO.read(from));
         }

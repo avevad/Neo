@@ -13,6 +13,11 @@ import java.io.OutputStream;
 public final class NAWTReadonlyImage extends NImage {
     public static final NImageIO<NAWTReadonlyImage> AWT_READONLY_IMAGE_IO = new NImageIO<NAWTReadonlyImage>() {
         @Override
+        public NAWTReadonlyImage newImage(int w, int h) {
+            return new NAWTReadonlyImage(new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB));
+        }
+
+        @Override
         public NAWTReadonlyImage loadImage(InputStream from) throws IOException{
             return new NAWTReadonlyImage(ImageIO.read(from));
         }

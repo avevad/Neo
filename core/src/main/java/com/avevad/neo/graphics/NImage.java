@@ -33,6 +33,8 @@ public abstract class NImage {
 
 
     public interface NImageIO<I extends NImage> {
+        I newImage(int w, int h);
+
         I loadImage(InputStream from) throws IOException;
 
         void saveImage(I image, OutputStream to, String format) throws IOException;
