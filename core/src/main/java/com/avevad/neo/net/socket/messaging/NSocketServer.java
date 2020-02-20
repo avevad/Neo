@@ -61,8 +61,8 @@ public final class NSocketServer implements Iterable<Integer>{
                     if (clientConnectedHandler != null)
                         taskQueue.join(() -> clientConnectedHandler.onClientConnected(finalI));
                 } catch (IOException e) {
-                    logger.log(NLogMessage.NSeverity.DEBUG, "connector", "Failed to connect client:");
-                    logger.log(NLogMessage.NSeverity.DEBUG, "connector", e);
+                    logger.log(NLogMessage.NSeverity.VERBOSE, "connector", "Failed to connect client:");
+                    logger.log(NLogMessage.NSeverity.VERBOSE, "connector", e);
                 }
             }
         }, toString() + ":connector").start();
@@ -155,8 +155,8 @@ public final class NSocketServer implements Iterable<Integer>{
         try {
             client.send(new NMessagePacket(message));
         } catch (IOException ex) {
-            logger.log(NLogMessage.NSeverity.WARNING, "Client #" + to + " has disconnected while sending message");
-            logger.log(NLogMessage.NSeverity.WARNING, ex);
+            logger.log(NLogMessage.NSeverity.VERBOSE, "Client #" + to + " has disconnected while sending message");
+            logger.log(NLogMessage.NSeverity.VERBOSE, ex);
             throw new IllegalArgumentException("no such client", ex);
         }
     }
@@ -166,8 +166,8 @@ public final class NSocketServer implements Iterable<Integer>{
             try {
                 client.send(new NMessagePacket(message));
             } catch (IOException e) {
-                logger.log(NLogMessage.NSeverity.WARNING, "Client #" + client.id + " has disconnected while sending message to all");
-                logger.log(NLogMessage.NSeverity.WARNING, e);
+                logger.log(NLogMessage.NSeverity.VERBOSE, "Client #" + client.id + " has disconnected while sending message to all");
+                logger.log(NLogMessage.NSeverity.VERBOSE, e);
             }
         }
     }
@@ -179,8 +179,8 @@ public final class NSocketServer implements Iterable<Integer>{
             try {
                 client.send(new NMessagePacket(message));
             } catch (IOException ex) {
-                logger.log(NLogMessage.NSeverity.WARNING, "Client #" + id + " has disconnected while sending group message");
-                logger.log(NLogMessage.NSeverity.WARNING, ex);
+                logger.log(NLogMessage.NSeverity.VERBOSE, "Client #" + id + " has disconnected while sending group message");
+                logger.log(NLogMessage.NSeverity.VERBOSE, ex);
             }
         }
     }
@@ -192,8 +192,8 @@ public final class NSocketServer implements Iterable<Integer>{
         try {
             client.send(commandPacket);
         } catch (IOException e) {
-            logger.log(NLogMessage.NSeverity.WARNING, "Client #" + to + " has disconnected while sending command");
-            logger.log(NLogMessage.NSeverity.WARNING, e);
+            logger.log(NLogMessage.NSeverity.VERBOSE, "Client #" + to + " has disconnected while sending command");
+            logger.log(NLogMessage.NSeverity.VERBOSE, e);
             throw new IllegalArgumentException("no such client", e);
         }
         synchronized (lock) {
@@ -201,7 +201,7 @@ public final class NSocketServer implements Iterable<Integer>{
                 try {
                     lock.wait();
                 } catch (InterruptedException e) {
-                    logger.log(NLogMessage.NSeverity.DEBUG, "Interrupted while waiting for client response");
+                    logger.log(NLogMessage.NSeverity.VERBOSE, "Interrupted while waiting for client response");
                 }
             }
         }
@@ -214,7 +214,7 @@ public final class NSocketServer implements Iterable<Integer>{
             responses.remove(commandPacket.id);
             return (R) response.response;
         } else {
-            logger.log(NLogMessage.NSeverity.WARNING, "Client #" + to + " has disconnected while receiving response");
+            logger.log(NLogMessage.NSeverity.VERBOSE, "Client #" + to + " has disconnected while receiving response");
             throw new IllegalArgumentException("no such client");
         }
     }
@@ -239,7 +239,7 @@ public final class NSocketServer implements Iterable<Integer>{
                         if (messageHandlers.containsKey(messageClass)) {
                             taskQueue.join(() -> messageHandlers.get(messageClass).handleMessage(id, messagePacket.message));
                         } else
-                            logger.log(NLogMessage.NSeverity.WARNING, label, "No handler for message class " + messageClass);
+                            logger.log(NLogMessage.NSeverity.DEBUG, label, "No handler for message class " + messageClass);
                     } else if (o instanceof NCommandPacket) {
                         NCommandPacket commandPacket = (NCommandPacket) o;
                         Class<? extends NSocketCommand> commandClass = commandPacket.command.getClass();
@@ -250,8 +250,8 @@ public final class NSocketServer implements Iterable<Integer>{
                                     try {
                                         client.send(new NResponsePacket(commandPacket.id, response));
                                     } catch (IOException ioex) {
-                                        logger.log(NLogMessage.NSeverity.DEBUG, label, "IOException while sending response to client");
-                                        logger.log(NLogMessage.NSeverity.DEBUG, label, ioex);
+                                        logger.log(NLogMessage.NSeverity.VERBOSE, label, "IOException while sending response to client");
+                                        logger.log(NLogMessage.NSeverity.VERBOSE, label, ioex);
                                     }
                                 } catch (RuntimeException ex) {
                                     logger.log(NLogMessage.NSeverity.DEBUG, label, "Exception in command handler for class " + commandClass + ":");
@@ -259,18 +259,18 @@ public final class NSocketServer implements Iterable<Integer>{
                                     try {
                                         client.send(new NExceptionPacket(commandPacket.id, ex));
                                     } catch (IOException ioex) {
-                                        logger.log(NLogMessage.NSeverity.DEBUG, label, "IOException while sending exception to client");
-                                        logger.log(NLogMessage.NSeverity.DEBUG, label, ioex);
+                                        logger.log(NLogMessage.NSeverity.VERBOSE, label, "IOException while sending exception to client");
+                                        logger.log(NLogMessage.NSeverity.VERBOSE, label, ioex);
                                     }
                                 }
                             });
                         } else {
-                            logger.log(NLogMessage.NSeverity.ERROR, label, "No handler for command class " + commandClass);
+                            logger.log(NLogMessage.NSeverity.WARNING, label, "No handler for command class " + commandClass);
                             try {
                                 client.send(new NExceptionPacket(commandPacket.id, new NNoSuitableSocketCommandHandlerException()));
                             } catch (IOException ioex) {
-                                logger.log(NLogMessage.NSeverity.DEBUG, label, "IOException while sending exception to client");
-                                logger.log(NLogMessage.NSeverity.DEBUG, label, ioex);
+                                logger.log(NLogMessage.NSeverity.VERBOSE, label, "IOException while sending exception to client");
+                                logger.log(NLogMessage.NSeverity.VERBOSE, label, ioex);
                             }
                         }
                     } else if (o instanceof NResponsePacket) {
@@ -294,8 +294,8 @@ public final class NSocketServer implements Iterable<Integer>{
                 }
             }
         } catch (IOException e) {
-            logger.log(NLogMessage.NSeverity.DEBUG, label, "Lost connection with client:");
-            logger.log(NLogMessage.NSeverity.DEBUG, label, e);
+            logger.log(NLogMessage.NSeverity.VERBOSE, label, "Lost connection with client:");
+            logger.log(NLogMessage.NSeverity.VERBOSE, label, e);
             clients.remove(id);
             if (clientDisconnectedHandler != null)
                 taskQueue.join(() -> clientDisconnectedHandler.onClientDisconnected(id));

@@ -40,7 +40,7 @@ public final class NTaskQueue {
 
     public void start() {
         worker.start();
-        logger.log(NLogMessage.NSeverity.DEBUG, "started");
+        logger.log(NLogMessage.NSeverity.VERBOSE, "started");
     }
 
     public void destroy() {
@@ -48,7 +48,7 @@ public final class NTaskQueue {
         worker.stop();
         queue.clear();
         destroyed = true;
-        logger.log(NLogMessage.NSeverity.DEBUG, "destroyed");
+        logger.log(NLogMessage.NSeverity.VERBOSE, "destroyed");
     }
 
     private void run() {
@@ -58,16 +58,16 @@ public final class NTaskQueue {
                     try {
                         lock.wait();
                     } catch (InterruptedException e) {
-                        logger.log(NLogMessage.NSeverity.WARNING, "worker", "Worker interrupted!");
-                        logger.log(NLogMessage.NSeverity.WARNING, "worker", e);
+                        logger.log(NLogMessage.NSeverity.VERBOSE, "worker", "Worker interrupted!");
+                        logger.log(NLogMessage.NSeverity.VERBOSE, "worker", e);
                     }
                 }
             }
             try {
                 queue.poll().run();
             } catch (Exception ex) {
-                logger.log(NLogMessage.NSeverity.ERROR, "worker", "Task has thrown an exception!");
-                logger.log(NLogMessage.NSeverity.ERROR, ex);
+                logger.log(NLogMessage.NSeverity.DEBUG, "worker", "Task has thrown an exception!");
+                logger.log(NLogMessage.NSeverity.DEBUG, ex);
             }
         }
     }
