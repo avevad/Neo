@@ -31,8 +31,6 @@ public final class NAWTReadonlyImage extends NImage {
     final NAWTImage img;
     final int sx;
     final int sy;
-    final int sw;
-    final int sh;
 
     public NAWTReadonlyImage(BufferedImage img){
         this(img, 0, 0, img.getWidth(), img.getHeight());
@@ -43,8 +41,6 @@ public final class NAWTReadonlyImage extends NImage {
         this.img = new NAWTImage(img);
         this.sx = sx;
         this.sy = sy;
-        this.sw = sw;
-        this.sh = sh;
     }
 
     @Override

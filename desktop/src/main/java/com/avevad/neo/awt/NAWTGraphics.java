@@ -120,21 +120,39 @@ public final class NAWTGraphics extends NGraphics {
     @Override
     public void drawImage(NImage img, int x, int y) {
         if(img instanceof NAWTImage) graphics.drawImage(((NAWTImage) img).img, x, y, null);
-        else if(img instanceof NAWTReadonlyImage) graphics.drawImage(((NAWTReadonlyImage) img).img.img, x, y, null);
+        else if(img instanceof NAWTReadonlyImage) {
+            NAWTReadonlyImage readonlyImage = (NAWTReadonlyImage) img;
+            graphics.drawImage(readonlyImage.img.img,
+                    x, y, x + readonlyImage.w, y + readonlyImage.h,
+                    readonlyImage.sx, readonlyImage.sy, readonlyImage.sx + readonlyImage.w, readonlyImage.sy + readonlyImage.h,
+                    null);
+        }
         else drawImage(img, 0, 0, img.w, img.h, x, y, img.w, img.h);
     }
 
     @Override
     public void drawImage(NImage img, int x, int y, int w, int h) {
         if(img instanceof NAWTImage) graphics.drawImage(((NAWTImage) img).img, x, y, w, h, null);
-        else if(img instanceof NAWTReadonlyImage) graphics.drawImage(((NAWTReadonlyImage) img).img.img, x, y, w, h, null);
+        else if(img instanceof NAWTReadonlyImage) {
+            NAWTReadonlyImage readonlyImage = (NAWTReadonlyImage) img;
+            graphics.drawImage(readonlyImage.img.img,
+                    x, y, x + w, y + h,
+                    readonlyImage.sx, readonlyImage.sy, readonlyImage.sx + readonlyImage.w, readonlyImage.sy + readonlyImage.h,
+                    null);
+        }
         else drawImage(img, 0, 0, img.w, img.h, x, y, w, h);
     }
 
     @Override
     public void drawImage(NImage img, int srcX, int srcY, int srcW, int srcH, int dstX, int dstY, int dstW, int dstH) {
         if(img instanceof NAWTImage) graphics.drawImage(((NAWTImage) img).img, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH, null);
-        else if(img instanceof NAWTReadonlyImage) graphics.drawImage(((NAWTReadonlyImage) img).img.img, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH, null);
+        else if(img instanceof NAWTReadonlyImage) {
+            NAWTReadonlyImage readonlyImage = (NAWTReadonlyImage) img;
+            graphics.drawImage(readonlyImage.img.img,
+                    dstX, dstY, dstX + dstW, dstY + dstH,
+                    readonlyImage.sx + srcX, readonlyImage.sy + srcY, readonlyImage.sx + srcX + srcW, readonlyImage.sy + srcY + srcH,
+                    null);
+        }
         else {
             double kx = (double) srcW / dstW;
             double ky = (double) srcH / dstH;
