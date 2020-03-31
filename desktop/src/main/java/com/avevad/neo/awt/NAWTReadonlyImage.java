@@ -29,25 +29,39 @@ public final class NAWTReadonlyImage extends NImage {
     };
 
     final NAWTImage img;
+    final int sx;
+    final int sy;
+    final int sw;
+    final int sh;
 
     public NAWTReadonlyImage(BufferedImage img){
-        super(img.getWidth(), img.getHeight());
+        this(img, 0, 0, img.getWidth(), img.getHeight());
+    }
+
+    public NAWTReadonlyImage(BufferedImage img, int sx, int sy, int sw, int sh) {
+        super(sw, sh);
         this.img = new NAWTImage(img);
+        this.sx = sx;
+        this.sy = sy;
+        this.sw = sw;
+        this.sh = sh;
     }
 
     @Override
     public int getPixel(int x, int y) {
-        return img.getPixel(x, y);
+        return img.getPixel(sx + x, sy + y);
     }
 
     @Override
     public NImage copyReadonly(int x, int y, int w, int h) {
-        return img.copyReadonly(x, y, w, h);
+        return new NAWTReadonlyImage(img.img, sx + x, sy + y, w, h);
     }
 
     @Override
     public NEditableImage copyEditable(int x, int y, int w, int h) {
-        return img.copyEditable();
+        BufferedImage newImg = new BufferedImage(w, h, img.img.getType());
+        newImg.getGraphics().drawImage(img.img, sx + x, sy + y, w, h, null);
+        return new NAWTImage(newImg);
     }
 
 
