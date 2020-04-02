@@ -6,10 +6,7 @@ import com.avevad.neo.logging.NLogDestination;
 import com.avevad.neo.logging.NLogMessage;
 import com.avevad.neo.logging.NLogger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public final class NResourceManager {
@@ -36,7 +33,7 @@ public final class NResourceManager {
     private String locale = "EN";
     private final Map<String, String> cachedStrings = new HashMap<>();
     private final Set<String> cachedStringFiles = new HashSet<>();
-    private final Map<String, File> stringSets = new HashMap<>();
+    private final Map<String, ResourceMap> stringSets = new HashMap<>();
 
     public void setLocale(String locale) {
         this.locale = locale;
@@ -46,8 +43,12 @@ public final class NResourceManager {
         return locale;
     }
 
-    public void addStringSet(String name, File dir) {
-        stringSets.put(name, dir);
+    public void addStringSet(String name, File directory) {
+        addStringSet(name, resource -> new FileInputStream(new File(directory, resource)));
+    }
+
+    public void addStringSet(String name, ResourceMap resourceMap) {
+        stringSets.put(name, resourceMap);
     }
 
     public String string(String name, Object... objects) {
@@ -69,15 +70,15 @@ public final class NResourceManager {
                 return name;
             }
         }
-        File set = stringSets.get(setName);
+        ResourceMap set = stringSets.get(setName);
         if (set == null) {
             logger.log(NLogMessage.NSeverity.WARNING, "String '" + name + "' (" + locale + ") with nonexistent set was queried");
             return name;
         }
-        File file = new File(set, fileName.replaceAll("\\.", "/") + "_" + locale + ".txt");
+        String realFilename = fileName.replaceAll("\\.", "/") + "_" + locale + ".txt";
         Scanner scanner;
         try {
-            scanner = new Scanner(file);
+            scanner = new Scanner(set.getResourceStream(realFilename));
         } catch (FileNotFoundException e) {
             logger.log(NLogMessage.NSeverity.WARNING, "String '" + name + "' (" + locale + ") with nonexistent file was queried");
             return name;
@@ -89,7 +90,7 @@ public final class NResourceManager {
             String entry = scanner.nextLine();
             int delim = entry.indexOf('=');
             if (delim == -1) {
-                logger.log(NLogMessage.NSeverity.WARNING, "Invalid string entry in file '" + file.getAbsolutePath() + "', line " + line);
+                logger.log(NLogMessage.NSeverity.WARNING, "Invalid string entry in file '" + realFilename + "', line " + line);
                 continue;
             }
             String key = entry.substring(0, delim).trim();
@@ -98,7 +99,7 @@ public final class NResourceManager {
             if (key.equals(id)) ret = value;
             cachedStrings.put(setName + "/" + fileName + ":" + key + "_" + locale, value);
         }
-        logger.log(NLogMessage.NSeverity.DEBUG, "Cached " + line + " line(s) from file '" + file.getAbsolutePath() + "'");
+        logger.log(NLogMessage.NSeverity.DEBUG, "Cached " + line + " line(s) from file '" + realFilename + "'");
         cachedStringFiles.add(setName + "/" + fileName + "_" + locale);
         if (ret == null) {
             logger.log(NLogMessage.NSeverity.WARNING, "String '" + name + "' (" + locale + ") with nonexistent id was queried");
@@ -114,14 +115,18 @@ public final class NResourceManager {
     private NImage.NImageIO<? extends NImage> imageIO;
     private final Map<String, NImage> cachedImages = new HashMap<>();
     private final Map<String, Atlas> cachedAtlases = new HashMap<>();
-    private final Map<String, File> imageSets = new HashMap<>();
+    private final Map<String, ResourceMap> imageSets = new HashMap<>();
 
     public void setImageIO(NImage.NImageIO<? extends NImage> imageIO) {
         this.imageIO = imageIO;
     }
 
-    public void addImageSet(String name, File dir) {
-        imageSets.put(name, dir);
+    public void addImageSet(String name, File directory) {
+        addImageSet(name, resource -> new FileInputStream(new File(directory, resource)));
+    }
+
+    public void addImageSet(String name, ResourceMap resourceMap) {
+        imageSets.put(name, resourceMap);
     }
 
     public NImage image(String name) {
@@ -153,24 +158,23 @@ public final class NResourceManager {
                 return image;
             }
         }
-        File set = imageSets.get(setName);
+        ResourceMap set = imageSets.get(setName);
         if (set == null) {
             logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent set was queried");
             return null;
         }
-        File atlasFile = new File(set, fileName.replaceAll("\\.", "/") + ".atlas");
+        String atlasName = fileName.replaceAll("\\.", "/");
         Scanner scanner;
         try {
-            scanner = new Scanner(atlasFile);
+            scanner = new Scanner(set.getResourceStream(atlasName + ".atlas"));
         } catch (FileNotFoundException e) {
             logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent atlas file was queried");
             return null;
         }
         String suffix = scanner.nextLine();
-        File imageFile = new File(set, fileName.replaceAll("\\.", "/") + suffix);
-        FileInputStream in;
+        InputStream in;
         try {
-            in = new FileInputStream(imageFile);
+            in = set.getResourceStream(atlasName + suffix);
         } catch (FileNotFoundException e) {
             logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent image file was queried");
             return null;
@@ -189,7 +193,7 @@ public final class NResourceManager {
             String entry = scanner.nextLine();
             String[] tokens = entry.split("\\s+");
             if (tokens.length != 5) {
-                logger.log(NLogMessage.NSeverity.WARNING, "Invalid string entry in file '" + atlasFile.getAbsolutePath() + "', line " + line);
+                logger.log(NLogMessage.NSeverity.WARNING, "Invalid atlas entry in file '" + atlasName + ".atlas', line " + line);
                 continue;
             }
             String key = tokens[0];
@@ -200,13 +204,13 @@ public final class NResourceManager {
                 w = Integer.parseInt(tokens[3]);
                 h = Integer.parseInt(tokens[4]);
             } catch (NumberFormatException ex) {
-                logger.log(NLogMessage.NSeverity.WARNING, "Invalid string entry in file '" + atlasFile.getAbsolutePath() + "', line " + line);
+                logger.log(NLogMessage.NSeverity.WARNING, "Invalid atlas entry in file '" + atlasName + ".atlas', line " + line);
                 continue;
             }
             bounds.put(key, new NRectangle(x, y, w, h));
         }
         cachedAtlases.put(setName + "/" + fileName, atlas);
-        logger.log(NLogMessage.NSeverity.DEBUG, "Cached " + (line - 1) + " atlas entries from file '" + atlasFile.getAbsolutePath() + "'");
+        logger.log(NLogMessage.NSeverity.DEBUG, "Cached " + (line - 1) + " atlas entries from file '" + atlasName + ".atlas'");
         return image(name);
     }
 
@@ -218,5 +222,10 @@ public final class NResourceManager {
             this.image = image;
             this.bounds = bounds;
         }
+    }
+
+
+    public interface ResourceMap {
+        InputStream getResourceStream(String resource) throws FileNotFoundException;
     }
 }
