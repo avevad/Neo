@@ -131,14 +131,12 @@ public final class NResourceManager {
 
     public NImage image(String name) {
         if (name == null) {
-            logger.log(NLogMessage.NSeverity.WARNING, "Invalid image '" + name + "' was queried");
-            return null;
+            throw new IllegalArgumentException("invalid image name '" + name + "'");
         }
         int div1 = name.indexOf('/');
         int div2 = name.indexOf(':');
         if (div1 == -1 || div2 == -1) {
-            logger.log(NLogMessage.NSeverity.WARNING, "Invalid image '" + name + "' was queried");
-            return null;
+            throw new IllegalArgumentException("invalid image name '" + name + "'");
         }
         String setName = name.substring(0, div1);
         String fileName = name.substring(div1 + 1, div2);
@@ -149,8 +147,7 @@ public final class NResourceManager {
         if (atlas != null) {
             NRectangle bounds = atlas.bounds.get(id);
             if (bounds == null) {
-                logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent id was queried");
-                return null;
+                throw new IllegalArgumentException("image name '" + name + "' has nonexistent id");
             } else {
                 image = atlas.image.copyReadonly(bounds.x, bounds.y, bounds.w, bounds.h);
                 cachedImages.put(name, image);
@@ -160,30 +157,26 @@ public final class NResourceManager {
         }
         ResourceMap set = imageSets.get(setName);
         if (set == null) {
-            logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent set was queried");
-            return null;
+            throw new IllegalArgumentException("image name '" + name + "' has nonexistent set");
         }
         String atlasName = fileName.replaceAll("\\.", "/");
         Scanner scanner;
         try {
             scanner = new Scanner(set.getResourceStream(atlasName + ".atlas"));
         } catch (FileNotFoundException e) {
-            logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent atlas file was queried");
-            return null;
+            throw new IllegalArgumentException("image '" + name + "' has nonexistent atlas file");
         }
         String suffix = scanner.nextLine();
         InputStream in;
         try {
             in = set.getResourceStream(atlasName + suffix);
         } catch (FileNotFoundException e) {
-            logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with nonexistent image file was queried");
-            return null;
+            throw new IllegalArgumentException("image '" + name + "' has nonexistent image file");
         }
         try {
             image = imageIO.loadImage(in);
         } catch (IOException e) {
-            logger.log(NLogMessage.NSeverity.WARNING, "Image '" + name + "' with invalid image file was queried");
-            return null;
+            throw new IllegalArgumentException("image '" + name + "' has invalid file");
         }
         Map<String, NRectangle> bounds = new HashMap<>();
         atlas = new Atlas(image, bounds);
