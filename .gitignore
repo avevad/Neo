@@ -2,3 +2,4 @@
 /.gradle/
 /core/build
 /desktop/build
+/desktop/src/main/java/com/avevad/neo/test/
