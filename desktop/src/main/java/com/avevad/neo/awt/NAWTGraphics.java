@@ -3,9 +3,13 @@ package com.avevad.neo.awt;
 import com.avevad.neo.graphics.*;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public final class NAWTGraphics extends NGraphics {
+    public static final Map<Object, Object> AWT_RENDERING_HINTS = new HashMap<>();
+
     public final Graphics2D graphics;
     private int color;
     private double opacity = 1;
@@ -13,6 +17,7 @@ public final class NAWTGraphics extends NGraphics {
 
     public NAWTGraphics(Graphics2D graphics) {
         this.graphics = graphics;
+        graphics.setRenderingHints(AWT_RENDERING_HINTS);
         this.font = new NAWTFont(new Font(Font.SERIF, Font.PLAIN, 14));
     }
 
