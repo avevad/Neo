@@ -1,3 +1,10 @@
 dependencies {
-    compileOnly project(":core")
+    compile project(":core")
+}
+
+task testRun(type: JavaExec, dependsOn: classes) {
+    main = 'com.avevad.neo.test.Test'
+    classpath sourceSets.main.output.classesDirs
+    classpath configurations.runtimeClasspath
+    ignoreExitValue true
 }
