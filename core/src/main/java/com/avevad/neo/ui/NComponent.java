@@ -193,16 +193,18 @@ public abstract class NComponent {
         private double opacity = 1;
         private NFont font;
         private final NRectangle clip;
+        private final NPoint offset;
 
-        public NLinkedGraphics(NComponent parent, NComponent child, NRectangle clip) {
+        public NLinkedGraphics(NComponent parent, NComponent child, NRectangle clip, NPoint offset) {
             this.parent = parent;
             this.child = child;
             this.clip = clip;
+            this.offset = offset;
             updateGraphics();
         }
 
         public NLinkedGraphics(NComponent parent, NComponent child) {
-            this(parent, child, null);
+            this(parent, child, null, NPoint.ZERO);
         }
 
         private void updateGraphics() {
@@ -254,6 +256,10 @@ public abstract class NComponent {
         public void drawLine(int x1, int y1, int x2, int y2) {
             updateGraphics();
             setParameters();
+            x1 += offset.x;
+            y1 += offset.y;
+            x2 += offset.x;
+            y2 += offset.y;
             graphics.drawLine(x1, y1, x2, y2);
         }
 
@@ -261,6 +267,8 @@ public abstract class NComponent {
         public void drawRect(int x, int y, int w, int h) {
             updateGraphics();
             setParameters();
+            x += offset.x;
+            y += offset.y;
             graphics.drawRect(x, y, w, h);
         }
 
@@ -268,6 +276,8 @@ public abstract class NComponent {
         public void fillRect(int x, int y, int w, int h) {
             updateGraphics();
             setParameters();
+            x += offset.x;
+            y += offset.y;
             graphics.fillRect(x, y, w, h);
         }
 
@@ -275,6 +285,8 @@ public abstract class NComponent {
         public void drawOval(int x, int y, int w, int h) {
             updateGraphics();
             setParameters();
+            x += offset.x;
+            y += offset.y;
             graphics.drawOval(x, y, w, h);
         }
 
@@ -282,6 +294,8 @@ public abstract class NComponent {
         public void fillOval(int x, int y, int w, int h) {
             updateGraphics();
             setParameters();
+            x += offset.x;
+            y += offset.y;
             graphics.fillOval(x, y, w, h);
         }
 
@@ -289,20 +303,30 @@ public abstract class NComponent {
         public void drawPolygon(int[] xs, int[] ys) {
             updateGraphics();
             setParameters();
-            graphics.drawPolygon(xs, ys);
+            int[] nxs = new int[xs.length];
+            for(int i = 0; i < xs.length; i++) nxs[i] = xs[i] + offset.x;
+            int[] nys = new int[ys.length];
+            for(int i = 0; i < ys.length; i++) nys[i] = ys[i] + offset.y;
+            graphics.drawPolygon(nxs, nys);
         }
 
         @Override
         public void fillPolygon(int[] xs, int[] ys) {
             updateGraphics();
             setParameters();
-            graphics.fillPolygon(xs, ys);
+            int[] nxs = new int[xs.length];
+            for(int i = 0; i < xs.length; i++) nxs[i] = xs[i] + offset.x;
+            int[] nys = new int[ys.length];
+            for(int i = 0; i < ys.length; i++) nys[i] = ys[i] + offset.y;
+            graphics.fillPolygon(nxs, nys);
         }
 
         @Override
         public void drawString(String s, int x, int y) {
             updateGraphics();
             setParameters();
+            x += offset.x;
+            y += offset.y;
             graphics.drawString(s, x, y);
         }
 
@@ -313,8 +337,12 @@ public abstract class NComponent {
 
         @Override
         public NGraphics create(int x, int y, int w, int h) {
-            if (clip == null) return new NLinkedGraphics(parent, child, new NRectangle(x, y, w, h));
+            if (clip == null) return new NLinkedGraphics(parent, child, new NRectangle(x, y, w, h), offset);
             else {
+                int offsetX = offset.x;
+                int offsetY = offset.y;
+                if(x < 0) offsetX += x;
+                if(y < 0) offsetY += y;
                 x += clip.x;
                 y += clip.y;
                 int x1 = Integer.max(x, clip.x);
@@ -323,7 +351,7 @@ public abstract class NComponent {
                 int y2 = Integer.min(y + h, clip.y + clip.h);
                 if (x2 < x1) x2 = x1;
                 if (y2 < y1) y2 = y1;
-                return new NLinkedGraphics(parent, child, new NRectangle(x1, y1, x2 - x1, y2 - y1));
+                return new NLinkedGraphics(parent, child, new NRectangle(x1, y1, x2 - x1, y2 - y1), new NPoint(offsetX, offsetY));
             }
         }
 
@@ -331,6 +359,8 @@ public abstract class NComponent {
         public void drawImage(NImage img, int x, int y) {
             updateGraphics();
             setParameters();
+            x += offset.x;
+            y += offset.y;
             graphics.drawImage(img, x, y);
         }
 
@@ -338,6 +368,8 @@ public abstract class NComponent {
         public void drawImage(NImage img, int x, int y, int w, int h) {
             updateGraphics();
             setParameters();
+            x += offset.x;
+            y += offset.y;
             graphics.drawImage(img, x, y, w, h);
         }
 
@@ -345,6 +377,8 @@ public abstract class NComponent {
         public void drawImage(NImage img, int srcX, int srcY, int srcW, int srcH, int dstX, int dstY, int dstW, int dstH) {
             updateGraphics();
             setParameters();
+            dstX += offset.x;
+            dstY += offset.y;
             graphics.drawImage(img, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
         }
 
@@ -357,6 +391,8 @@ public abstract class NComponent {
         @Override
         public void rotate(int x, int y, double a) {
             updateGraphics();
+            x += offset.x;
+            y += offset.y;
             graphics.rotate(x, y, a);
         }
     }
