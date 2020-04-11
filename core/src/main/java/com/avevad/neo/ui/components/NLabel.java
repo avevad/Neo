@@ -3,7 +3,6 @@ package com.avevad.neo.ui.components;
 import com.avevad.neo.graphics.*;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NHorizontalTextAlignment;
-import com.avevad.neo.ui.NUI;
 import com.avevad.neo.ui.NVerticalTextAlignment;
 import com.avevad.neo.ui.events.*;
 
@@ -14,12 +13,15 @@ public class NLabel extends NComponent {
     private NHorizontalTextAlignment hAlign = NHorizontalTextAlignment.CENTER;
     private NVerticalTextAlignment vAlign = NVerticalTextAlignment.CENTER;
     private int color = NColor.NONE;
+    private NLabelUI ui;
 
-
-    public NLabel() {
-        setUI(new DefaultUI());
+    public void setUI(NLabelUI ui) {
+        this.ui = ui;
     }
 
+    public NLabelUI getUI() {
+        return ui;
+    }
 
     public void setText(String text) {
         this.text = text;
@@ -149,35 +151,13 @@ public class NLabel extends NComponent {
         return new NPoint(x, y);
     }
 
-
-    private final static class DefaultUI implements NUI {
-        public static final int DEFAULT_COLOR = NColor.BLACK;
-
-        @Override
-        public boolean render(NComponent component, int layer) {
-            if (!(component instanceof NLabel)) throw new IllegalArgumentException("This UI can only render NLabel");
-            if (layer > 0) return false;
-
-            NLabel label = (NLabel) component;
-            NGraphics g = label.getGraphics();
-
-            NHorizontalTextAlignment hAlign = label.getHorizontalAlignment();
-            NVerticalTextAlignment vAlign = label.getVerticalAlignment();
-            int color = label.getColor();
-            if (color == NColor.NONE) color = DEFAULT_COLOR;
-            NFont font = label.getFont();
-            NFontMetrics fontMetrics = g.getFontMetrics(font);
-            int w = label.getWidth();
-            int h = label.getHeight();
-            String s = NLabel.cutToFit(label.getText(), w, fontMetrics);
-            NPoint point = alignText(s, label.getSize(), fontMetrics, hAlign, vAlign);
-
-            g.setOpacity(label.getOpacity());
-            g.setFont(font);
-            g.setColor(color);
-            g.drawString(s, point.x, point.y);
-
-            return false;
-        }
+    @Override
+    public boolean render(int layer) {
+        return ui.drawLabel(this, layer);
     }
+
+    public interface NLabelUI {
+        boolean drawLabel(NLabel label, int layer);
+    }
+
 }

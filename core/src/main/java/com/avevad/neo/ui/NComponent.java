@@ -7,9 +7,7 @@ public abstract class NComponent {
     private NParentComponent parent;
     private NRectangle bounds;
     private NGraphics graphics;
-    private NUI ui;
     private int focusIndex = 0;
-    private boolean enabled = true;
     private double opacity = 1;
 
     public NComponent() {
@@ -35,15 +33,6 @@ public abstract class NComponent {
 
     public NGraphics getGraphics() {
         return graphics;
-    }
-
-
-    public void setUI(NUI ui) {
-        this.ui = ui;
-    }
-
-    public final NUI getUI() {
-        return ui;
     }
 
 
@@ -139,14 +128,6 @@ public abstract class NComponent {
     }
 
 
-    public final boolean isEnabled() {
-        return enabled;
-    }
-
-    public final void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public final void setOpacity(double opacity) {
         this.opacity = opacity;
     }
@@ -155,10 +136,7 @@ public abstract class NComponent {
         return opacity;
     }
 
-    public boolean render(int layer) {
-        if (ui != null) return ui.render(this, layer);
-        else return false;
-    }
+    public abstract boolean render(int layer);
 
 
     public abstract boolean onMousePressed(NMousePressedEvent event);

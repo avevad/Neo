@@ -1,9 +1,11 @@
-package com.avevad.neo.graphics;
+package com.avevad.neo.ui.components;
 
+import com.avevad.neo.graphics.NColor;
+import com.avevad.neo.graphics.NPoint;
+import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NEvent;
 import com.avevad.neo.ui.NEventDispatcher;
-import com.avevad.neo.ui.NUI;
 import com.avevad.neo.ui.events.*;
 
 import java.util.ArrayList;
@@ -18,12 +20,17 @@ public class NRadioButton extends NComponent {
     private boolean isPressed = false;
     private boolean isHovered = false;
     private boolean isChecked = false;
+    private NRadioButtonUI ui;
 
     public final NEventDispatcher<NCheckedEvent> checked = new NEventDispatcher<>();
+    private boolean enabled = true;
 
+    public void setUI(NRadioButtonUI ui) {
+        this.ui = ui;
+    }
 
-    public NRadioButton() {
-        setUI(new DefaultUI());
+    public NRadioButtonUI getUI() {
+        return ui;
     }
 
     public void setBackgroundColor(int backgroundColor) {
@@ -133,76 +140,23 @@ public class NRadioButton extends NComponent {
         return false;
     }
 
-    private final static class DefaultUI implements NUI {
-        public static final int DEFAULT_BACKGROUND_COLOR = NColor.WHITE;
-        public static final int DEFAULT_FOREGROUND_COLOR = NColor.BLACK;
-
-        public static final double PRESS_COLOR_RATIO = 0.25;
-        public static final double HOVER_COLOR_RATIO = 0.75;
-        public static final double FOCUS_COLOR_RATIO = 0.5;
-
-        public static final int DISABLED_COVER_COLOR = NColor.WHITE;
-        public static final double DISABLED_COVER_OPACITY = 0.5;
-
-        public static final double CHECK_RATIO = 0.6;
-
-        @Override
-        public boolean render(NComponent component, int layer) {
-            if (!(component instanceof NRadioButton))
-                throw new IllegalArgumentException("This UI can only render NRadioButton");
-            if (layer > 0) return false;
-            NRadioButton radioButton = (NRadioButton) component;
-            NGraphics g = radioButton.getGraphics();
-
-            NDimension size = radioButton.getSize();
-            int w = size.w;
-            int h = size.h;
-            int cx = (int) ((1. - CHECK_RATIO) / 2. * w);
-            int cy = (int) ((1. - CHECK_RATIO) / 2. * h);
-            int cw = (int) (CHECK_RATIO * w);
-            int ch = (int) (CHECK_RATIO * h);
-            boolean pressed = radioButton.isPressed();
-            boolean hovered = radioButton.isHovered();
-            boolean focused = radioButton.isFocused();
-            boolean checked = radioButton.isChecked();
-
-            int backgroundColor = radioButton.getBackgroundColor();
-            if (backgroundColor == NColor.NONE) backgroundColor = DEFAULT_BACKGROUND_COLOR;
-            int foregroundColor = radioButton.getForegroundColor();
-            if (foregroundColor == NColor.NONE) foregroundColor = DEFAULT_FOREGROUND_COLOR;
-            int pressColor = NColor.mix(backgroundColor, foregroundColor, PRESS_COLOR_RATIO);
-            int hoverColor = NColor.mix(backgroundColor, foregroundColor, HOVER_COLOR_RATIO);
-            int focusColor = NColor.mix(backgroundColor, foregroundColor, FOCUS_COLOR_RATIO);
-            if (pressed) backgroundColor = pressColor;
-            else if (hovered) backgroundColor = hoverColor;
-
-            g.setOpacity(radioButton.getOpacity());
-
-            g.setColor(backgroundColor);
-            g.fillOval(0, 0, w, h);
-
-            if (checked) {
-                g.setColor(foregroundColor);
-                g.fillOval(cx, cy, cw - 1, ch - 1);
-            }
-
-            if (focused) {
-                g.setColor(focusColor);
-                g.drawOval(cx, cy, cw - 1, ch - 1);
-            }
-
-            g.setColor(foregroundColor);
-            g.drawOval(0, 0, w - 1, h - 1);
-
-            if (!radioButton.isEnabled()) {
-                g.setOpacity(DISABLED_COVER_OPACITY * radioButton.getOpacity());
-                g.setColor(DISABLED_COVER_COLOR);
-                g.fillOval(new NRectangle(NPoint.ZERO, radioButton.getSize()));
-            }
-
-            return false;
-        }
+    @Override
+    public boolean render(int layer) {
+        return ui.drawRadioButton(this, layer);
     }
+
+    public final boolean isEnabled() {
+        return enabled;
+    }
+
+    public final void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public interface NRadioButtonUI {
+        boolean drawRadioButton(NRadioButton radioButton, int layer);
+    }
+
 
     public static final class NCheckedEvent extends NEvent {
 

@@ -4,7 +4,6 @@ import com.avevad.neo.graphics.NGraphics;
 import com.avevad.neo.graphics.NImage;
 import com.avevad.neo.ui.NEventDispatcher;
 import com.avevad.neo.ui.NParentComponent;
-import com.avevad.neo.ui.NUI;
 import com.avevad.neo.ui.events.*;
 
 public class NFreestyleParentComponent extends NParentComponent {
@@ -21,11 +20,6 @@ public class NFreestyleParentComponent extends NParentComponent {
 
     public NFreestyleParentComponent(NImage canvas) {
         this.canvas = canvas;
-    }
-
-    @Override
-    public void setUI(NUI ui) {
-        throw new UnsupportedOperationException("this component doesn't support custom UI");
     }
 
     @Override

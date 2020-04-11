@@ -19,11 +19,16 @@ public class NTextField extends NComponent {
     public final NEventDispatcher<NTextChangedEvent> textChanged = new NEventDispatcher<>();
     public final NEventDispatcher<NCaretPositionChangedEvent> caretPositionChanged = new NEventDispatcher<>();
     public final NEventDispatcher<NTextSelectionChangedEvent> selectionChanged = new NEventDispatcher<>();
+    private boolean enabled = true;
+    private NTextFieldUI ui;
 
-    public NTextField() {
-        setUI(new DefaultUI());
+    public void setUI(NTextFieldUI ui) {
+        this.ui = ui;
     }
 
+    public NTextFieldUI getUI() {
+        return ui;
+    }
 
     public String getText() {
         return text;
@@ -258,90 +263,21 @@ public class NTextField extends NComponent {
         return isFocused() && isEnabled();
     }
 
+    public final boolean isEnabled() {
+        return enabled;
+    }
 
-    private static final class DefaultUI implements NUI {
-        public static final int DEFAULT_BACKGROUND_COLOR = NColor.WHITE;
-        public static final int DEFAULT_FOREGROUND_COLOR = NColor.BLACK;
+    public final void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-        public static final int CARET_BLINK_DURATION = 500;
+    @Override
+    public boolean render(int layer) {
+        return ui.drawTextField(this, layer);
+    }
 
-        public static final int DISABLED_COVER_COLOR = NColor.WHITE;
-        public static final double DISABLED_COVER_OPACITY = 0.5;
-
-        @Override
-        public boolean render(NComponent component, int layer) {
-            if (!(component instanceof NTextField))
-                throw new IllegalArgumentException("This UI can only render NTextField");
-            if (layer > 0) return false;
-            NTextField textField = (NTextField) component;
-            NGraphics g = textField.getGraphics();
-
-            String text = textField.getText();
-            NFont font = textField.getFont();
-            NFontMetrics fontMetrics = g.getFontMetrics(font);
-            int w = textField.getWidth();
-            int h = textField.getHeight();
-            int backgroundColor = textField.getBackgroundColor();
-            int offset = textField.getViewOffset();
-            NTextSelection selection = textField.getSelection();
-            int caretPosition = textField.getCaretPosition();
-            int selectionLength = selection.length();
-            int textY = NLabel.alignText(text, h, fontMetrics, NVerticalTextAlignment.CENTER);
-            int ascent = fontMetrics.getAscent();
-            String selectionText = text.substring(selection.begin, selection.end);
-            int selectionRectangleX = fontMetrics.getWidth(text.substring(0, selection.begin)) - offset;
-            int selectionRectangleY = textY - ascent;
-            int selectionRectangleW = fontMetrics.getWidth(selectionText);
-            int textH = fontMetrics.getAscent() + fontMetrics.getDescent();
-            int caretX = fontMetrics.getWidth(text.substring(0, caretPosition)) - offset;
-
-            boolean caretVisible = ((System.currentTimeMillis() - textField.getLastKeyPressTime()) / CARET_BLINK_DURATION) % 2 == 0;
-            caretVisible &= textField.isKeyboardNeeded();
-            if (backgroundColor == NColor.NONE) backgroundColor = DEFAULT_BACKGROUND_COLOR;
-            int foregroundColor = textField.getForegroundColor();
-            if (foregroundColor == NColor.NONE) foregroundColor = DEFAULT_FOREGROUND_COLOR;
-            int caretColor = foregroundColor;
-
-            g.setOpacity(textField.getOpacity());
-
-            g.setColor(backgroundColor);
-            g.fillRect(0, 0, w, h);
-
-            g.setColor(foregroundColor);
-            g.setFont(font);
-            g.drawString(text, -offset, textY);
-
-            if (selectionLength != 0) {
-                g.setColor(foregroundColor);
-                g.fillRect(selectionRectangleX, selectionRectangleY, selectionRectangleW, textH);
-
-                g.setColor(backgroundColor);
-                g.drawString(selectionText, selectionRectangleX, textY);
-            }
-
-            if (caretVisible) {
-                g.setColor(caretColor);
-                if (caretPosition == selection.end) g.fillRect(caretX, selectionRectangleY, 2, textH);
-                else g.fillRect(caretX - 2, selectionRectangleY, 2, textH);
-            }
-
-            g.setColor(foregroundColor);
-            g.drawRect(0, 0, w - 1, h - 1);
-
-            if (!textField.isEnabled()) {
-                g.setOpacity(DISABLED_COVER_OPACITY * textField.getOpacity());
-                g.setColor(DISABLED_COVER_COLOR);
-                g.fillRect(new NRectangle(NPoint.ZERO, textField.getSize()));
-            }
-
-            if (caretX < 2) {
-                textField.setViewOffset(caretX + offset);
-            } else if (caretX > w - 2) {
-                textField.setViewOffset(caretX + offset - w + 2);
-            }
-
-            return false;
-        }
+    public interface NTextFieldUI {
+        boolean drawTextField(NTextField textField, int layer);
     }
 
     public static final class NTextSelection {

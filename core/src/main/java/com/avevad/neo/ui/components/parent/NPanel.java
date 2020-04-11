@@ -6,14 +6,18 @@ import com.avevad.neo.graphics.NPoint;
 import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NParentComponent;
-import com.avevad.neo.ui.NUI;
 import com.avevad.neo.ui.events.*;
 
 public class NPanel extends NParentComponent {
     private int color = NColor.NONE;
+    private NPanelUI ui;
 
-    public NPanel() {
-        setUI(new DefaultUI());
+    public void setUI(NPanelUI ui) {
+        this.ui = ui;
+    }
+
+    public NPanelUI getUI() {
+        return ui;
     }
 
     public final void setColor(int color) {
@@ -77,27 +81,14 @@ public class NPanel extends NParentComponent {
         super.onKeyReleased(event);
     }
 
-    private static final class DefaultUI implements NUI {
-        public static final int DEFAULT_COLOR = NColor.WHITE;
-        public static final int DISABLED_COVER_COLOR = NColor.WHITE;
-        public static final double DISABLED_COVER_OPACITY = 0.5;
+    @Override
+    public boolean render(int layer) {
+        boolean ret = ui.drawPanel(this, layer);
+        super.render(layer);
+        return ret;
+    }
 
-        @Override
-        public boolean render(NComponent component, int layer) {
-            if (!(component instanceof NPanel)) throw new IllegalArgumentException("This UI can only render NPanel");
-            NPanel panel = (NPanel) component;
-            NGraphics g = panel.getParent().getGraphics();
-            if (layer == 0) {
-                g.setOpacity(panel.getOpacity());
-                g.setColor(panel.getColor());
-                g.fillRect(panel.getBounds());
-            }
-            if (layer == 1 && !panel.isEnabled()) {
-                g.setOpacity(DISABLED_COVER_OPACITY * panel.getOpacity());
-                g.setColor(DISABLED_COVER_COLOR);
-                g.fillRect(panel.getBounds());
-            }
-            return layer < 1;
-        }
+    public interface NPanelUI {
+        boolean drawPanel(NPanel panel, int layer);
     }
 }

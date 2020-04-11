@@ -4,7 +4,6 @@ import com.avevad.neo.graphics.NGraphics;
 import com.avevad.neo.graphics.NImage;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NEventDispatcher;
-import com.avevad.neo.ui.NUI;
 import com.avevad.neo.ui.events.*;
 
 public class NFreestyleComponent extends NComponent {
@@ -18,14 +17,10 @@ public class NFreestyleComponent extends NComponent {
     public final NEventDispatcher<NMouseMovedEvent> mouseMoved = new NEventDispatcher<>();
     public final NEventDispatcher<NKeyPressedEvent> keyPressed = new NEventDispatcher<>();
     public final NEventDispatcher<NKeyReleasedEvent> keyReleased = new NEventDispatcher<>();
+    private boolean enabled = true;
 
     public NFreestyleComponent(NImage canvas) {
         this.canvas = canvas;
-    }
-
-    @Override
-    public void setUI(NUI ui) {
-        throw new UnsupportedOperationException("this component doesn't support custom UI");
     }
 
     @Override
@@ -100,5 +95,13 @@ public class NFreestyleComponent extends NComponent {
     @Override
     public boolean isKeyboardNeeded() {
         return keyboardNeeded;
+    }
+
+    public final boolean isEnabled() {
+        return enabled;
+    }
+
+    public final void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

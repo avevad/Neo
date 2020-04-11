@@ -12,11 +12,15 @@ public class NProgressBar extends NComponent {
     private int foregroundColor = NColor.NONE;
     private NFont font;
     private String text = "";
+    private NProgressBarUI ui;
 
-    public NProgressBar() {
-        setUI(new DefaultUI());
+    public void setUI(NProgressBarUI ui) {
+        this.ui = ui;
     }
 
+    public NProgressBarUI getUI() {
+        return ui;
+    }
 
     public void setText(String text) {
         this.text = text;
@@ -106,67 +110,12 @@ public class NProgressBar extends NComponent {
         return false;
     }
 
-    private final static class DefaultUI implements NUI {
-        public static final int DEFAULT_BACKGROUND_COLOR = NColor.WHITE;
-        public static final int DEFAULT_FOREGROUND_COLOR = NColor.BLACK;
+    @Override
+    public boolean render(int layer) {
+        return ui.drawProgressBar(this, layer);
+    }
 
-        @Override
-        public boolean render(NComponent component, int layer) {
-            if (!(component instanceof NProgressBar))
-                throw new IllegalArgumentException("This UI can only render NProgressBar");
-            if (layer > 0) return false;
-
-            NProgressBar bar = (NProgressBar) component;
-            NGraphics g = bar.getGraphics();
-
-            NDirection direction = bar.getDirection();
-            double progress = bar.getProgress();
-            NDimension size = bar.getSize();
-            int w = bar.getWidth();
-            int h = bar.getHeight();
-            int pw = (int) (w * progress);
-            if (direction == NDirection.UP || direction == NDirection.DOWN) pw = w;
-            int ph = (int) (h * progress);
-            if (direction == NDirection.LEFT || direction == NDirection.RIGHT) ph = h;
-            int px = 0;
-            if (direction == NDirection.LEFT) px = w - pw;
-            int py = 0;
-            if (direction == NDirection.UP) py = h - ph;
-
-            int backgroundColor = bar.getBackgroundColor();
-            if (backgroundColor == NColor.NONE) backgroundColor = DEFAULT_BACKGROUND_COLOR;
-            int foregroundColor = bar.getForegroundColor();
-            if (foregroundColor == NColor.NONE) foregroundColor = DEFAULT_FOREGROUND_COLOR;
-            int textColor = progress > 0.5 ? backgroundColor : foregroundColor;
-            int baseColor = progress > 0.5 ? foregroundColor : backgroundColor;
-
-            NFont font = bar.getFont();
-            String text = bar.getText();
-            text = String.format(text, progress * 100.);
-            NFontMetrics fontMetrics = g.getFontMetrics(font);
-            int ta = fontMetrics.getAscent();
-            int td = fontMetrics.getDescent();
-            int tw = fontMetrics.getWidth(text);
-            NPoint p = NLabel.alignText(text, size, fontMetrics, NHorizontalTextAlignment.CENTER, NVerticalTextAlignment.CENTER);
-
-            g.setOpacity(bar.getOpacity());
-
-            g.setColor(backgroundColor);
-            g.fillRect(0, 0, w, h);
-
-            g.setColor(foregroundColor);
-            g.fillRect(px, py, pw, ph);
-
-            g.setColor(baseColor);
-            g.fillRect(p.x, p.y - ta, tw, ta + td);
-
-            g.setColor(textColor);
-            g.drawString(text, p);
-
-            g.setColor(foregroundColor);
-            g.drawRect(0, 0, w - 1, h - 1);
-
-            return false;
-        }
+    public interface NProgressBarUI {
+        boolean drawProgressBar(NProgressBar progressBar, int layer);
     }
 }

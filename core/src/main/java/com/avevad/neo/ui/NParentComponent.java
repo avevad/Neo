@@ -17,6 +17,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     public final Set<NKeyEvent.NKey> pressedFocusMovementKeys = new HashSet<>();
     public final Set<NKeyEvent.NKey> reverseFocusMovementKeys = new HashSet<>();
     private final Set<NKeyEvent.NKey> pressedReverseFocusMovementKeys = new HashSet<>();
+    private boolean enabled = true;
 
     public NParentComponent() {
         super();
@@ -126,7 +127,6 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public boolean render(int layer) {
-        boolean ret = super.render(layer);
         if (layer == 0) synchronized (children) {
             List<NComponent> zSort = new ArrayList<>();
             List<NComponent> render = new ArrayList<>(children);
@@ -146,7 +146,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
             children.clear();
             children.addAll(zSort);
         }
-        return ret;
+        return false;
     }
 
     @Override
@@ -250,5 +250,13 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     @Override
     public boolean isKeyboardNeeded() {
         return focus != null && focus.isKeyboardNeeded();
+    }
+
+    public final boolean isEnabled() {
+        return enabled;
+    }
+
+    public final void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
