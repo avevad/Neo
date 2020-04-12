@@ -1,13 +1,16 @@
 package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.*;
-import com.avevad.neo.ui.NComponent;
-import com.avevad.neo.ui.NHorizontalTextAlignment;
-import com.avevad.neo.ui.NVerticalTextAlignment;
+import com.avevad.neo.ui.*;
 import com.avevad.neo.ui.events.*;
+import com.avevad.neo.util.NPair;
+
+import static com.avevad.neo.ui.NHorizontalDirection.*;
 
 public class NLabel extends NComponent {
 
+    private NImage icon;
+    private NHorizontalDirection iconPosition;
     private String text = "";
     private NFont font;
     private NHorizontalTextAlignment hAlign = NHorizontalTextAlignment.CENTER;
@@ -21,6 +24,22 @@ public class NLabel extends NComponent {
 
     public NLabelUI getUI() {
         return ui;
+    }
+
+    public void setIcon(NImage icon) {
+        this.icon = icon;
+    }
+
+    public NImage getIcon() {
+        return icon;
+    }
+
+    public void setIconPosition(NHorizontalDirection iconPosition) {
+        this.iconPosition = iconPosition;
+    }
+
+    public NHorizontalDirection getIconPosition() {
+        return iconPosition;
     }
 
     public void setText(String text) {
@@ -116,39 +135,64 @@ public class NLabel extends NComponent {
     }
 
 
-    public static int alignText(String text, int width, NFontMetrics fontMetrics, NHorizontalTextAlignment align) {
+    public static NPair<Integer, Integer> alignLabelX(NImage icon, String text, int width, NFontMetrics fontMetrics, NHorizontalTextAlignment align, NHorizontalDirection iconPosition) {
+        if(iconPosition == null) iconPosition = LEFT;
+        int iw = icon == null ? 0 : icon.w;
         int tw = fontMetrics.getWidth(text);
+        int lw = tw + iw;
+        int lx;
         switch (align) {
             case LEFT:
-                return 0;
+                lx = 0;
+                break;
             case RIGHT:
-                return width - tw;
+                lx = width - lw;
+                break;
             case CENTER:
             default:
-                return (width - tw) / 2;
+                lx = (width - lw) / 2;
+                break;
         }
+        int ix, tx;
+        switch (iconPosition) {
+            case LEFT:
+                ix = lx;
+                tx = ix + iw;
+                break;
+            case RIGHT:
+                ix = lx + lw - iw;
+                tx = lx;
+                break;
+            default:
+                throw new IllegalArgumentException("icon can't be aligned vertically");
+        }
+        return new NPair<>(ix, tx);
     }
 
-    public static int alignText(String text, int height, NFontMetrics fontMetrics, NVerticalTextAlignment align) {
+    public static NPair<Integer, Integer> alignLabelY(NImage icon, String text, int height, NFontMetrics fontMetrics, NVerticalTextAlignment align) {
+        int ih = icon == null ? 0 : icon.h;
         int ta = fontMetrics.getAscent();
         int td = fontMetrics.getDescent();
         int th = ta + td;
+        int ty;
         switch (align) {
             case TOP:
-                return ta;
+                ty = ta;
             case BOTTOM:
-                return height - td;
+                ty = height - td;
             case CENTER:
             default:
-                return (height - th) / 2 + ta;
+                ty = (height - th) / 2 + ta;
         }
+        int iy = (ty - ta) + (th - ih) / 2;
+        return new NPair<>(iy, ty);
     }
 
-    public static NPoint alignText(String text, NDimension boundsSize, NFontMetrics fontMetrics,
-                                   NHorizontalTextAlignment hAlign, NVerticalTextAlignment vAlign) {
-        int x = alignText(text, boundsSize.w, fontMetrics, hAlign);
-        int y = alignText(text, boundsSize.h, fontMetrics, vAlign);
-        return new NPoint(x, y);
+    public static NPair<NPoint, NPoint> alignLabel(NImage icon, String text, NDimension boundsSize, NFontMetrics fontMetrics,
+                                   NHorizontalTextAlignment hAlign, NVerticalTextAlignment vAlign, NHorizontalDirection iconPosition) {
+        NPair<Integer, Integer> xs = alignLabelX(icon, text, boundsSize.w, fontMetrics, hAlign, iconPosition);
+        NPair<Integer, Integer> ys = alignLabelY(icon, text, boundsSize.h, fontMetrics, vAlign);
+        return new NPair<>(new NPoint(xs.a, ys.a), new NPoint(xs.b, ys.b));
     }
 
     @Override

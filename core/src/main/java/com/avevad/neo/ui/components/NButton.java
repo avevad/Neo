@@ -8,6 +8,8 @@ public class NButton extends NComponent {
     public static final NKeyEvent.NKey EMULATE_MOUSE_PRESS_KEY = NKeyEvent.NKey.SPACE;
     public static final NKeyEvent.NKey EMULATE_MOUSE_CLICK_KEY = NKeyEvent.NKey.ENTER;
 
+    private NImage icon;
+    private NHorizontalDirection iconPosition;
     private String text = "";
     private NFont font;
     private int backgroundColor = NColor.NONE;
@@ -25,6 +27,22 @@ public class NButton extends NComponent {
 
     public NButtonUI getUI() {
         return ui;
+    }
+
+    public void setIcon(NImage icon) {
+        this.icon = icon;
+    }
+
+    public NImage getIcon() {
+        return icon;
+    }
+
+    public void setIconPosition(NHorizontalDirection iconPosition) {
+        this.iconPosition = iconPosition;
+    }
+
+    public NHorizontalDirection getIconPosition() {
+        return iconPosition;
     }
 
     public void setText(String text) {

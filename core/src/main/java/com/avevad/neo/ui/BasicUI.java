@@ -3,8 +3,9 @@ package com.avevad.neo.ui;
 import com.avevad.neo.graphics.*;
 import com.avevad.neo.ui.components.*;
 import com.avevad.neo.ui.components.parent.NPanel;
+import com.avevad.neo.util.NPair;
 
-import static com.avevad.neo.ui.components.NLabel.alignText;
+import static com.avevad.neo.ui.components.NLabel.alignLabel;
 
 public class BasicUI implements
         NButton.NButtonUI, NRadioButton.NRadioButtonUI, NCheckBox.NCheckBoxUI, NPanel.NPanelUI, NLabel.NLabelUI,
@@ -28,9 +29,11 @@ public class BasicUI implements
         int h = size.h;
         NFont font = button.getFont();
         NFontMetrics fontMetrics = g.getFontMetrics(font);
-        String text = NLabel.cutToFit(button.getText(), w, fontMetrics);
+        NImage i = button.getIcon();
+        int iw = i == null ? 0 : i.w;
+        String text = NLabel.cutToFit(button.getText(), w - iw, fontMetrics);
         int ascent = fontMetrics.getAscent();
-        NPoint point = alignText(text, size, fontMetrics, NHorizontalTextAlignment.CENTER, NVerticalTextAlignment.CENTER);
+        NPair<NPoint, NPoint> alignment = alignLabel(i, text, size, fontMetrics, NHorizontalTextAlignment.CENTER, NVerticalTextAlignment.CENTER, button.getIconPosition());
         boolean pressed = button.isPressed();
         boolean hovered = button.isHovered();
         boolean focused = button.isFocused();
@@ -53,11 +56,16 @@ public class BasicUI implements
         g.setColor(foregroundColor);
         g.drawRect(0, 0, w - 1, h - 1);
 
+        if(i != null) g.drawImage(i, alignment.a);
+
         g.setFont(font);
-        g.drawString(text, point);
+        g.drawString(text, alignment.b);
 
         g.setColor(focusColor);
-        if (focused) g.drawRect(point.x / 2, (point.y - ascent) / 2, w - point.x - 1, h - (point.y - ascent) - 1);
+        if (focused) g.drawRect(
+                alignment.b.x / 2, (alignment.b.y - ascent) / 2,
+                w - alignment.b.x - 1, h - (alignment.b.y - ascent) - 1
+        );
 
         if (!button.isEnabled()) {
             g.setOpacity(tweaks.disabledCoverOpacity * button.getOpacity());
@@ -212,13 +220,18 @@ public class BasicUI implements
         NFontMetrics fontMetrics = g.getFontMetrics(font);
         int w = label.getWidth();
         int h = label.getHeight();
-        String s = NLabel.cutToFit(label.getText(), w, fontMetrics);
-        NPoint point = alignText(s, label.getSize(), fontMetrics, hAlign, vAlign);
+        NImage i = label.getIcon();
+        int iw = i == null ? 0 : i.w;
+        String s = NLabel.cutToFit(label.getText(), w - iw, fontMetrics);
+        NPair<NPoint, NPoint> alignment = alignLabel(i, s, label.getSize(), fontMetrics, hAlign, vAlign, label.getIconPosition());
 
         g.setOpacity(label.getOpacity());
+
+        if(i != null) g.drawImage(i, alignment.a);
+
         g.setFont(font);
         g.setColor(color);
-        g.drawString(s, point.x, point.y);
+        g.drawString(s, alignment.b);
 
         return false;
     }
@@ -255,7 +268,7 @@ public class BasicUI implements
         int ta = fontMetrics.getAscent();
         int td = fontMetrics.getDescent();
         int tw = fontMetrics.getWidth(text);
-        NPoint p = NLabel.alignText(text, size, fontMetrics, NHorizontalTextAlignment.CENTER, NVerticalTextAlignment.CENTER);
+        NPoint p = NLabel.alignLabel(null, text, size, fontMetrics, NHorizontalTextAlignment.CENTER, NVerticalTextAlignment.CENTER, null).b;
 
         g.setOpacity(bar.getOpacity());
 
@@ -292,7 +305,7 @@ public class BasicUI implements
         NTextField.NTextSelection selection = textField.getSelection();
         int caretPosition = textField.getCaretPosition();
         int selectionLength = selection.length();
-        int textY = NLabel.alignText(text, h, fontMetrics, NVerticalTextAlignment.CENTER);
+        int textY = NLabel.alignLabelY(null, text, h, fontMetrics, NVerticalTextAlignment.CENTER).b;
         int ascent = fontMetrics.getAscent();
         String selectionText = text.substring(selection.begin, selection.end);
         int selectionRectangleX = fontMetrics.getWidth(text.substring(0, selection.begin)) - offset;
