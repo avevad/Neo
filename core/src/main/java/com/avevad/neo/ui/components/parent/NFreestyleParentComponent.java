@@ -1,16 +1,15 @@
 package com.avevad.neo.ui.components.parent;
 
-import com.avevad.neo.graphics.NGraphics;
-import com.avevad.neo.graphics.NImage;
 import com.avevad.neo.graphics.NPoint;
 import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NEventDispatcher;
 import com.avevad.neo.ui.NParentComponent;
+import com.avevad.neo.ui.components.NFreestyleComponent;
 import com.avevad.neo.ui.events.*;
 
 public class NFreestyleParentComponent extends NParentComponent {
-    public final NImage canvas;
     private boolean keyboardNeeded = false;
+    private final NFreestyleComponent.NFreestyleRenderer renderer;
 
     public final NEventDispatcher<NMousePressedEvent> mousePressed = new NEventDispatcher<>();
     public final NEventDispatcher<NMouseReleasedEvent> mouseReleased = new NEventDispatcher<>();
@@ -20,16 +19,16 @@ public class NFreestyleParentComponent extends NParentComponent {
     public final NEventDispatcher<NKeyPressedEvent> keyPressed = new NEventDispatcher<>();
     public final NEventDispatcher<NKeyReleasedEvent> keyReleased = new NEventDispatcher<>();
 
-    public NFreestyleParentComponent(NImage canvas) {
-        this.canvas = canvas;
+    public NFreestyleParentComponent(NFreestyleComponent.NFreestyleRenderer renderer) {
+        this.renderer = renderer;
     }
+
 
     @Override
     public boolean render(int layer) {
-        NGraphics g = getParent().getGraphics();
-        g.setOpacity(getOpacity());
-        g.drawImage(canvas, getLocation(), getSize());
-        return super.render(layer);
+        boolean ret = renderer.render(layer);
+        if (!ret) super.render(layer);
+        return ret;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.avevad.neo.ui.components;
 
-import com.avevad.neo.graphics.NGraphics;
-import com.avevad.neo.graphics.NImage;
 import com.avevad.neo.graphics.NPoint;
 import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
@@ -9,8 +7,8 @@ import com.avevad.neo.ui.NEventDispatcher;
 import com.avevad.neo.ui.events.*;
 
 public class NFreestyleComponent extends NComponent {
-    public final NImage canvas;
     private boolean keyboardNeeded = false;
+    private final NFreestyleRenderer renderer;
 
     public final NEventDispatcher<NMousePressedEvent> mousePressed = new NEventDispatcher<>();
     public final NEventDispatcher<NMouseReleasedEvent> mouseReleased = new NEventDispatcher<>();
@@ -21,16 +19,13 @@ public class NFreestyleComponent extends NComponent {
     public final NEventDispatcher<NKeyReleasedEvent> keyReleased = new NEventDispatcher<>();
     private boolean enabled = true;
 
-    public NFreestyleComponent(NImage canvas) {
-        this.canvas = canvas;
+    public NFreestyleComponent(NFreestyleRenderer renderer) {
+        this.renderer = renderer;
     }
 
     @Override
     public boolean render(int layer) {
-        NGraphics g = getParent().getGraphics();
-        g.setOpacity(getOpacity());
-        g.drawImage(canvas, getLocation(), getSize());
-        return false;
+        return renderer.render(layer);
     }
 
     @Override
@@ -100,5 +95,9 @@ public class NFreestyleComponent extends NComponent {
 
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public interface NFreestyleRenderer {
+        boolean render(int layer);
     }
 }
