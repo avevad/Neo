@@ -1,11 +1,14 @@
 package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.*;
-import com.avevad.neo.ui.*;
+import com.avevad.neo.ui.NComponent;
+import com.avevad.neo.ui.NHorizontalDirection;
+import com.avevad.neo.ui.NHorizontalTextAlignment;
+import com.avevad.neo.ui.NVerticalTextAlignment;
 import com.avevad.neo.ui.events.*;
 import com.avevad.neo.util.NPair;
 
-import static com.avevad.neo.ui.NHorizontalDirection.*;
+import static com.avevad.neo.ui.NHorizontalDirection.LEFT;
 
 public class NLabel extends NComponent {
 
@@ -84,27 +87,27 @@ public class NLabel extends NComponent {
 
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        return false;
     }
 
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        return false;
     }
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        return false;
     }
 
     @Override
     public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        return false;
     }
 
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        return false;
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.NGraphics;
 import com.avevad.neo.graphics.NImage;
+import com.avevad.neo.graphics.NPoint;
+import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NEventDispatcher;
 import com.avevad.neo.ui.events.*;
@@ -34,8 +36,7 @@ public class NFreestyleComponent extends NComponent {
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
         if (!isEnabled()) return false;
-        if (event.x < 0 || event.x >= getWidth()) return false;
-        if (event.y < 0 || event.y >= getHeight()) return false;
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         mousePressed.trigger(event);
         return true;
     }
@@ -43,8 +44,7 @@ public class NFreestyleComponent extends NComponent {
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
         if (!isEnabled()) return false;
-        if (event.x < 0 || event.x >= getWidth()) return false;
-        if (event.y < 0 || event.y >= getHeight()) return false;
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         mouseReleased.trigger(event);
         return true;
     }
@@ -52,8 +52,7 @@ public class NFreestyleComponent extends NComponent {
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
         if (!isEnabled()) return false;
-        if (event.x < 0 || event.x >= getWidth()) return false;
-        if (event.y < 0 || event.y >= getHeight()) return false;
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         mouseDragged.trigger(event);
         return true;
     }
@@ -61,8 +60,7 @@ public class NFreestyleComponent extends NComponent {
     @Override
     public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
         if (!isEnabled()) return false;
-        if (event.x < 0 || event.x >= getWidth()) return false;
-        if (event.y < 0 || event.y >= getHeight()) return false;
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         mouseWheelScrolled.trigger(event);
         return true;
     }
@@ -70,8 +68,7 @@ public class NFreestyleComponent extends NComponent {
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
         if (!isEnabled()) return false;
-        if (event.x < 0 || event.x >= getWidth()) return false;
-        if (event.y < 0 || event.y >= getHeight()) return false;
+        if (!new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) return false;
         mouseMoved.trigger(event);
         return true;
     }

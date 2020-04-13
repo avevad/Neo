@@ -1,7 +1,9 @@
 package com.avevad.neo.ui.components;
 
-import com.avevad.neo.graphics.*;
-import com.avevad.neo.ui.*;
+import com.avevad.neo.graphics.NColor;
+import com.avevad.neo.graphics.NFont;
+import com.avevad.neo.ui.NComponent;
+import com.avevad.neo.ui.NDirection;
 import com.avevad.neo.ui.events.*;
 
 
@@ -72,27 +74,27 @@ public class NProgressBar extends NComponent {
 
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        return false;
     }
 
     @Override
     public boolean onMouseReleased(NMouseReleasedEvent event) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        return false;
     }
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        return false;
     }
 
     @Override
     public boolean onMouseWheelScrolled(NMouseWheelScrolledEvent event) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        return false;
     }
 
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
-        return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        return false;
     }
 
     @Override
