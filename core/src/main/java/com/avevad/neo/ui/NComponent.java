@@ -9,6 +9,7 @@ public abstract class NComponent {
     private NGraphics graphics;
     private int focusIndex = 0;
     private double opacity = 1;
+    private boolean visible = true;
 
     public NComponent() {
         this.bounds = new NRectangle(0, 0, 0, 0);
@@ -35,6 +36,13 @@ public abstract class NComponent {
         return graphics;
     }
 
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
 
     public final void setBounds(NRectangle bounds) {
         this.bounds = bounds;
