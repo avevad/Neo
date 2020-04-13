@@ -16,8 +16,9 @@ public final class JarResourceMap implements NResourceManager.ResourceMap {
 
     @Override
     public InputStream getResourceStream(String resource) throws FileNotFoundException {
-        InputStream stream = JarResourceMap.class.getResourceAsStream(prefix + "/" + resource);
-        if(stream == null) throw new FileNotFoundException();
+        String fullPath = prefix + "/" + resource;
+        InputStream stream = JarResourceMap.class.getResourceAsStream(fullPath);
+        if (stream == null) throw new FileNotFoundException("resource '" + fullPath + "' not found");
         return stream;
     }
 }

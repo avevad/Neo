@@ -81,6 +81,7 @@ public final class NResourceManager {
             scanner = new Scanner(set.getResourceStream(realFilename));
         } catch (FileNotFoundException e) {
             logger.log(NLogMessage.NSeverity.WARNING, "String '" + name + "' (" + locale + ") with nonexistent file was queried");
+            logger.log(NLogMessage.NSeverity.WARNING, e);
             return name;
         }
         int line = 0;
@@ -164,19 +165,19 @@ public final class NResourceManager {
         try {
             scanner = new Scanner(set.getResourceStream(atlasName + ".atlas"));
         } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("image '" + name + "' has nonexistent atlas file");
+            throw new IllegalArgumentException("image '" + name + "' has nonexistent atlas file", e);
         }
         String suffix = scanner.nextLine();
         InputStream in;
         try {
             in = set.getResourceStream(atlasName + suffix);
         } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("image '" + name + "' has nonexistent image file");
+            throw new IllegalArgumentException("image '" + name + "' has nonexistent image file", e);
         }
         try {
             image = imageIO.loadImage(in);
         } catch (IOException e) {
-            throw new IllegalArgumentException("image '" + name + "' has invalid file");
+            throw new IllegalArgumentException("image '" + name + "' has invalid file", e);
         }
         Map<String, NRectangle> bounds = new HashMap<>();
         atlas = new Atlas(image, bounds);
