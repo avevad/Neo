@@ -143,7 +143,7 @@ public class NButton extends NComponent {
     public void onKeyReleased(NKeyReleasedEvent event) {
         if (!isEnabled()) return;
         if (event.key == EMULATE_MOUSE_CLICK_KEY || event.key == EMULATE_MOUSE_PRESS_KEY) {
-            if (isPressed) clicked.trigger(new ClickedEvent());
+            if (isPressed && event.key != EMULATE_MOUSE_CLICK_KEY) clicked.trigger(new ClickedEvent());
             isPressed = false;
         }
     }
