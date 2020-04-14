@@ -75,7 +75,7 @@ public class NPanel extends NParentComponent {
     @Override
     public boolean render(int layer) {
         boolean ret = ui.drawPanel(this, layer);
-        if (!ret) super.render(layer);
+        if (layer == 0) super.render(layer);
         return ret;
     }
 
