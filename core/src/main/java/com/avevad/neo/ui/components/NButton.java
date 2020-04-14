@@ -1,7 +1,10 @@
 package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.*;
-import com.avevad.neo.ui.*;
+import com.avevad.neo.ui.NComponent;
+import com.avevad.neo.ui.NEvent;
+import com.avevad.neo.ui.NEventDispatcher;
+import com.avevad.neo.ui.NHorizontalDirection;
 import com.avevad.neo.ui.events.*;
 
 public class NButton extends NComponent {
@@ -14,8 +17,8 @@ public class NButton extends NComponent {
     private NFont font;
     private int backgroundColor = NColor.NONE;
     private int foregroundColor = NColor.NONE;
-    private boolean isPressed = false;
-    private boolean isHovered = false;
+    protected boolean isPressed = false;
+    protected boolean isHovered = false;
     private NButtonUI ui;
 
     public final NEventDispatcher<ClickedEvent> clicked = new NEventDispatcher<>();
@@ -131,8 +134,8 @@ public class NButton extends NComponent {
             isPressed = true;
         }
         if (event.key == EMULATE_MOUSE_CLICK_KEY) {
-            if (isPressed) clicked.trigger(new ClickedEvent());
             isPressed = !isPressed;
+            if (isPressed) clicked.trigger(new ClickedEvent());
         }
     }
 
