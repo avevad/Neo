@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static java.awt.event.KeyEvent.*;
-import static java.awt.event.KeyEvent.VK_ENTER;
 
 public final class NAWTUIRenderer {
     private static final Map<Integer, NKeyEvent.NKey> KEY_MAP = new HashMap<>();
@@ -42,8 +41,9 @@ public final class NAWTUIRenderer {
     private volatile int maxFPS = 60;
     private final Thread rendererThread;
 
-    public NAWTUIRenderer(NComponent component, JPanel panel) {
-        rendererThread = new ComponentRenderer(component, panel);
+    public NAWTUIRenderer(NComponent component, Component parent) {
+        rendererThread = new ComponentRenderer(component, parent);
+        component.setSize(parent.getWidth(), parent.getHeight());
     }
 
     public void start() {
@@ -66,7 +66,7 @@ public final class NAWTUIRenderer {
         this.maxFPS = maxFPS;
     }
 
-    public static void bindControls(NComponent to, Component from){
+    private static void bindEvents(NComponent to, Component from) {
         Set<KeyStroke> forwardKeys = new HashSet<>(1);
         forwardKeys.add(KeyStroke.getKeyStroke(
                 VK_TAB, InputEvent.CTRL_MASK));
@@ -136,21 +136,28 @@ public final class NAWTUIRenderer {
                 to.onKeyReleased(new NKeyReleasedEvent(key, keyEvent.getKeyChar()));
             }
         });
+
+        from.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent componentEvent) {
+                to.setSize(from.getWidth(), from.getHeight());
+            }
+        });
     }
 
     public final class ComponentRenderer extends Thread {
         private final NComponent component;
-        private final JPanel panel;
+        private final Component parent;
         private BufferedImage buffer;
-        private RootComponent root;
+        private final RootComponent root;
 
-        public ComponentRenderer(NComponent component, JPanel panel) {
+        public ComponentRenderer(NComponent component, Component parent) {
             this.component = component;
-            this.panel = panel;
+            this.parent = parent;
             root = new RootComponent();
             root.addChild(component);
             root.setFocus(component);
-            bindControls(component, panel);
+            bindEvents(component, this.parent);
             setName("Neo-AWT Component Renderer");
         }
 
@@ -163,7 +170,7 @@ public final class NAWTUIRenderer {
                 if(buffer == null || buffer.getWidth() != component.getWidth() || buffer.getHeight() != component.getHeight()) {
                     buffer = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_ARGB);
                     root.graphics = new NAWTGraphics((Graphics2D) buffer.getGraphics());
-                    panel.setSize(component.getWidth(), component.getHeight());
+                    parent.setSize(component.getWidth(), component.getHeight());
                 }
                 if(component.getX() != 0) component.setX(0);
                 if(component.getY() != 0) component.setY(0);
@@ -171,7 +178,7 @@ public final class NAWTUIRenderer {
                 //render:
                 int layer = 0;
                 while (component.render(layer++));
-                panel.getGraphics().drawImage(buffer, 0, 0, null);
+                parent.getGraphics().drawImage(buffer, 0, 0, null);
 
                 long after = System.currentTimeMillis();
 

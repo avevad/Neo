@@ -14,6 +14,7 @@ public class NWrapper extends NComponent {
         this.child = child;
         root.addChild(child);
         root.setFocus(child);
+        boundsChanged.addHandler(event -> root.setBounds(getBounds()));
     }
 
     @Override
@@ -70,7 +71,6 @@ public class NWrapper extends NComponent {
 
         @Override
         public boolean render(int layer) {
-            setSize(NWrapper.this.getSize());
             return child.render(layer);
         }
     }

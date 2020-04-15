@@ -11,6 +11,8 @@ public abstract class NComponent {
     private double opacity = 1;
     private boolean visible = true;
 
+    public final NEventDispatcher<NBoundsChangedEvent> boundsChanged = new NEventDispatcher<>();
+
     public NComponent() {
         this.bounds = new NRectangle(0, 0, 0, 0);
     }
@@ -46,6 +48,7 @@ public abstract class NComponent {
 
     public final void setBounds(NRectangle bounds) {
         this.bounds = bounds;
+        boundsChanged.trigger(new NBoundsChangedEvent());
     }
 
     public final void setBounds(NPoint location, NDimension size) {
