@@ -12,6 +12,7 @@ public abstract class NComponent {
     private boolean visible = true;
 
     public final NEventDispatcher<NBoundsChangedEvent> boundsChanged = new NEventDispatcher<>();
+    public final NEventDispatcher<NVisibilityChangedEvent> visibilityChanged = new NEventDispatcher<>();
 
     public NComponent() {
         this.bounds = new NRectangle(0, 0, 0, 0);
@@ -40,6 +41,7 @@ public abstract class NComponent {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+        visibilityChanged.trigger(new NVisibilityChangedEvent());
     }
 
     public boolean isVisible() {
