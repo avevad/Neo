@@ -180,13 +180,15 @@ public class NLabel extends NComponent {
         int ih = icon == null ? 0 : icon.h;
         int ta = fontMetrics.getAscent();
         int td = fontMetrics.getDescent();
-        int th = ta + td;
+        int th = text.length() == 0 ? 0 : ta + td;
         int ty;
         switch (align) {
             case TOP:
                 ty = ta;
+                break;
             case BOTTOM:
                 ty = height - td;
+                break;
             case CENTER:
             default:
                 ty = (height - th) / 2 + ta;
@@ -204,8 +206,8 @@ public class NLabel extends NComponent {
 
     public static NDimension resizeToFit(NImage icon, String text, NFontMetrics fontMetrics) {
         return new NDimension(
-                fontMetrics.getWidth(text) + (icon == null ? 0 : icon.w),
-                Integer.max(fontMetrics.getAscent() + fontMetrics.getDescent(), icon == null ? 0 : icon.h)
+                (text.length() == 0 ? 0 : fontMetrics.getWidth(text)) + (icon == null ? 0 : icon.w) + 4,
+                Integer.max(text.length() == 0 ? 0 : (fontMetrics.getAscent() + fontMetrics.getDescent()), icon == null ? 0 : icon.h) + 4
         );
     }
 

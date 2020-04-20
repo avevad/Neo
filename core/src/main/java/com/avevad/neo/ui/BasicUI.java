@@ -56,16 +56,20 @@ public class BasicUI implements
         g.setColor(foregroundColor);
         g.drawRect(0, 0, w - 1, h - 1);
 
-        if(i != null) g.drawImage(i, alignment.a);
+        if (i != null) g.drawImage(i, alignment.a);
 
         g.setFont(font);
         g.drawString(text, alignment.b);
 
         g.setColor(focusColor);
-        if (focused) g.drawRect(
-                alignment.b.x / 2, (alignment.b.y - ascent) / 2,
-                w - alignment.b.x - 1, h - (alignment.b.y - ascent) - 1
-        );
+        if (focused) {
+            int fx = Integer.min(alignment.b.x, alignment.a.x) / 2;
+            int fy = Integer.min(alignment.b.y - ascent, alignment.a.y) / 2;
+            g.drawRect(
+                    fx, fy,
+                    w - fx * 2 - 1, h - fy * 2 - 1
+            );
+        }
 
         if (!button.isEnabled()) {
             g.setOpacity(tweaks.disabledCoverOpacity * button.getOpacity());
