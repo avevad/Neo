@@ -12,4 +12,15 @@ public final class NDimension {
     public String toString() {
         return "NDimension(" + w + ", " + h + ")";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NDimension that = (NDimension) o;
+
+        if (w != that.w) return false;
+        return h == that.h;
+    }
 }

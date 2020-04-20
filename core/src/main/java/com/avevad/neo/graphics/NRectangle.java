@@ -44,4 +44,10 @@ public final class NRectangle {
     public boolean contains(int x, int y) {
         return x >= this.x && x < this.x + w && y >= this.y && y < this.y + h;
     }
+
+    public boolean equals(Object o) {
+        if (!(o instanceof NRectangle)) return false;
+        NRectangle rectangle = (NRectangle) o;
+        return x == rectangle.x && y == rectangle.y && w == rectangle.w && h == rectangle.h;
+    }
 }
