@@ -85,6 +85,10 @@ public class NLabel extends NComponent {
         return vAlign;
     }
 
+    public void resizeToFit() {
+        setSize(resizeToFit(icon, text, getGraphics().getFontMetrics(getFont())));
+    }
+
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
         return false;
@@ -192,10 +196,17 @@ public class NLabel extends NComponent {
     }
 
     public static NPair<NPoint, NPoint> alignLabel(NImage icon, String text, NDimension boundsSize, NFontMetrics fontMetrics,
-                                   NHorizontalTextAlignment hAlign, NVerticalTextAlignment vAlign, NHorizontalDirection iconPosition) {
+                                                   NHorizontalTextAlignment hAlign, NVerticalTextAlignment vAlign, NHorizontalDirection iconPosition) {
         NPair<Integer, Integer> xs = alignLabelX(icon, text, boundsSize.w, fontMetrics, hAlign, iconPosition);
         NPair<Integer, Integer> ys = alignLabelY(icon, text, boundsSize.h, fontMetrics, vAlign);
         return new NPair<>(new NPoint(xs.a, ys.a), new NPoint(xs.b, ys.b));
+    }
+
+    public static NDimension resizeToFit(NImage icon, String text, NFontMetrics fontMetrics) {
+        return new NDimension(
+                fontMetrics.getWidth(text) + (icon == null ? 0 : icon.w),
+                Integer.max(fontMetrics.getAscent() + fontMetrics.getDescent(), icon == null ? 0 : icon.h)
+        );
     }
 
     @Override

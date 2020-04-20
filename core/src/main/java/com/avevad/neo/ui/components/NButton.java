@@ -88,6 +88,10 @@ public class NButton extends NComponent {
         return isPressed;
     }
 
+    public void resizeToFit() {
+        setSize(NLabel.resizeToFit(icon, text, getGraphics().getFontMetrics(font)));
+    }
+
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
         if (!isEnabled()) return false;
