@@ -42,8 +42,8 @@ public final class NAWTUIRenderer {
     private final Thread rendererThread;
 
     public NAWTUIRenderer(NComponent component, Component parent) {
-        rendererThread = new ComponentRenderer(component, parent);
         component.setSize(parent.getWidth(), parent.getHeight());
+        rendererThread = new ComponentRenderer(component, parent);
     }
 
     public void start() {
@@ -159,6 +159,7 @@ public final class NAWTUIRenderer {
             root.setFocus(component);
             bindEvents(component, this.parent);
             setName("Neo-AWT Component Renderer");
+            updateGraphics();
         }
 
         @Override
@@ -168,9 +169,7 @@ public final class NAWTUIRenderer {
 
                 //buffer & components setup:
                 if(buffer == null || buffer.getWidth() != component.getWidth() || buffer.getHeight() != component.getHeight()) {
-                    buffer = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_ARGB);
-                    root.graphics = new NAWTGraphics((Graphics2D) buffer.getGraphics());
-                    parent.setSize(component.getWidth(), component.getHeight());
+                    updateGraphics();
                 }
                 if(component.getX() != 0) component.setX(0);
                 if(component.getY() != 0) component.setY(0);
@@ -188,8 +187,15 @@ public final class NAWTUIRenderer {
                 long sleep = delay - renderTime;
                 try {
                     Thread.sleep(sleep <= 0 ? 0 : sleep);
-                } catch (InterruptedException e) { }
+                } catch (InterruptedException e) {
+                }
             }
+        }
+
+        private void updateGraphics() {
+            buffer = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            root.graphics = new NAWTGraphics((Graphics2D) buffer.getGraphics());
+            parent.setSize(component.getWidth(), component.getHeight());
         }
     }
 
