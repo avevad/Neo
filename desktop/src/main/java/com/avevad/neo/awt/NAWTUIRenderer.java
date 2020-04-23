@@ -42,7 +42,6 @@ public final class NAWTUIRenderer {
     private final Thread rendererThread;
 
     public NAWTUIRenderer(NComponent component, Component parent) {
-        component.setSize(parent.getWidth(), parent.getHeight());
         rendererThread = new ComponentRenderer(component, parent);
     }
 
@@ -164,6 +163,7 @@ public final class NAWTUIRenderer {
 
         @Override
         public void run() {
+            component.setSize(parent.getWidth(), parent.getHeight());
             while (true){
                 long before = System.currentTimeMillis();
 
@@ -193,9 +193,11 @@ public final class NAWTUIRenderer {
         }
 
         private void updateGraphics() {
-            buffer = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            buffer = new BufferedImage(
+                    Integer.max(component.getWidth(), 1),
+                    Integer.max(component.getHeight(), 1),
+                    BufferedImage.TYPE_INT_ARGB);
             root.graphics = new NAWTGraphics((Graphics2D) buffer.getGraphics());
-            parent.setSize(component.getWidth(), component.getHeight());
         }
     }
 
