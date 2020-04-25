@@ -100,7 +100,7 @@ public final class NResourceManager {
             if (key.equals(id)) ret = value;
             cachedStrings.put(setName + "/" + fileName + ":" + key + "_" + locale, value);
         }
-        logger.log(NLogMessage.NSeverity.DEBUG, "Cached " + line + " line(s) from file '" + realFilename + "'");
+        logger.log(NLogMessage.NSeverity.VERBOSE, "Cached " + line + " line(s) from file '" + realFilename + "'");
         cachedStringFiles.add(setName + "/" + fileName + "_" + locale);
         if (ret == null) {
             logger.log(NLogMessage.NSeverity.WARNING, "String '" + name + "' (" + locale + ") with nonexistent id was queried");
@@ -152,7 +152,7 @@ public final class NResourceManager {
             } else {
                 image = atlas.image.copyReadonly(bounds.x, bounds.y, bounds.w, bounds.h);
                 cachedImages.put(name, image);
-                logger.log(NLogMessage.NSeverity.DEBUG, "Cached image '" + name + "' from atlas '" + (setName + "/" + fileName) + "'");
+                logger.log(NLogMessage.NSeverity.VERBOSE, "Cached image '" + name + "' from atlas '" + (setName + "/" + fileName) + "'");
                 return image;
             }
         }
@@ -204,7 +204,7 @@ public final class NResourceManager {
             bounds.put(key, new NRectangle(x, y, w, h));
         }
         cachedAtlases.put(setName + "/" + fileName, atlas);
-        logger.log(NLogMessage.NSeverity.DEBUG, "Cached " + (line - 1) + " atlas entries from file '" + atlasName + ".atlas'");
+        logger.log(NLogMessage.NSeverity.VERBOSE, "Cached " + (line - 1) + " atlas entries from file '" + atlasName + ".atlas'");
         return image(name);
     }
 
