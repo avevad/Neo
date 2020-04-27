@@ -124,6 +124,7 @@ public final class NAWTGraphics extends NGraphics {
 
     @Override
     public void drawImage(NImage img, int x, int y) {
+        setAWTGraphicsProperties();
         if(img instanceof NAWTImage) graphics.drawImage(((NAWTImage) img).img, x, y, null);
         else if(img instanceof NAWTReadonlyImage) {
             NAWTReadonlyImage readonlyImage = (NAWTReadonlyImage) img;
@@ -137,6 +138,7 @@ public final class NAWTGraphics extends NGraphics {
 
     @Override
     public void drawImage(NImage img, int x, int y, int w, int h) {
+        setAWTGraphicsProperties();
         if(img instanceof NAWTImage) graphics.drawImage(((NAWTImage) img).img, x, y, w, h, null);
         else if(img instanceof NAWTReadonlyImage) {
             NAWTReadonlyImage readonlyImage = (NAWTReadonlyImage) img;
@@ -150,6 +152,7 @@ public final class NAWTGraphics extends NGraphics {
 
     @Override
     public void drawImage(NImage img, int srcX, int srcY, int srcW, int srcH, int dstX, int dstY, int dstW, int dstH) {
+        setAWTGraphicsProperties();
         if(img instanceof NAWTImage) graphics.drawImage(((NAWTImage) img).img, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH, null);
         else if(img instanceof NAWTReadonlyImage) {
             NAWTReadonlyImage readonlyImage = (NAWTReadonlyImage) img;
