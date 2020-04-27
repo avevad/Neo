@@ -206,8 +206,8 @@ public class NLabel extends NComponent {
 
     public static NDimension resizeToFit(NImage icon, String text, NFontMetrics fontMetrics) {
         return new NDimension(
-                (text.length() == 0 ? 0 : fontMetrics.getWidth(text)) + (icon == null ? 0 : icon.w) + 4,
-                Integer.max(text.length() == 0 ? 0 : (fontMetrics.getAscent() + fontMetrics.getDescent()), icon == null ? 0 : icon.h) + 4
+                (text.length() == 0 ? 0 : fontMetrics.getWidth(text)) + (icon == null ? 0 : icon.w) + 8,
+                Integer.max(text.length() == 0 ? 0 : (fontMetrics.getAscent() + fontMetrics.getDescent()), icon == null ? 0 : icon.h) + 8
         );
     }
 
