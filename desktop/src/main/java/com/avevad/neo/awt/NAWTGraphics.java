@@ -28,7 +28,7 @@ public final class NAWTGraphics extends NGraphics {
         float blue = NColor.blue(color) / (float) 255;
         float alpha = (float) opacity;
         graphics.setColor(new Color(red, green, blue));
-        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC, alpha));
+        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
 
     @Override
