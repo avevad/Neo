@@ -4,6 +4,7 @@ package com.avevad.neo.ui;
 import com.avevad.neo.graphics.NPoint;
 import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.events.*;
+import com.avevad.neo.util.NPair;
 
 import java.util.*;
 
@@ -130,23 +131,13 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     @Override
     public boolean render(int layer) {
         if (layer == 0) synchronized (children) {
-            List<NComponent> zSort = new ArrayList<>();
-            List<NComponent> render = new ArrayList<>(children);
-            List<NComponent> render2 = new ArrayList<>();
-            int l = 0;
+            Queue<NPair<NComponent, Integer>> render = new LinkedList<>();
+            for (NComponent child : children) render.add(new NPair<>(child, 0));
             while (!render.isEmpty()) {
-                for (NComponent child : render) {
-                    if (child.isVisible()) if (child.render(l)) render2.add(child);
-                }
-                zSort.addAll(render);
-                zSort.removeAll(render2);
-                render.clear();
-                render.addAll(render2);
-                render2.clear();
-                l++;
+                NPair<NComponent, Integer> child = render.poll();
+                if (child.a.isVisible()) if (child.a.render(child.b))
+                    render.add(new NPair<>(child.a, child.b + 1));
             }
-            children.clear();
-            children.addAll(zSort);
         }
         return false;
     }
