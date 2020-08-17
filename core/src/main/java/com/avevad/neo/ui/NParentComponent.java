@@ -14,17 +14,10 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     private boolean isMousePressed;
     private NComponent lastHoveredChild;
 
-    public final Set<NKeyEvent.NKey> focusMovementKeys = new HashSet<>();
-    public final Set<NKeyEvent.NKey> pressedFocusMovementKeys = new HashSet<>();
-    public final Set<NKeyEvent.NKey> reverseFocusMovementKeys = new HashSet<>();
-    private final Set<NKeyEvent.NKey> pressedReverseFocusMovementKeys = new HashSet<>();
     private boolean enabled = true;
 
     public NParentComponent() {
         super();
-        focusMovementKeys.add(NKeyEvent.NKey.TAB);
-        reverseFocusMovementKeys.add(NKeyEvent.NKey.SHIFT);
-        reverseFocusMovementKeys.add(NKeyEvent.NKey.TAB);
     }
 
     public boolean hasChild(NComponent child) {
@@ -53,78 +46,7 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
         this.focus = focus;
     }
 
-    // TODO: REFACTOR FOCUS MOVEMENT!!!!!!
-
-    public final NComponent getNextFocusable() {
-        NComponent min = null;
-        if (focus == null) {
-            for (NComponent component : this) {
-                if (component.getFocusIndex() < 0) continue;
-                if (min == null) {
-                    min = component;
-                    continue;
-                }
-                if (component.getFocusIndex() > min.getFocusIndex()) continue;
-                if (component.getFocusIndex() < min.getFocusIndex() || component.hashCode() < min.hashCode())
-                    min = component;
-            }
-            return min;
-        }
-        for (NComponent component : this) {
-            if (component.getFocusIndex() < 0) continue;
-            if (component.getFocusIndex() < focus.getFocusIndex()) continue;
-            if (component.getFocusIndex() > focus.getFocusIndex() || component.hashCode() > focus.hashCode())
-                return component;
-        }
-        return null;
-    }
-
-    public final NComponent getPrevFocusable() {
-        NComponent max = null;
-        if (focus == null) {
-            for (NComponent component : this) {
-                if (component.getFocusIndex() < 0) continue;
-                if (max == null) {
-                    max = component;
-                    continue;
-                }
-                if (component.getFocusIndex() < max.getFocusIndex()) continue;
-                if (component.getFocusIndex() > max.getFocusIndex() || component.hashCode() > max.hashCode())
-                    max = component;
-            }
-            return max;
-        }
-        for (NComponent component : this) {
-            if (component.getFocusIndex() < 0) continue;
-            if (component.getFocusIndex() > focus.getFocusIndex()) continue;
-            if (component.getFocusIndex() < focus.getFocusIndex() || component.hashCode() < focus.hashCode())
-                return component;
-        }
-        return null;
-    }
-
-    public boolean moveFocusForward() {
-        if (focus instanceof NParentComponent) {
-            NParentComponent pfocus = (NParentComponent) focus;
-            if (pfocus.moveFocusForward()) focus = getNextFocusable();
-        } else {
-            focus = getNextFocusable();
-        }
-        return focus == null;
-    }
-
-    public boolean moveFocusBackward() {
-        if (focus instanceof NParentComponent) {
-            NParentComponent pfocus = (NParentComponent) focus;
-            if (pfocus.moveFocusBackward()) focus = getPrevFocusable();
-        } else {
-            focus = getPrevFocusable();
-        }
-        return focus == null;
-    }
-
-
-    public final NComponent getFocus() {
+    public NComponent getFocus() {
         return focus;
     }
 
@@ -154,11 +76,11 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
         for (NComponent comp : this) {
             if (!comp.isVisible()) continue;
             if (comp.onMousePressed(new NMousePressedEvent(event.x - comp.getX(), event.y - comp.getY(), event.button))) {
-                setFocus(comp);
+                focus = comp;
                 return true;
             }
         }
-        setFocus(null);
+        focus = null;
         return false;
     }
 
@@ -225,23 +147,11 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     @Override
     public void onKeyPressed(NKeyPressedEvent event) {
-        if (reverseFocusMovementKeys.contains(event.key)) {
-            pressedReverseFocusMovementKeys.add(event.key);
-        }
-        if (focusMovementKeys.contains(event.key)) {
-            pressedFocusMovementKeys.add(event.key);
-        }
-        if (pressedReverseFocusMovementKeys.size() == reverseFocusMovementKeys.size()) {
-            moveFocusBackward();
-        } else if (pressedFocusMovementKeys.size() == focusMovementKeys.size()) {
-            moveFocusForward();
-        } else if (focus != null) focus.onKeyPressed(new NKeyPressedEvent(event.key, event.c));
+        focus.onKeyPressed(new NKeyPressedEvent(event.key, event.c));
     }
 
     @Override
     public void onKeyReleased(NKeyReleasedEvent event) {
-        pressedReverseFocusMovementKeys.remove(event.key);
-        pressedFocusMovementKeys.remove(event.key);
         if (focus != null) focus.onKeyReleased(new NKeyReleasedEvent(event.key, event.c));
     }
 

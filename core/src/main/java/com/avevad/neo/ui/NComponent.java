@@ -7,7 +7,6 @@ public abstract class NComponent {
     private NParentComponent parent;
     private NRectangle bounds;
     private NGraphics graphics;
-    private int focusIndex = 0;
     private double opacity = 1;
     private boolean visible = true;
 
@@ -131,15 +130,6 @@ public abstract class NComponent {
     public final boolean isFocused() {
         return parent == null || (parent.getFocus() == this && parent.isFocused());
     }
-
-    public int getFocusIndex() {
-        return focusIndex;
-    }
-
-    public void setFocusIndex(int focusIndex) {
-        this.focusIndex = focusIndex;
-    }
-
 
     public final void setOpacity(double opacity) {
         this.opacity = opacity;
