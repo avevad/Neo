@@ -158,8 +158,8 @@ public class NButton extends NComponent {
     }
 
     @Override
-    public boolean render(int layer) {
-        return ui.drawButton(this, layer);
+    public boolean render(int layer, NRectangle area) {
+        return ui.drawButton(this, layer, area);
     }
 
     public final boolean isEnabled() {
@@ -171,7 +171,7 @@ public class NButton extends NComponent {
     }
 
     public interface NButtonUI {
-        boolean drawButton(NButton button, int layer);
+        boolean drawButton(NButton button, int layer, NRectangle area);
     }
 
     public static class ClickedEvent extends NEvent {

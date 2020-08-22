@@ -26,6 +26,10 @@ public final class NPoint {
         return y == point.y;
     }
 
+    public NPoint negate() {
+        return new NPoint(-x, -y);
+    }
+
     @Override
     public int hashCode() {
         int result = x;

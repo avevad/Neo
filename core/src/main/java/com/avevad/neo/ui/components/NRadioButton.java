@@ -141,8 +141,8 @@ public class NRadioButton extends NComponent {
     }
 
     @Override
-    public boolean render(int layer) {
-        return ui.drawRadioButton(this, layer);
+    public boolean render(int layer, NRectangle area) {
+        return ui.drawRadioButton(this, layer, area);
     }
 
     public final boolean isEnabled() {
@@ -154,7 +154,7 @@ public class NRadioButton extends NComponent {
     }
 
     public interface NRadioButtonUI {
-        boolean drawRadioButton(NRadioButton radioButton, int layer);
+        boolean drawRadioButton(NRadioButton radioButton, int layer, NRectangle area);
     }
 
 

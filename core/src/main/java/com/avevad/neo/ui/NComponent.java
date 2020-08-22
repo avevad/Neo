@@ -139,7 +139,7 @@ public abstract class NComponent {
         return opacity;
     }
 
-    public abstract boolean render(int layer);
+    public abstract boolean render(int layer, NRectangle area);
 
 
     public abstract boolean onMousePressed(NMousePressedEvent event);

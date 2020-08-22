@@ -2,6 +2,7 @@ package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.NColor;
 import com.avevad.neo.graphics.NFont;
+import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NDirection;
 import com.avevad.neo.ui.events.*;
@@ -113,11 +114,11 @@ public class NProgressBar extends NComponent {
     }
 
     @Override
-    public boolean render(int layer) {
-        return ui.drawProgressBar(this, layer);
+    public boolean render(int layer, NRectangle area) {
+        return ui.drawProgressBar(this, layer, area);
     }
 
     public interface NProgressBarUI {
-        boolean drawProgressBar(NProgressBar progressBar, int layer);
+        boolean drawProgressBar(NProgressBar progressBar, int layer, NRectangle area);
     }
 }

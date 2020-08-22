@@ -25,9 +25,9 @@ public class NFreestyleParentComponent extends NParentComponent {
 
 
     @Override
-    public boolean render(int layer) {
+    public boolean render(int layer, NRectangle area) {
         boolean ret = renderer.render(layer);
-        if (!ret) super.render(layer);
+        if (!ret) super.render(layer, area);
         return ret;
     }
 

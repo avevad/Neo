@@ -1,6 +1,8 @@
 package com.avevad.neo.ui.components;
 
-import com.avevad.neo.graphics.*;
+import com.avevad.neo.graphics.NColor;
+import com.avevad.neo.graphics.NPoint;
+import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NEvent;
 import com.avevad.neo.ui.NEventDispatcher;
@@ -136,8 +138,8 @@ public class NCheckBox extends NComponent {
     }
 
     @Override
-    public boolean render(int layer) {
-        return ui.drawCheckbox(this, layer);
+    public boolean render(int layer, NRectangle area) {
+        return ui.drawCheckbox(this, layer, area);
     }
 
     public final boolean isEnabled() {
@@ -149,7 +151,7 @@ public class NCheckBox extends NComponent {
     }
 
     public interface NCheckBoxUI {
-        boolean drawCheckbox(NCheckBox checkBox, int layer);
+        boolean drawCheckbox(NCheckBox checkBox, int layer, NRectangle area);
     }
 
     public static final class NCheckStateChangedEvent extends NEvent {

@@ -45,6 +45,20 @@ public final class NRectangle {
         return x >= this.x && x < this.x + w && y >= this.y && y < this.y + h;
     }
 
+    public NRectangle intersect(NRectangle that) {
+        if (that == null) return null;
+        if (this.x + this.w < that.x || that.x + that.w < this.x || this.y + this.h < that.y || that.y + that.h < this.y)
+            return null;
+        return new NRectangle(
+                new NPoint(Integer.max(this.x, that.x), Integer.max(this.y, that.y)),
+                new NPoint(Integer.min(this.x + this.w, that.x + that.w), Integer.min(this.y + this.h, that.y + that.h))
+        );
+    }
+
+    public NRectangle move(NPoint delta) {
+        return new NRectangle(x + delta.x, y + delta.y, w, h);
+    }
+
     public boolean equals(Object o) {
         if (!(o instanceof NRectangle)) return false;
         NRectangle rectangle = (NRectangle) o;

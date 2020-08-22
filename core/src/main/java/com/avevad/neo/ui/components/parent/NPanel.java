@@ -1,6 +1,7 @@
 package com.avevad.neo.ui.components.parent;
 
 import com.avevad.neo.graphics.NColor;
+import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NParentComponent;
 import com.avevad.neo.ui.events.*;
 
@@ -73,13 +74,13 @@ public class NPanel extends NParentComponent {
     }
 
     @Override
-    public boolean render(int layer) {
-        boolean ret = ui.drawPanel(this, layer);
-        if (layer == 0) super.render(layer);
+    public boolean render(int layer, NRectangle area) {
+        boolean ret = ui.drawPanel(this, layer, area);
+        if (layer == 0) super.render(layer, area);
         return ret;
     }
 
     public interface NPanelUI {
-        boolean drawPanel(NPanel panel, int layer);
+        boolean drawPanel(NPanel panel, int layer, NRectangle area);
     }
 }

@@ -1,7 +1,9 @@
 package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.*;
-import com.avevad.neo.ui.*;
+import com.avevad.neo.ui.NComponent;
+import com.avevad.neo.ui.NEvent;
+import com.avevad.neo.ui.NEventDispatcher;
 import com.avevad.neo.ui.events.*;
 
 
@@ -272,12 +274,12 @@ public class NTextField extends NComponent {
     }
 
     @Override
-    public boolean render(int layer) {
-        return ui.drawTextField(this, layer);
+    public boolean render(int layer, NRectangle area) {
+        return ui.drawTextField(this, layer, area);
     }
 
     public interface NTextFieldUI {
-        boolean drawTextField(NTextField textField, int layer);
+        boolean drawTextField(NTextField textField, int layer, NRectangle area);
     }
 
     public static final class NTextSelection {

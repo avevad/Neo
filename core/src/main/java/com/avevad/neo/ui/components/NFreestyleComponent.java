@@ -24,7 +24,7 @@ public class NFreestyleComponent extends NComponent {
     }
 
     @Override
-    public boolean render(int layer) {
+    public boolean render(int layer, NRectangle area) {
         return renderer.render(layer);
     }
 

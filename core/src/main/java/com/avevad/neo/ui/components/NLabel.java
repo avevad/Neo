@@ -212,12 +212,12 @@ public class NLabel extends NComponent {
     }
 
     @Override
-    public boolean render(int layer) {
-        return ui.drawLabel(this, layer);
+    public boolean render(int layer, NRectangle area) {
+        return ui.drawLabel(this, layer, area);
     }
 
     public interface NLabelUI {
-        boolean drawLabel(NLabel label, int layer);
+        boolean drawLabel(NLabel label, int layer, NRectangle area);
     }
 
 }

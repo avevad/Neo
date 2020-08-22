@@ -21,7 +21,8 @@ public class BasicUI implements
     }
 
     @Override
-    public boolean drawButton(NButton button, int layer) {
+    public boolean drawButton(NButton button, int layer, NRectangle area) {
+        if (new NRectangle(NPoint.ZERO, button.getSize()).intersect(area) == null) return false;
         NGraphics g = button.getGraphics();
 
         NDimension size = button.getSize();
@@ -81,7 +82,8 @@ public class BasicUI implements
     }
 
     @Override
-    public boolean drawRadioButton(NRadioButton radioButton, int layer) {
+    public boolean drawRadioButton(NRadioButton radioButton, int layer, NRectangle area) {
+        if (new NRectangle(NPoint.ZERO, radioButton.getSize()).intersect(area) == null) return false;
         if (layer > 0) return false;
         NGraphics g = radioButton.getGraphics();
 
@@ -135,7 +137,8 @@ public class BasicUI implements
     }
 
     @Override
-    public boolean drawCheckbox(NCheckBox checkBox, int layer) {
+    public boolean drawCheckbox(NCheckBox checkBox, int layer, NRectangle area) {
+        if (new NRectangle(NPoint.ZERO, checkBox.getSize()).intersect(area) == null) return false;
         NGraphics g = checkBox.getGraphics();
 
         NDimension size = checkBox.getSize();
@@ -197,7 +200,8 @@ public class BasicUI implements
     }
 
     @Override
-    public boolean drawPanel(NPanel panel, int layer) {
+    public boolean drawPanel(NPanel panel, int layer, NRectangle area) {
+        if (new NRectangle(NPoint.ZERO, panel.getSize()).intersect(area) == null) return false;
         NGraphics g = panel.getParent().getGraphics();
         if (layer == 0) {
             g.setOpacity(panel.getOpacity());
@@ -213,7 +217,8 @@ public class BasicUI implements
     }
 
     @Override
-    public boolean drawLabel(NLabel label, int layer) {
+    public boolean drawLabel(NLabel label, int layer, NRectangle area) {
+        if (new NRectangle(NPoint.ZERO, label.getSize()).intersect(area) == null) return false;
         NGraphics g = label.getGraphics();
 
         NHorizontalTextAlignment hAlign = label.getHorizontalAlignment();
@@ -241,7 +246,8 @@ public class BasicUI implements
     }
 
     @Override
-    public boolean drawProgressBar(NProgressBar bar, int layer) {
+    public boolean drawProgressBar(NProgressBar bar, int layer, NRectangle area) {
+        if (new NRectangle(NPoint.ZERO, bar.getSize()).intersect(area) == null) return false;
         NGraphics g = bar.getGraphics();
 
         NDirection direction = bar.getDirection();
@@ -296,7 +302,8 @@ public class BasicUI implements
     }
 
     @Override
-    public boolean drawTextField(NTextField textField, int layer) {
+    public boolean drawTextField(NTextField textField, int layer, NRectangle area) {
+        if (new NRectangle(NPoint.ZERO, textField.getSize()).intersect(area) == null) return false;
         NGraphics g = textField.getGraphics();
 
         String text = textField.getText();

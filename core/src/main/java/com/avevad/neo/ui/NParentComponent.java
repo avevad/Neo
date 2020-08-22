@@ -51,13 +51,13 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
     }
 
     @Override
-    public boolean render(int layer) {
+    public boolean render(int layer, NRectangle area) {
         if (layer == 0) synchronized (children) {
             Queue<NPair<NComponent, Integer>> render = new LinkedList<>();
             for (NComponent child : children) render.add(new NPair<>(child, 0));
             while (!render.isEmpty()) {
                 NPair<NComponent, Integer> child = render.poll();
-                if (child.a.isVisible()) if (child.a.render(child.b))
+                if (child.a.isVisible()) if (child.a.render(child.b, area.move(child.a.getLocation().negate())))
                     render.add(new NPair<>(child.a, child.b + 1));
             }
         }

@@ -1,6 +1,7 @@
 package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.NGraphics;
+import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NParentComponent;
 import com.avevad.neo.ui.components.parent.NPanel;
@@ -58,8 +59,8 @@ public class NWrapper extends NComponent {
     }
 
     @Override
-    public boolean render(int layer) {
-        return root.render(layer);
+    public boolean render(int layer, NRectangle area) {
+        return root.render(layer, area);
     }
 
     private final class NWrapperPanel extends NPanel {
@@ -70,8 +71,8 @@ public class NWrapper extends NComponent {
         }
 
         @Override
-        public boolean render(int layer) {
-            return child.render(layer);
+        public boolean render(int layer, NRectangle area) {
+            return child.render(layer, area.move(child.getLocation().negate()));
         }
     }
 }
