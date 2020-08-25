@@ -80,6 +80,15 @@ public class NPanel extends NParentComponent {
         return ret;
     }
 
+    @Override
+    public void update(NRectangle area) {
+        if (getOpacity() < 1) super.update(area);
+        else {
+            int layer = 0;
+            while (render(layer, area)) layer++;
+        }
+    }
+
     public interface NPanelUI {
         boolean drawPanel(NPanel panel, int layer, NRectangle area);
     }

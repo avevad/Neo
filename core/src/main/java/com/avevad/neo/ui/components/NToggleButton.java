@@ -11,6 +11,7 @@ public class NToggleButton extends NButton {
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
         if (!isEnabled()) return false;
+        update();
         return new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
     }
 
@@ -20,6 +21,7 @@ public class NToggleButton extends NButton {
         if (new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y)) {
             isPressed = !isPressed;
             clicked.trigger(new ClickedEvent());
+            update();
             return true;
         } else return false;
     }
@@ -31,6 +33,7 @@ public class NToggleButton extends NButton {
             isPressed = !isPressed;
             clicked.trigger(new ClickedEvent());
         }
+        update();
     }
 
     @Override
@@ -40,9 +43,11 @@ public class NToggleButton extends NButton {
             isPressed = !isPressed;
             clicked.trigger(new ClickedEvent());
         }
+        update();
     }
 
     public void setPressed(boolean pressed) {
         this.isPressed = pressed;
+        update();
     }
 }

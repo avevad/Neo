@@ -26,6 +26,7 @@ public class NButton extends NComponent {
 
     public void setUI(NButtonUI ui) {
         this.ui = ui;
+        update();
     }
 
     public NButtonUI getUI() {
@@ -34,6 +35,7 @@ public class NButton extends NComponent {
 
     public void setIcon(NImage icon) {
         this.icon = icon;
+        update();
     }
 
     public NImage getIcon() {
@@ -42,6 +44,7 @@ public class NButton extends NComponent {
 
     public void setIconPosition(NHorizontalDirection iconPosition) {
         this.iconPosition = iconPosition;
+        update();
     }
 
     public NHorizontalDirection getIconPosition() {
@@ -50,6 +53,7 @@ public class NButton extends NComponent {
 
     public void setText(String text) {
         this.text = text;
+        update();
     }
 
     public String getText() {
@@ -58,6 +62,7 @@ public class NButton extends NComponent {
 
     public void setFont(NFont font) {
         this.font = font;
+        update();
     }
 
     public NFont getFont() {
@@ -66,6 +71,7 @@ public class NButton extends NComponent {
 
     public void setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        update();
     }
 
     public int getBackgroundColor() {
@@ -74,6 +80,7 @@ public class NButton extends NComponent {
 
     public void setForegroundColor(int foregroundColor) {
         this.foregroundColor = foregroundColor;
+        update();
     }
 
     public int getForegroundColor() {
@@ -95,7 +102,9 @@ public class NButton extends NComponent {
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
         if (!isEnabled()) return false;
-        return isPressed = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        isPressed = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        update();
+        return isPressed;
     }
 
     @Override
@@ -104,6 +113,7 @@ public class NButton extends NComponent {
         boolean ret = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
         boolean isClicked = isPressed && ret;
         isPressed = false;
+        update();
         if (isClicked) clicked.trigger(new ClickedEvent());
         return ret;
     }
@@ -111,7 +121,9 @@ public class NButton extends NComponent {
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
         if (!isEnabled()) return false;
-        return isHovered = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        isHovered = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        update();
+        return isHovered;
     }
 
     @Override
@@ -123,12 +135,15 @@ public class NButton extends NComponent {
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
         if (!isEnabled()) return false;
-        return isHovered = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        isHovered = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        update();
+        return isHovered;
     }
 
     @Override
     public void onMouseExited() {
         isHovered = false;
+        update();
     }
 
     @Override
@@ -141,6 +156,7 @@ public class NButton extends NComponent {
             isPressed = !isPressed;
             if (isPressed) clicked.trigger(new ClickedEvent());
         }
+        update();
     }
 
     @Override
@@ -150,6 +166,7 @@ public class NButton extends NComponent {
             if (isPressed && event.key != EMULATE_MOUSE_CLICK_KEY) clicked.trigger(new ClickedEvent());
             isPressed = false;
         }
+        update();
     }
 
     @Override
@@ -168,6 +185,7 @@ public class NButton extends NComponent {
 
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        update();
     }
 
     public interface NButtonUI {

@@ -1,15 +1,15 @@
 package com.avevad.neo.ui.components;
 
 import com.avevad.neo.graphics.NGraphics;
+import com.avevad.neo.graphics.NPoint;
 import com.avevad.neo.graphics.NRectangle;
 import com.avevad.neo.ui.NComponent;
 import com.avevad.neo.ui.NParentComponent;
-import com.avevad.neo.ui.components.parent.NPanel;
 import com.avevad.neo.ui.events.*;
 
 public class NWrapper extends NComponent {
     private final NComponent child;
-    private final NParentComponent root = new NWrapperPanel();
+    private final NParentComponent root = new NWrapperParent();
 
     public NWrapper(NComponent child) {
         this.child = child;
@@ -63,7 +63,7 @@ public class NWrapper extends NComponent {
         return root.render(layer, area);
     }
 
-    private final class NWrapperPanel extends NPanel {
+    private final class NWrapperParent extends NParentComponent {
 
         @Override
         public NGraphics getGraphics() {
@@ -73,6 +73,16 @@ public class NWrapper extends NComponent {
         @Override
         public boolean render(int layer, NRectangle area) {
             return child.render(layer, area.move(child.getLocation().negate()));
+        }
+
+        @Override
+        public void update(NRectangle area) {
+            if (new NRectangle(NPoint.ZERO, getLocation()).intersect(area) == null) return;
+            if (NWrapper.this.getParent() != null) NWrapper.this.getParent().update(area.move(getLocation()));
+            else {
+                int layer = 0;
+                while (render(layer, area)) layer++;
+            }
         }
     }
 }

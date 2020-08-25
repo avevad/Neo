@@ -8,7 +8,7 @@ import com.avevad.neo.util.NPair;
 
 import java.util.*;
 
-public abstract class NParentComponent extends NComponent implements Iterable<NComponent> {
+public class NParentComponent extends NComponent implements Iterable<NComponent> {
     private final List<NComponent> children = new ArrayList<>();
     private NComponent focus;
     private boolean isMousePressed;
@@ -166,5 +166,14 @@ public abstract class NParentComponent extends NComponent implements Iterable<NC
 
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void update(NRectangle area) {
+        if (new NRectangle(NPoint.ZERO, getLocation()).intersect(area) == null) return;
+        if (getParent() != null) getParent().update(area.move(getLocation()));
+        else {
+            int layer = 0;
+            while (render(layer, area)) layer++;
+        }
     }
 }

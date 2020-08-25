@@ -19,6 +19,7 @@ public class NProgressBar extends NComponent {
 
     public void setUI(NProgressBarUI ui) {
         this.ui = ui;
+        update();
     }
 
     public NProgressBarUI getUI() {
@@ -27,6 +28,7 @@ public class NProgressBar extends NComponent {
 
     public void setText(String text) {
         this.text = text;
+        update();
     }
 
     public String getText() {
@@ -35,6 +37,7 @@ public class NProgressBar extends NComponent {
 
     public void setFont(NFont font) {
         this.font = font;
+        update();
     }
 
     public NFont getFont() {
@@ -43,6 +46,7 @@ public class NProgressBar extends NComponent {
 
     public void setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        update();
     }
 
     public int getBackgroundColor() {
@@ -51,6 +55,7 @@ public class NProgressBar extends NComponent {
 
     public void setForegroundColor(int foregroundColor) {
         this.foregroundColor = foregroundColor;
+        update();
     }
 
     public int getForegroundColor() {
@@ -59,6 +64,7 @@ public class NProgressBar extends NComponent {
 
     public void setProgress(double progress) {
         this.progress = progress;
+        update();
     }
 
     public double getProgress() {
@@ -67,6 +73,7 @@ public class NProgressBar extends NComponent {
 
     public void setDirection(NDirection direction) {
         this.direction = direction;
+        update();
     }
 
     public NDirection getDirection() {

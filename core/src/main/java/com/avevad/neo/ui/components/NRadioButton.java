@@ -27,6 +27,7 @@ public class NRadioButton extends NComponent {
 
     public void setUI(NRadioButtonUI ui) {
         this.ui = ui;
+        update();
     }
 
     public NRadioButtonUI getUI() {
@@ -35,6 +36,7 @@ public class NRadioButton extends NComponent {
 
     public void setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        update();
     }
 
     public int getBackgroundColor() {
@@ -43,6 +45,7 @@ public class NRadioButton extends NComponent {
 
     public void setForegroundColor(int foregroundColor) {
         this.foregroundColor = foregroundColor;
+        update();
     }
 
     public int getForegroundColor() {
@@ -59,6 +62,7 @@ public class NRadioButton extends NComponent {
 
     public void setChecked(boolean checked) {
         isChecked = checked;
+        update();
     }
 
     public boolean isChecked() {
@@ -69,7 +73,9 @@ public class NRadioButton extends NComponent {
     @Override
     public boolean onMousePressed(NMousePressedEvent event) {
         if (!isEnabled()) return false;
-        return isPressed = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        isPressed = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        update();
+        return isPressed;
     }
 
     @Override
@@ -82,13 +88,16 @@ public class NRadioButton extends NComponent {
             if (!isChecked) checked.trigger(new NCheckedEvent());
             isChecked = true;
         }
+        update();
         return ret;
     }
 
     @Override
     public boolean onMouseDragged(NMouseDraggedEvent event) {
         if (!isEnabled()) return false;
-        return isHovered = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        isHovered = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        update();
+        return isHovered;
     }
 
     @Override
@@ -100,12 +109,15 @@ public class NRadioButton extends NComponent {
     @Override
     public boolean onMouseMoved(NMouseMovedEvent event) {
         if (!isEnabled()) return false;
-        return isHovered = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        isHovered = new NRectangle(NPoint.ZERO, getSize()).contains(event.x, event.y);
+        update();
+        return isHovered;
     }
 
     @Override
     public void onMouseExited() {
         isHovered = false;
+        update();
     }
 
     @Override
@@ -121,6 +133,7 @@ public class NRadioButton extends NComponent {
             }
             isPressed = !isPressed;
         }
+        update();
     }
 
     @Override
@@ -133,6 +146,7 @@ public class NRadioButton extends NComponent {
             }
             isPressed = false;
         }
+        update();
     }
 
     @Override
@@ -151,6 +165,7 @@ public class NRadioButton extends NComponent {
 
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        update();
     }
 
     public interface NRadioButtonUI {
