@@ -24,7 +24,6 @@ public abstract class NComponent {
             this.parent = parent;
             this.graphics = new NLinkedGraphics(parent, this);
             if (!parent.hasChild(this)) parent.addChild(this);
-            update();
         } catch (Exception ex) {
             this.parent = null;
             throw ex;
@@ -41,7 +40,6 @@ public abstract class NComponent {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
-        update();
         visibilityChanged.trigger(new NVisibilityChangedEvent());
     }
 
@@ -50,10 +48,8 @@ public abstract class NComponent {
     }
 
     public final void setBounds(NRectangle bounds) {
-        NRectangle oldBounds = this.bounds;
         this.bounds = bounds;
         boundsChanged.trigger(new NBoundsChangedEvent());
-        if (parent != null) parent.update(oldBounds);
     }
 
     public final void setBounds(NPoint location, NDimension size) {
@@ -137,7 +133,6 @@ public abstract class NComponent {
 
     public final void setOpacity(double opacity) {
         this.opacity = opacity;
-        update();
     }
 
     public final double getOpacity() {

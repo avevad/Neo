@@ -26,7 +26,6 @@ public class NButton extends NComponent {
 
     public void setUI(NButtonUI ui) {
         this.ui = ui;
-        update();
     }
 
     public NButtonUI getUI() {
@@ -35,7 +34,6 @@ public class NButton extends NComponent {
 
     public void setIcon(NImage icon) {
         this.icon = icon;
-        update();
     }
 
     public NImage getIcon() {
@@ -44,7 +42,6 @@ public class NButton extends NComponent {
 
     public void setIconPosition(NHorizontalDirection iconPosition) {
         this.iconPosition = iconPosition;
-        update();
     }
 
     public NHorizontalDirection getIconPosition() {
@@ -53,7 +50,6 @@ public class NButton extends NComponent {
 
     public void setText(String text) {
         this.text = text;
-        update();
     }
 
     public String getText() {
@@ -62,7 +58,6 @@ public class NButton extends NComponent {
 
     public void setFont(NFont font) {
         this.font = font;
-        update();
     }
 
     public NFont getFont() {
@@ -71,7 +66,6 @@ public class NButton extends NComponent {
 
     public void setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
-        update();
     }
 
     public int getBackgroundColor() {
@@ -80,7 +74,6 @@ public class NButton extends NComponent {
 
     public void setForegroundColor(int foregroundColor) {
         this.foregroundColor = foregroundColor;
-        update();
     }
 
     public int getForegroundColor() {
@@ -185,7 +178,6 @@ public class NButton extends NComponent {
 
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        update();
     }
 
     public interface NButtonUI {

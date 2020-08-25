@@ -48,6 +48,5 @@ public class NToggleButton extends NButton {
 
     public void setPressed(boolean pressed) {
         this.isPressed = pressed;
-        update();
     }
 }

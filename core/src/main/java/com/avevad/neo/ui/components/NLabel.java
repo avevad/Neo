@@ -23,7 +23,6 @@ public class NLabel extends NComponent {
 
     public void setUI(NLabelUI ui) {
         this.ui = ui;
-        update();
     }
 
     public NLabelUI getUI() {
@@ -32,7 +31,6 @@ public class NLabel extends NComponent {
 
     public void setIcon(NImage icon) {
         this.icon = icon;
-        update();
     }
 
     public NImage getIcon() {
@@ -41,7 +39,6 @@ public class NLabel extends NComponent {
 
     public void setIconPosition(NHorizontalDirection iconPosition) {
         this.iconPosition = iconPosition;
-        update();
     }
 
     public NHorizontalDirection getIconPosition() {
@@ -50,7 +47,6 @@ public class NLabel extends NComponent {
 
     public void setText(String text) {
         this.text = text;
-        update();
     }
 
     public String getText() {
@@ -59,7 +55,6 @@ public class NLabel extends NComponent {
 
     public void setColor(int color) {
         this.color = color;
-        update();
     }
 
     public int getColor() {
@@ -68,7 +63,6 @@ public class NLabel extends NComponent {
 
     public void setFont(NFont font) {
         this.font = font;
-        update();
     }
 
     public NFont getFont() {
@@ -77,7 +71,6 @@ public class NLabel extends NComponent {
 
     public void setHorizontalAlignment(NHorizontalTextAlignment hAlign) {
         this.hAlign = hAlign;
-        update();
     }
 
     public NHorizontalTextAlignment getHorizontalAlignment() {
@@ -86,7 +79,6 @@ public class NLabel extends NComponent {
 
     public void setVerticalAlignment(NVerticalTextAlignment vAlign) {
         this.vAlign = vAlign;
-        update();
     }
 
     public NVerticalTextAlignment getVerticalAlignment() {

@@ -26,7 +26,6 @@ public class NTextField extends NComponent {
 
     public void setUI(NTextFieldUI ui) {
         this.ui = ui;
-        update();
     }
 
     public NTextFieldUI getUI() {
@@ -40,7 +39,6 @@ public class NTextField extends NComponent {
     public void setText(String text) {
         if (caretPosition > text.length()) setCaretPosition(text.length());
         this.text = text;
-        update();
     }
 
     public NTextSelection getSelection() {
@@ -50,7 +48,6 @@ public class NTextField extends NComponent {
     public void setSelection(NTextSelection selection) {
         this.selection = selection;
         if (caretPosition != selection.begin && caretPosition != selection.end) setCaretPosition(selection.end);
-        update();
     }
 
     public NFont getFont() {
@@ -59,7 +56,6 @@ public class NTextField extends NComponent {
 
     public void setFont(NFont font) {
         this.font = font;
-        update();
     }
 
     public int getBackgroundColor() {
@@ -68,7 +64,6 @@ public class NTextField extends NComponent {
 
     public void setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
-        update();
     }
 
     public int getForegroundColor() {
@@ -77,7 +72,6 @@ public class NTextField extends NComponent {
 
     public void setForegroundColor(int foregroundColor) {
         this.foregroundColor = foregroundColor;
-        update();
     }
 
     public int getViewOffset() {
@@ -86,7 +80,6 @@ public class NTextField extends NComponent {
 
     public void setViewOffset(int viewOffset) {
         this.viewOffset = viewOffset;
-        update();
     }
 
     public int getCaretPosition() {
@@ -97,7 +90,6 @@ public class NTextField extends NComponent {
         this.caretPosition = caretPosition;
         if (caretPosition != selection.begin && caretPosition != selection.end)
             setSelection(new NTextSelection(caretPosition, caretPosition));
-        update();
     }
 
     public long getLastKeyPressTime() {
@@ -122,7 +114,6 @@ public class NTextField extends NComponent {
         selectionChanged.trigger(new NTextSelectionChangedEvent(selection, newSelection));
         setSelection(newSelection);
         lastKeyPressTime = System.currentTimeMillis();
-        update();
         return true;
     }
 
