@@ -20,7 +20,7 @@ public class NAWTViewport extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 panel.setSize(getWidth(), getHeight());
-                System.out.println("changed: " + getWidth() + " " + getHeight());
+                repaint();
             }
         });
     }
