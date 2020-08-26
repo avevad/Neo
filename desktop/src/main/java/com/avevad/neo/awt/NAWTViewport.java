@@ -7,8 +7,6 @@ import com.avevad.neo.ui.NParentComponent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 public class NAWTViewport extends JPanel {
     private NGraphics graphics;
@@ -16,13 +14,6 @@ public class NAWTViewport extends JPanel {
     public final NAWTPanel panel = new NAWTPanel();
 
     public NAWTViewport() {
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                panel.setSize(getWidth(), getHeight());
-                repaint();
-            }
-        });
     }
 
     @Override
@@ -31,13 +22,14 @@ public class NAWTViewport extends JPanel {
             graphics2D = (Graphics2D) g;
             graphics = new NAWTGraphics(graphics2D);
         }
+        if (getWidth() != panel.getWidth() || getHeight() != panel.getHeight()) panel.setSize(getWidth(), getHeight());
         int layer = 0;
         while (panel.render(layer, new NRectangle(NPoint.ZERO, panel.getSize()))) layer++;
     }
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(panel.getX() + panel.getWidth(), panel.getY() + panel.getHeight());
+        return new Dimension(panel.getWidth(), panel.getHeight());
     }
 
     public class NAWTPanel extends NParentComponent {
