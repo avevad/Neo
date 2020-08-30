@@ -17,17 +17,10 @@ public abstract class NComponent {
         this.bounds = new NRectangle(0, 0, 0, 0);
     }
 
-    public synchronized void setParent(NParentComponent parent) {
-        if (this.parent != null) throw new IllegalStateException("already have a parent");
-        if (parent == null) throw new IllegalArgumentException("parent cannot be null");
-        try {
-            this.parent = parent;
-            this.graphics = new NLinkedGraphics(parent, this);
-            if (!parent.hasChild(this)) parent.addChild(this);
-        } catch (Exception ex) {
-            this.parent = null;
-            throw ex;
-        }
+    final void setParent(NParentComponent parent) {
+        if (this.parent != null && parent != null) throw new IllegalStateException("already have a parent");
+        this.parent = parent;
+        this.graphics = parent == null ? null : new NLinkedGraphics(parent, this);
     }
 
     public final NParentComponent getParent() {
@@ -164,6 +157,7 @@ public abstract class NComponent {
     public abstract boolean isKeyboardNeeded();
 
     public final void update() {
+        if (!isVisible()) return;
         if (parent != null) parent.update(getBounds());
     }
 
@@ -289,9 +283,9 @@ public abstract class NComponent {
             updateGraphics();
             setParameters();
             int[] nxs = new int[xs.length];
-            for(int i = 0; i < xs.length; i++) nxs[i] = xs[i] + offset.x;
+            for (int i = 0; i < xs.length; i++) nxs[i] = xs[i] + offset.x;
             int[] nys = new int[ys.length];
-            for(int i = 0; i < ys.length; i++) nys[i] = ys[i] + offset.y;
+            for (int i = 0; i < ys.length; i++) nys[i] = ys[i] + offset.y;
             graphics.drawPolygon(nxs, nys);
         }
 
@@ -300,9 +294,9 @@ public abstract class NComponent {
             updateGraphics();
             setParameters();
             int[] nxs = new int[xs.length];
-            for(int i = 0; i < xs.length; i++) nxs[i] = xs[i] + offset.x;
+            for (int i = 0; i < xs.length; i++) nxs[i] = xs[i] + offset.x;
             int[] nys = new int[ys.length];
-            for(int i = 0; i < ys.length; i++) nys[i] = ys[i] + offset.y;
+            for (int i = 0; i < ys.length; i++) nys[i] = ys[i] + offset.y;
             graphics.fillPolygon(nxs, nys);
         }
 
@@ -326,8 +320,8 @@ public abstract class NComponent {
             else {
                 int offsetX = offset.x;
                 int offsetY = offset.y;
-                if(x < 0) offsetX += x;
-                if(y < 0) offsetY += y;
+                if (x < 0) offsetX += x;
+                if (y < 0) offsetY += y;
                 x += clip.x;
                 y += clip.y;
                 int x1 = Integer.max(x, clip.x);

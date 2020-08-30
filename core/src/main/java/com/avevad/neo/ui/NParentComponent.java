@@ -24,7 +24,7 @@ public class NParentComponent extends NComponent implements Iterable<NComponent>
         return children.contains(child);
     }
 
-    public final synchronized void addChild(NComponent child) {
+    public final void addChild(NComponent child) {
         if (child == null) throw new IllegalArgumentException("child cannot be null");
         if (hasChild(child)) throw new IllegalArgumentException("already have this child");
         NComponent component = this;
@@ -32,13 +32,8 @@ public class NParentComponent extends NComponent implements Iterable<NComponent>
             if (component == child) throw new IllegalArgumentException("ancestor of the component cannot be its child");
             component = component.getParent();
         }
-        try {
-            children.add(child);
-            if (child.getParent() != this) child.setParent(this);
-        } catch (Exception ex) {
-            children.remove(child);
-            throw ex;
-        }
+        children.add(child);
+        child.setParent(this);
     }
 
     public final void setFocus(NComponent focus) {
